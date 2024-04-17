@@ -1,0 +1,17 @@
+@mixin mp0 {
+    margin: 0;
+    padding: 0;
+}
+
+@mixin absolute_full {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+@mixin center_x {
+    left: 50%;
+    transform: translateX(-50%);
+}

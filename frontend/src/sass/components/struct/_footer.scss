@@ -1,0 +1,174 @@
+footer{
+    width: 100%;
+    min-height: 340px;
+    background: $cinza_rodape;
+    position: relative;
+    padding-bottom: 100px;
+    box-sizing: border-box;
+    color: #FFF;
+
+    a{
+        color: #FFF;
+        text-decoration: none;
+
+        &:active{
+            color: #f5f5f5;
+        }
+
+        &:hover{
+            text-decoration: underline;
+        }
+
+        &.__inema{
+            &:hover{
+                color: $cor_primaria_inema;
+            }
+        }
+
+        &.__sema{
+            &:hover{
+                color: $cor_primaria_sema;
+            }
+        }
+    }
+
+    .flex{
+        padding: 31px 5vw;
+        justify-content: space-between;
+        flex-wrap: wrap;
+
+        > div{
+            flex: 1 0 auto;
+            padding: 10px 20px;
+
+            &:first-child{
+                padding-left: 0;
+            }
+
+            &:last-child{
+                padding-right: 0;
+            }
+        }
+
+        .box_contato{
+            flex: 1 0 250px;
+            text-align: center;
+            padding-top: 30px;
+
+            img{
+                display: block;
+                margin: 0 auto;
+                margin-bottom: 10px;
+            }
+
+            span{
+                display: inline-block;
+                line-height: 19px;
+                font-size: 14px;
+                vertical-align: top;
+                margin-bottom: 8px;
+            }
+
+            .redes_sociais{
+
+                li{
+                    display: inline-block;
+                    margin: 2px 3px;
+                }
+            }
+        }
+
+        .links_referencia{
+            display: flex;
+            flex-wrap: wrap;
+            padding-top: 30px;
+            
+            ul{
+                margin: 0 15px;
+
+                &:last-child{
+                    margin-right: 0;
+                }
+                
+                li{
+                    line-height: 19px;
+                    font-size: 14px;
+                    min-width: 150px;
+
+                    &.titulo{
+                        font-weight: 600;
+                        line-height: 24px;
+                        font-size: 18px;
+                        margin-bottom: 10px;
+                    }
+                }
+            }
+        }
+
+        .instagram{
+            flex: 0 0 320px;
+        }
+    }
+
+    .creditos{
+        background: #FFFFFF;
+        text-align: center;
+        height: 90px;
+        box-sizing: border-box;
+        position: absolute;
+        bottom: 0;
+        display: block;
+        width: 100%;
+        overflow-y: hidden;
+
+        img{
+            height: 28px;
+            margin: calc((90px - 28px) / 2) 30px;
+        }
+    }
+
+    @media (max-width: 767.98px) {
+        &{
+            text-align: center;
+        }
+
+        .flex{
+            justify-content: center;
+
+            > div{
+                flex: 1 1 auto !important;
+                width: 100%;
+                box-sizing: border-box;
+
+                &:first-child{
+                    padding: 20px;
+                }
+
+                &:last-child{
+                    padding: 20px;
+                }
+            }
+        }
+
+        .links_referencia{
+            justify-content: center;
+
+            ul{
+                margin: 30px 0 !important;
+            }
+        }
+
+        .instagram{
+            overflow-x: auto;
+        }
+
+        .creditos{
+            height: auto;
+
+            img{
+                height: 20px;
+                margin: calc((90px - 20px) / 2) 10px;
+            }
+        }
+    }
+}

@@ -1,0 +1,58 @@
+.input_wrap{
+    position: relative;
+}
+
+input[type=text], input[type=password], input[type=search], select{
+    height: 45px;
+    background:#f8f8f8;
+    border: 1px solid rgba(0,0,0,0.06);
+    padding: 13px 23px;
+    box-sizing: border-box;
+    margin-bottom: 30px;
+    transition: .2s all;
+    outline: 0;
+
+    &:focus{
+        border-color: $cor_primaria_neutra;
+    }
+
+    &.focused_or_filled{
+        padding: 13px 23px;
+        padding-left: 70px;
+    }
+}
+
+select {
+    appearance: none;
+    background-position: center right 23px;
+    background-repeat: no-repeat;
+}
+
+label{
+    position: absolute;
+    top: 13px;
+    left: 23px;
+    line-height: 24px;
+    color: $cinza_placeholder;
+    transition: .2s all;
+    cursor: pointer;
+
+    &.focused_or_filled{
+        color: $cor_primaria_neutra;
+        left: 20px;
+        font-size: .9em;
+        font-weight: bold;
+
+        &::after { 
+            content: ":";
+        }
+    }
+}
+
+.inside_icon{
+    position: absolute;
+    top: 15px;
+    right: 21px;
+    line-height: 19px;
+    cursor: pointer;
+}

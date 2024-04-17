@@ -1,0 +1,5 @@
+.vscode
+__pycache__
+wworan_*.sql
+mysql_*/
+data/

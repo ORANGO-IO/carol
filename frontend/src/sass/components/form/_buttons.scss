@@ -1,0 +1,17 @@
+.btn{
+    height: 45px;
+    text-align: center;
+    color: #FFF;
+    background: $cor_primaria_neutra;
+    font-weight: 500;
+    line-height: 21px;
+    font-size: 16px;
+    text-align: center;
+    text-transform: uppercase;
+    border: none;
+    outline: 0;
+
+    &.__full{
+        width: 100%;
+    }
+}

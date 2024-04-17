@@ -1,0 +1,9 @@
+@import url("https://fonts.googleapis.com/css?family=Hind+Guntur");
+@import url("/variables");
+@import url("mixins");
+@import url("/login");
+@import url("/components/form");
+html {
+  font-family: 'Hind Guntur', sans-serif;
+}
+/*# sourceMappingURL=app.css.map */

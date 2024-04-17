@@ -1,0 +1,10 @@
+Flask==2.0.3
+Flask-Cors==3.0.8
+simplejson==3.16.0
+gunicorn
+flask-swagger
+sqlalchemy
+alembic
+PyMySQL==0.10.0
+Werkzeug==2.2.2
+
