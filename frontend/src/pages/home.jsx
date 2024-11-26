@@ -1,15 +1,23 @@
-import React, { Component } from 'react'
-import { Segment, Container, Grid, Image, Dropdown, Modal, Loader, Form, Input, Button, Icon } from 'semantic-ui-react'
-import { Link } from 'react-router-dom'
-import HintedInput from '../components/form/input_hinted'
-import axios from 'axios'
-import QpDescription from '../components/qp_description'
-import FilterResults from '../components/filter_results'
-import AppContext from '../context'
+import axios from "axios";
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import {
+  Button,
+  Container,
+  Dropdown,
+  Grid,
+  Icon,
+  Input,
+  Loader,
+  Modal,
+  Segment,
+} from "semantic-ui-react";
+import FilterResults from "../components/filter_results";
+import HintedInput from "../components/form/input_hinted";
+import AppContext from "../context";
 
 export default class newHome extends Component {
-
-  static contextType = AppContext
+  static contextType = AppContext;
 
   state = {
     isLoading: false,
@@ -17,66 +25,81 @@ export default class newHome extends Component {
     dbQP: [],
     showedQP: [],
     dados: {},
-    categoria: null
-  }
+    categoria: null,
+  };
 
-  setQpId = hint => {
-    let selectedQP = this.state.dbQP.filter(qp => qp.ID == hint.ID)
-    console.log(selectedQP)
-    this.setState({ isLoading: true })
-    selectedQP.map(qp => {
-      axios(`${process.env.REACT_APP_API}/qp/${qp.ID}`)
-        .then(response => {
-          console.log(response.data)
-          this.context.showQp([response.data])
-          this.setState({ isLoading: false })
+  setQpId = (hint) => {
+    let selectedQP = this.state.dbQP.filter((qp) => qp.ID == hint.ID);
+    console.log(selectedQP);
+    this.setState({ isLoading: true });
+    selectedQP.map((qp) => {
+      axios(`${import.meta.env.REACT_APP_API}/qp/${qp.ID}`)
+        .then((response) => {
+          console.log(response.data);
+          this.context.showQp([response.data]);
+          this.setState({ isLoading: false });
         })
-        .catch(() => console.log("Não foi possível capturar a queixa principal"))
-    })
-  }
+        .catch(() =>
+          console.log("Não foi possível capturar a queixa principal")
+        );
+    });
+  };
 
-  changeCategoria = categoriaId => e => {
-    if(this.state.categoria == categoriaId){
-      this.setState({ categoria: null})
-    }else{
-      this.setState({ categoria: categoriaId })
+  changeCategoria = (categoriaId) => (e) => {
+    if (this.state.categoria == categoriaId) {
+      this.setState({ categoria: null });
+    } else {
+      this.setState({ categoria: categoriaId });
     }
-  }
+  };
 
   handleChangeDados = (e, { name, value }) => {
-    let dados = this.state.dados
-    dados[name] = parseFloat(value)
-    this.setState({ dados })
-  }
+    let dados = this.state.dados;
+    dados[name] = parseFloat(value);
+    this.setState({ dados });
+  };
 
   searchResults = () => {
-    this.setState({ isLoading: true })
-    console.log(this.state.dados, Object.entries(this.state.dados))
-    let url = `filter?${Object.entries(this.state.dados).map(dado => `${dado[0]}=${dado[1]}&`).join('')}`
-    url += `categoria=${this.state.categoria}`
-    console.log(url)
-    axios(`${process.env.REACT_APP_API}/${url}`)
-      .then(response => this.setState({ results: response.data, isLoading: false }, () => console.log(this.state.results)))
-      .catch(err => console.log(err))
-  }
+    this.setState({ isLoading: true });
+    console.log(this.state.dados, Object.entries(this.state.dados));
+    let url = `filter?${
+      Object.entries(this.state.dados).map((dado) => `${dado[0]}=${dado[1]}&`)
+        .join("")
+    }`;
+    url += `categoria=${this.state.categoria}`;
+    console.log(url);
+    axios(`${import.meta.env.REACT_APP_API}/${url}`)
+      .then((response) =>
+        this.setState(
+          { results: response.data, isLoading: false },
+          () => console.log(this.state.results),
+        )
+      )
+      .catch((err) => console.log(err));
+  };
 
   componentDidMount() {
     if (!this.state.dbQP.length) {
-      this.setState({ isLoading: true })
-      axios(`${process.env.REACT_APP_API}/qp`)
-        .then(response => {
-          let data = []
-          response.data.forEach(qp => {
-            let tmp = {}
-            tmp.ID = qp.ID
-            tmp.label = <div><strong>{qp.sintoma}</strong><p>{qp.observacao}</p></div>
-            tmp.value = qp.sintoma
-            tmp.content = `${qp.sintoma} ${qp.observacao}`
-            data.push(tmp)
-          })
-          this.setState({ dbQP: data, isLoading: false })
+      this.setState({ isLoading: true });
+      axios(`${import.meta.env.REACT_APP_API}/qp`)
+        .then((response) => {
+          let data = [];
+          response.data.forEach((qp) => {
+            let tmp = {};
+            tmp.ID = qp.ID;
+            tmp.label = (
+              <div>
+                <strong>{qp.sintoma}</strong>
+                <p>{qp.observacao}</p>
+              </div>
+            );
+            tmp.value = qp.sintoma;
+            tmp.content = `${qp.sintoma} ${qp.observacao}`;
+            data.push(tmp);
+          });
+          this.setState({ dbQP: data, isLoading: false });
         })
-        .catch(() => console.log("Não foi possível capturar as categorias"))
+        .catch(() => console.log("Não foi possível capturar as categorias"));
       // qpData().then(data => {
       //   this.setState({ dbQP : data }, () => console.log(this.state))
       // })
@@ -85,10 +108,16 @@ export default class newHome extends Component {
 
   render() {
     return [
-      <Modal size='tiny' open={this.state.isLoading} onClose={() => this.setState({ isLoading: false })}>
+      <Modal
+        size="tiny"
+        open={this.state.isLoading}
+        onClose={() => this.setState({ isLoading: false })}
+      >
         <Loader indeterminate>Carregando...</Loader>
       </Modal>,
-      <header className="main" ><Link to="/adm">Área administrativa</Link></header>,
+      <header className="main">
+        <Link to="/adm">Área administrativa</Link>
+      </header>,
       <Container id="home-search-box" text>
         <img src="/sm_carol.svg" />
         <Segment>
@@ -105,10 +134,22 @@ export default class newHome extends Component {
           </Grid>
           <Grid className="categoria">
             <Grid.Column mobile={16} tablet={8} computer={8}>
-              <Button onClick={this.changeCategoria(1)} positive={this.state.categoria === 1} fluid>Gestante</Button>
+              <Button
+                onClick={this.changeCategoria(1)}
+                positive={this.state.categoria === 1}
+                fluid
+              >
+                Gestante
+              </Button>
             </Grid.Column>
             <Grid.Column mobile={16} tablet={8} computer={8}>
-              <Button onClick={this.changeCategoria(3)} positive={this.state.categoria === 3} fluid>Criança</Button>
+              <Button
+                onClick={this.changeCategoria(3)}
+                positive={this.state.categoria === 3}
+                fluid
+              >
+                Criança
+              </Button>
             </Grid.Column>
           </Grid>
           <h4>Filtrar por sinais</h4>
@@ -118,9 +159,9 @@ export default class newHome extends Component {
                 fluid
                 name="pas"
                 type="number"
-                label={{ basic: true, content: 'mmHg' }}
-                labelPosition='right'
-                placeholder='Pressão sitólica'
+                label={{ basic: true, content: "mmHg" }}
+                labelPosition="right"
+                placeholder="Pressão sitólica"
                 onChange={this.handleChangeDados}
               />
             </Grid.Column>
@@ -129,9 +170,9 @@ export default class newHome extends Component {
                 fluid
                 name="pad"
                 type="number"
-                label={{ basic: true, content: 'mmHg' }}
-                labelPosition='right'
-                placeholder='Pressão diastólica'
+                label={{ basic: true, content: "mmHg" }}
+                labelPosition="right"
+                placeholder="Pressão diastólica"
                 onChange={this.handleChangeDados}
               />
             </Grid.Column>
@@ -140,9 +181,9 @@ export default class newHome extends Component {
                 fluid
                 name="fc"
                 type="number"
-                label={{ basic: true, content: 'bpm' }}
-                labelPosition='right'
-                placeholder='FC'
+                label={{ basic: true, content: "bpm" }}
+                labelPosition="right"
+                placeholder="FC"
                 onChange={this.handleChangeDados}
               />
             </Grid.Column>
@@ -151,9 +192,9 @@ export default class newHome extends Component {
                 fluid
                 name="fr"
                 type="number"
-                label={{ basic: true, content: 'ipm' }}
-                labelPosition='right'
-                placeholder='FR'
+                label={{ basic: true, content: "ipm" }}
+                labelPosition="right"
+                placeholder="FR"
                 onChange={this.handleChangeDados}
               />
             </Grid.Column>
@@ -162,9 +203,9 @@ export default class newHome extends Component {
                 fluid
                 name="spo2"
                 type="number"
-                label={{ basic: true, content: '%' }}
-                labelPosition='right'
-                placeholder='Saturação de O2'
+                label={{ basic: true, content: "%" }}
+                labelPosition="right"
+                placeholder="Saturação de O2"
                 onChange={this.handleChangeDados}
               />
             </Grid.Column>
@@ -173,9 +214,9 @@ export default class newHome extends Component {
                 fluid
                 name="temp"
                 type="number"
-                label={{ basic: true, content: 'ºC' }}
-                labelPosition='right'
-                placeholder='Temperatura'
+                label={{ basic: true, content: "ºC" }}
+                labelPosition="right"
+                placeholder="Temperatura"
                 onChange={this.handleChangeDados}
               />
             </Grid.Column>
@@ -184,7 +225,7 @@ export default class newHome extends Component {
                 fluid
                 name="glasgow"
                 type="number"
-                placeholder='Glasgow'
+                placeholder="Glasgow"
                 onChange={this.handleChangeDados}
               />
             </Grid.Column>
@@ -193,9 +234,9 @@ export default class newHome extends Component {
                 fluid
                 name="glicemia"
                 type="number"
-                label={{ basic: true, content: 'ml/dL' }}
-                labelPosition='right'
-                placeholder='HGT'
+                label={{ basic: true, content: "ml/dL" }}
+                labelPosition="right"
+                placeholder="HGT"
                 onChange={this.handleChangeDados}
               />
             </Grid.Column>
@@ -204,7 +245,7 @@ export default class newHome extends Component {
                 fluid
                 name="dor"
                 type="number"
-                placeholder='Dor'
+                placeholder="Dor"
                 onChange={this.handleChangeDados}
               />
             </Grid.Column>
@@ -212,25 +253,40 @@ export default class newHome extends Component {
               <Button animated primary fluid onClick={this.searchResults}>
                 <Button.Content visible>Filtrar</Button.Content>
                 <Button.Content hidden>
-                  <Icon name='arrow right' />
+                  <Icon name="arrow right" />
                 </Button.Content>
               </Button>
             </Grid.Column>
           </Grid>
           {/* <pre>{JSON.stringify(this.state.dados, null, 2)}</pre> */}
         </Segment>
-        {this.state.results ? <FilterResults results={this.state.results} /> : null}
+        {this.state.results
+          ? <FilterResults results={this.state.results} />
+          : null}
       </Container>,
       <footer className="main">
-        <Dropdown text='Classificações'>
+        <Dropdown text="Classificações">
           <Dropdown.Menu>
-            <Dropdown.Item text='Dor' />
-            <Dropdown.Item text='Glasgow' description='Nível de consciência' />
+            <Dropdown.Item text="Dor" />
+            <Dropdown.Item text="Glasgow" description="Nível de consciência" />
           </Dropdown.Menu>
-        </Dropdown><br />
-        Encontrou algum erro? Sugestão? Críticas?  <a href='https://gitlab.com/medapps/carol/frontend/issues' target='_blank'>Registre detalhadamente aqui</a><br />
-        <a href='/manual-acolhimento-classificacao-de-risco.pdf' target="_blank">Link para referência</a>
-      </footer>
-    ]
+        </Dropdown>
+        <br />
+        Encontrou algum erro? Sugestão? Críticas?{" "}
+        <a
+          href="https://gitlab.com/medapps/carol/frontend/issues"
+          target="_blank"
+        >
+          Registre detalhadamente aqui
+        </a>
+        <br />
+        <a
+          href="/manual-acolhimento-classificacao-de-risco.pdf"
+          target="_blank"
+        >
+          Link para referência
+        </a>
+      </footer>,
+    ];
   }
 }
