@@ -1,4 +1,4 @@
-version: '3.1'
+version: "3.1"
 
 services:
   db:
@@ -10,7 +10,7 @@ services:
       MYSQL_DATABASE: carol_v1_db
       MYSQL_USER: carol
       MYSQL_PASSWORD: JVeuiA7E30u8SQx5
-      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+      MYSQL_RANDOM_ROOT_PASSWORD: "1"
     volumes:
       # Change to an empty volume in prod
       - ./data:/var/lib/mysql
@@ -41,4 +41,3 @@ services:
       - 99:80
     depends_on:
       - api
-
