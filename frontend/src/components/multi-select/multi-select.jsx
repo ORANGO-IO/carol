@@ -1,27 +1,31 @@
 import SelectComponent from "react-select";
 
-export const Select = ({ placeholder, name, onChange, options, hasError }) => {
+export const MultiSelect = (
+  { placeholder, name, onChange, options },
+) => {
   return (
     <SelectComponent
-      options={options}
-      onChange={(value) => {
+      name={name}
+      isMulti
+      onChange={(values) => {
         const event = {
           target: {
             name,
-            value: value.value,
+            value: values.map((value) => value.value),
           },
         };
         onChange(event);
       }}
-      name={name}
+      options={options}
       placeholder={placeholder}
       styles={{
         control: (provided) => ({
           ...provided,
           borderRadius: "24px",
           textAlign: "left",
-          borderColor: hasError ? "red" : "#9c9c9c",
+          borderColor: "#9c9c9c",
           fontSize: 16,
+          minHeight: 60,
         }),
         option: (provided) => ({
           ...provided,
@@ -34,6 +38,14 @@ export const Select = ({ placeholder, name, onChange, options, hasError }) => {
         }),
         placeholder: (provided) => ({
           ...provided,
+        }),
+        multiValue: (provided) => ({
+          ...provided,
+          borderRadius: "24px",
+        }),
+        multiValueRemove: (provided) => ({
+          ...provided,
+          borderRadius: "24px",
         }),
       }}
     />

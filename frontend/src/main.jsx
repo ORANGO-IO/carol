@@ -1,14 +1,12 @@
 import React, { useState } from "react";
-import "semantic-ui-css/semantic.min.css";
-import "./index.css"
 import { createRoot } from "react-dom/client";
+import "semantic-ui-css/semantic.min.css";
 import AppContext from "./context";
+import "./index.css";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import {HomePage} from './pages/home/home'
-
-import Edit from "./pages/edit";
+import { HomePage } from "./pages/home/home";
 
 const Main = () => {
   const [isShowingQp, setIsShowingQp] = useState(false);
@@ -29,10 +27,6 @@ const Main = () => {
     {
       path: "/",
       element: <HomePage />,
-    },
-    {
-      path: "/edit",
-      element: <Edit />,
     },
   ]);
 

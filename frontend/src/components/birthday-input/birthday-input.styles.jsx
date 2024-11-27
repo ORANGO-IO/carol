@@ -1,15 +1,21 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  border: 1px solid #ccc;
+  border: ${(
+  { hasError },
+) => (hasError ? "1px solid red" : "1px solid #9c9c9c")};
   border-radius: 24px;
   font-size: 16px;
   background-color: white;
   transition: 0.2s;
-  padding: 10px;
   flex-direction: row;
+  align-items: center;
   display: flex;
   gap: 6px;
+  padding: 0px 10px;
+  width: 100%;
+  flex: 1 1 240px;
+  height: 40px;
 `;
 
 export const InputContainer = styled.div`
@@ -33,6 +39,6 @@ export const Divider = styled.div`
 
 export const PatientAgeContainer = styled.div``;
 
-export const PatientAge = styled.text`
-  color: black;
+export const PatientAge = styled.p`
+  color: #9C9C9C;
 `;

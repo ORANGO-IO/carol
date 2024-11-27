@@ -7,7 +7,7 @@ export const Container = styled.div`
   justify-content: center;
 `;
 
-export const Label = styled.text`
+export const Label = styled.p`
   color: ${(props) => (props.enabled ? props.color ?? "black" : "#ccc")};
   transition: 0.2s;
 `;

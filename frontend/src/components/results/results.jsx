@@ -12,7 +12,7 @@ export const Results = () => {
       <Title>RESULTADO MAIS SENSÍVEL CARREGADO</Title>
 
       <ResultContainer>
-        <ResultTitle>TÍTULO DA SUGESTÃO DE </ResultTitle>
+        <ResultTitle>TÍTULO DA SUGESTÃO DE</ResultTitle>
         <ResultMessage>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
           convallis, nulla a gravida auctor, arcu eros aliquet elit, eu maximus
