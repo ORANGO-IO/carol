@@ -42,3 +42,12 @@ export const PatientAgeContainer = styled.div``;
 export const PatientAge = styled.p`
   color: #9C9C9C;
 `;
+
+export const PatientAgeInput = styled.input`
+   width: 100%;
+  background-color: white;
+  color: black;
+  outline: none;
+  font-size: 16px;
+  border: none;
+`;

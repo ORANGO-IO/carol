@@ -21,6 +21,7 @@
     "semantic-ui-css": "^2.5.0",
     "semantic-ui-react": "^2.1.5",
     "styled-components": "^6.1.13",
+    "use-mask-input": "^3.4.2",
     "yup": "^1.4.0"
   },
   "devDependencies": {

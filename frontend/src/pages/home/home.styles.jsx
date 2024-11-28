@@ -8,9 +8,6 @@ export const Container = styled.div`
   gap: 16px;
 `;
 
-export const LogoContainer = styled.div`
-`;
-
 export const Title = styled.p`
   font-size: 14px;
   font-weight: bold;

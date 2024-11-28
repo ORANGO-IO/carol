@@ -1,3 +1,4 @@
+import { withMask } from "use-mask-input";
 import {
   BirthdayInput,
   Container,
@@ -5,67 +6,97 @@ import {
   InputContainer,
   PatientAge,
   PatientAgeContainer,
+  PatientAgeInput,
 } from "./birthday-input.styles";
 
-export const BirthdayField = ({ placeholder, value, onChange, hasError }) => {
+const DATE_REGEX = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+
+export const BirthdayField = (
+  { placeholder, value, onChange, hasError, ageValue },
+) => {
   function onChangeDate(e) {
     const value = e.target.value;
-    const date = new Date(value);
-    if (isNaN(date.getTime())) {
-      return;
-    }
-    const today = new Date();
-    if (date > today) {
-      return;
-    }
     onChange({
       target: {
         name: "birthday",
         value: value,
       },
     });
+
+    onChange({
+      target: {
+        name: "age",
+        value: "",
+      },
+    });
   }
 
-  function displayAge(birthday) {
-    if (!birthday || typeof birthday !== "string") return "IDADE";
+  function onChangeAge(e) {
+    const value = e.target.value;
+    onChange({
+      target: {
+        name: "age",
+        value: value,
+      },
+    });
 
-    const regex = /^\d{4}-\d{2}-\d{2}$/;
-    if (!regex.test(birthday)) return "IDADE";
+    onChange({
+      target: {
+        name: "birthday",
+        value: "",
+      },
+    });
+  }
 
-    const date = new Date(birthday);
+  function calculateAge(birthDate) {
+    if (!DATE_REGEX.test(birthDate)) "IDADE";
 
-    if (isNaN(date.getTime())) return "IDADE";
-
+    const [day, month, year] = birthDate.split("/").map(Number);
     const today = new Date();
-    let age = today.getFullYear() - date.getFullYear();
-    const monthDifference = today.getMonth() - date.getMonth();
+    let age = today.getFullYear() - year;
 
-    if (
-      monthDifference < 0 ||
-      (monthDifference === 0 && today.getDate() < date.getDate())
-    ) {
+    const hasBirthdayThisYear = today.getMonth() + 1 > month ||
+      (today.getMonth() + 1 === month && today.getDate() >= day);
+
+    if (!hasBirthdayThisYear) {
       age--;
     }
 
-    return age >= 0 ? `${age} ANOS` : "IDADE";
+    return age;
   }
 
   return (
     <Container hasError={hasError}>
       <InputContainer>
         <BirthdayInput
+          ref={withMask("99/99/9999")}
           name="birthday"
           value={value}
           onChange={onChangeDate}
-          maxLength={2}
-          type="date"
+          maxLength={10}
+          type="text"
           placeholder={placeholder}
         />
       </InputContainer>
       <Divider />
-      <PatientAgeContainer>
-        <PatientAge>{displayAge(value)}</PatientAge>
-      </PatientAgeContainer>
+      {DATE_REGEX.test(value)
+        ? (
+          <PatientAgeContainer>
+            <PatientAge>{`${calculateAge(value)} ANOS`}</PatientAge>
+          </PatientAgeContainer>
+        )
+        : (
+          <PatientAgeContainer>
+            <PatientAgeInput
+              maxLength={3}
+              onChange={onChangeAge}
+              value={ageValue}
+              name="age"
+              placeholder="IDADE"
+              type="text"
+            />
+          </PatientAgeContainer>
+        )}
     </Container>
   );
 };

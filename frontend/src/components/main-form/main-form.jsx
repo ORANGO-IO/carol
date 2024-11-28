@@ -3,7 +3,7 @@ import { MultiSelect } from "../multi-select/multi-select";
 import { Select } from "../select/select";
 import { Formik } from "formik";
 import { TextField } from "../text-field/text-field";
-import * as Yup from "yup";
+
 import {
   Container,
   FormRow,
@@ -14,6 +14,7 @@ import {
   SelectContainer,
   SubmitButton,
 } from "./main-form.styles";
+import { FormSchema } from "./form-schema";
 
 export const stateOptions = [
   { value: "AL", label: "Alabama" },
@@ -33,28 +34,13 @@ export const stateOptions = [
   { value: "HI", label: "Hawaii" },
 ];
 
-const FormSchema = Yup.object().shape({
-  complaint: Yup.string().required("Campo obrigatório"),
-  birthday: Yup.string().required("Campo obrigatório"),
-  vulnarability: Yup.string().required("Campo obrigatório"),
-  symptoms: Yup.array().required("Campo obrigatório"),
-  systolicPressure: Yup.string().required("Campo obrigatório"),
-  diastolicPressure: Yup.string().required("Campo obrigatório"),
-  heartRate: Yup.string().required("Campo obrigatório"),
-  respiratoryRate: Yup.string().required("Campo obrigatório"),
-  spO2: Yup.string().required("Campo obrigatório"),
-  temperature: Yup.string().required("Campo obrigatório"),
-  glasgow: Yup.string().required("Campo obrigatório"),
-  hgt: Yup.string().required("Campo obrigatório"),
-  pain: Yup.string().required("Campo obrigatório"),
-});
-
 export const MainForm = () => {
   return (
     <Formik
       initialValues={{
         complaint: "",
         birthday: "",
+        age: "",
         vulnarability: "",
         symptoms: [],
         systolicPressure: "",
@@ -79,9 +65,10 @@ export const MainForm = () => {
         handleSubmit,
       }) => (
         <Container onSubmit={handleSubmit}>
+          {console.log(errors)}
           <PatientComplaintContainer>
             <Select
-              hasError={errors.complaint}
+              hasError={errors.complaint ? true : false}
               options={stateOptions}
               onChange={handleChange}
               name="complaint"
@@ -89,6 +76,7 @@ export const MainForm = () => {
             />
             <PatientComplaintRow>
               <BirthdayField
+                ageValue={values.age}
                 hasError={errors.birthday}
                 onChange={handleChange}
                 value={values.birthday}
