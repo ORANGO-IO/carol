@@ -1,20 +1,20 @@
 import SelectComponent from "react-select";
 
 export const MultiSelect = (
-  { placeholder, name, onChange, options },
+  { placeholder, name, options, setValues, handleBlur },
 ) => {
   return (
     <SelectComponent
+      onBlur={handleBlur}
       name={name}
       isMulti
       onChange={(values) => {
-        const event = {
-          target: {
-            name,
-            value: values.map((value) => value.value),
-          },
-        };
-        onChange(event);
+        setValues((prev) => {
+          return {
+            ...prev,
+            [name]: values.map((value) => value.value),
+          };
+        });
       }}
       options={options}
       placeholder={placeholder}

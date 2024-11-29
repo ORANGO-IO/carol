@@ -62,24 +62,29 @@ export const PatientSignsRow = styled.div`
   display: flex;
 `;
 
-export const SubmitButton = styled.button`
+export const SubmitButton = styled.button.withConfig({
+  shouldForwardProp: (prop) => !["active"].includes(prop),
+})`
   display: flex;
   justify-content: center;
   align-items: center;
   border-bottom-left-radius: 24px;
   border-bottom-right-radius: 24px;
-  background-color: #2578fa;
+  background-color: ${(props) => (props.active ? "#2578fa" : "#ccc")};
   height: 50px;
   border: none;
-  cursor: pointer;
-  color:white;
-
-  &:hover {
-    background-color: #1e5fbc;
-  }
+  cursor: ${(props) => (props.active ? "pointer" : "not-allowed")};
+  color: ${(props) => (props.active ? "white" : "#666")};
   font-weight: bold;
   font-size: 18px;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: ${(props) =>
+  props.active ? "#1e5fbc" : "#ccc"}; /* Muda a cor apenas se ativo */
+  }
+
   &:active {
-    background-color: #0f4a9a;
+    background-color: ${(props) => (props.active ? "#0f4a9a" : "#ccc")};
   }
 `;

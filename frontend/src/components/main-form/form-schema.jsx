@@ -1,12 +1,42 @@
 import * as Yup from "yup";
-const REQUIRED_FIELD = "Campo obrigatório";
+import { DATE_REGEX } from "../../regex";
+
+function validateBirthday(value) {
+  if (value == undefined || value == "") return true;
+
+  if (!DATE_REGEX.test(value)) return false;
+
+  const [day, month, year] = value.split("/").map(Number);
+
+  if (day < 1 || day > 31) return false;
+  if (month < 1 || month > 12) return false;
+  if (year < 1900) return false;
+
+  return true;
+}
+
+function validateAge(value) {
+  if (value == undefined || value == "") return true;
+
+  if (Number(value) <= 0 || Number(value) >= 120) return false;
+
+  return true;
+}
+
+function validateSystolicPressure(value) {
+  if (value == undefined || value == "") return true;
+
+  return true;
+}
 
 export const FormSchema = Yup.object().shape({
   complaint: Yup.string(),
-  birthday: Yup.string(),
-  age: Yup.number()
-    .min(0, "A idade não pode ser negativa")
-    .max(120, "Idade inválida"),
+  birthday: Yup.string().test(
+    "validate-birthday",
+    "Data de nascimento inválida",
+    validateBirthday,
+  ),
+  age: Yup.string().test("validate-age", "Idade inválida", validateAge),
   vulnarability: Yup.string(),
   symptoms: Yup.array().of(Yup.string()),
   systolicPressure: Yup.number()

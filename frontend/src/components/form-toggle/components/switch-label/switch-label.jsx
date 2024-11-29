@@ -13,7 +13,13 @@ export const SwitchLabel = ({
       <Label enabled={enabled} color={textColor}>
         {text}
       </Label>
-      {rightImage && <RightImage src={rightImage} alt="rightImage" />}
+      {rightImage && (
+        <RightImage
+          width={23}
+          src={rightImage}
+          alt="rightImage"
+        />
+      )}
     </Container>
   );
 };

@@ -1,11 +1,11 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
+export const Container = styled.div.withConfig({
+  shouldForwardProp: (prop) => !["flexValue", "hasError"].includes(prop), // Prevent flexValue from being forwarded to the DOM
+})`
   display: flex;
   flex-direction: row;
-  border: ${(
-  props,
-) => (props.hasError ? "1px solid red" : "1px solid #9c9c9c")};
+  border: ${(props) => props.hasError ? "1px solid red" : "1px solid #9c9c9c"};
   border-radius: 24px;
   background-color: white;
   width: 100%;

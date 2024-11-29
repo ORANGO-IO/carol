@@ -1,18 +1,36 @@
+import { useState } from "react";
 import {
   Container,
+  CopyMessage,
+  CopyResult,
   ResultContainer,
   ResultMessage,
   ResultTitle,
   Title,
+  TitleContainer,
 } from "./results.styles";
 
 export const Results = () => {
+  const [copyMessage, setCopyMessage] = useState(false);
+
+  function onCopyResult() {
+    navigator.clipboard.writeText(
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer convallis}",
+    );
+
+    setCopyMessage(true);
+    setTimeout(() => {
+      setCopyMessage(false);
+    }, 800);
+  }
+
   return (
     <Container>
       <Title>RESULTADO MAIS SENSÍVEL CARREGADO</Title>
-
       <ResultContainer>
-        <ResultTitle>TÍTULO DA SUGESTÃO DE</ResultTitle>
+        <TitleContainer>
+          <ResultTitle>TÍTULO DA SUGESTÃO DE</ResultTitle>
+        </TitleContainer>
         <ResultMessage>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
           convallis, nulla a gravida auctor, arcu eros aliquet elit, eu maximus
@@ -28,6 +46,8 @@ export const Results = () => {
           ac sapien luctus, vestibulum erat eget, fringilla quam.
         </ResultMessage>
       </ResultContainer>
+      <CopyResult onClick={onCopyResult}>Copiar</CopyResult>
+      <CopyMessage active={copyMessage}>Resultado copiado!</CopyMessage>
     </Container>
   );
 };

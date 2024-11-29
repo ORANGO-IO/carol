@@ -21,21 +21,18 @@ export const Logo = () => {
       <LogoComponent src={LogoImage} alt="logo CAROL" />
 
       <About
-        width={16}
         onClick={handlePopup}
         src={AboutIcon}
         alt="sobre CAROL"
       />
-      {showPopup && (
-        <Popup>
-          <PopupText>
-            Esse projeto iniciou como uma intervenção no internato de medicina
-            da UFBA no Vale do Capão - Chapada Diamantina/BA. A recepcionista
-            Carol fazia um 'acolhimento' verificando a gravidade dos casos, o
-            que inspirou o sistema.
-          </PopupText>
-        </Popup>
-      )}
+      <Popup showPopup={showPopup}>
+        <PopupText>
+          Esse projeto iniciou como uma intervenção no internato de medicina da
+          UFBA no Vale do Capão - Chapada Diamantina/BA. A recepcionista Carol
+          fazia um 'acolhimento' verificando a gravidade dos casos, o que
+          inspirou o sistema.
+        </PopupText>
+      </Popup>
     </LogoContainer>
   );
 };

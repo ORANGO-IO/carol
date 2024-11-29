@@ -12,13 +12,16 @@ position: absolute;
 top: 0px;
 right: 0px;
 cursor: pointer;
-width: 20px;
+width: 14px;
 `;
 
-export const Popup = styled.div`
+export const Popup = styled.div.withConfig({
+  shouldForwardProp: (prop) => !["showPopup"].includes(prop),
+})`
+opacity: ${(props) => (props.showPopup ? "1" : "0")};
+transition: 0.2s;
 z-index: 1;
 position: absolute;
-display: block;
 top: 24px;
 right: -75px;
 min-width: 300px;

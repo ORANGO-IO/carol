@@ -30,6 +30,7 @@ export const FormSwitch = ({ onToggle, leftLabel, rightLabel }) => {
       )}
       <SwitchInputContainer>
         <SwitchInput
+          name="switch"
           type="checkbox"
           checked={isChecked}
           onChange={handleToggle}

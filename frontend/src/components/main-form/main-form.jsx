@@ -1,9 +1,11 @@
+import { Formik } from "formik";
 import { BirthdayField } from "../birthday-input/birthday-input";
 import { MultiSelect } from "../multi-select/multi-select";
 import { Select } from "../select/select";
-import { Formik } from "formik";
 import { TextField } from "../text-field/text-field";
 
+import { PrecisionWarningMessage } from "../precision-warning-message/precision-warning-message";
+import { FormSchema } from "./form-schema";
 import {
   Container,
   FormRow,
@@ -14,7 +16,7 @@ import {
   SelectContainer,
   SubmitButton,
 } from "./main-form.styles";
-import { FormSchema } from "./form-schema";
+import { FormErrors } from "../form-errors/form-errors";
 
 export const stateOptions = [
   { value: "AL", label: "Alabama" },
@@ -34,25 +36,37 @@ export const stateOptions = [
   { value: "HI", label: "Hawaii" },
 ];
 
+const MIN_INPUT_REQUIRED = 4;
+
+const INITIAL_VALUES = {
+  complaint: "",
+  birthday: "",
+  age: "",
+  vulnarability: "",
+  symptoms: [],
+  systolicPressure: "",
+  diastolicPressure: "",
+  heartRate: "",
+  respiratoryRate: "",
+  spO2: "",
+  temperature: "",
+  glasgow: "",
+  hgt: "",
+  pain: "",
+};
+
 export const MainForm = () => {
+  function checkInputFilled(values) {
+    return Object.values(values).filter(
+      (value) =>
+        value !== "" && value !== null && value !== undefined &&
+        value.length != 0,
+    ).length;
+  }
+
   return (
     <Formik
-      initialValues={{
-        complaint: "",
-        birthday: "",
-        age: "",
-        vulnarability: "",
-        symptoms: [],
-        systolicPressure: "",
-        diastolicPressure: "",
-        heartRate: "",
-        respiratoryRate: "",
-        spO2: "",
-        temperature: "",
-        glasgow: "",
-        hgt: "",
-        pain: "",
-      }}
+      initialValues={INITIAL_VALUES}
       onSubmit={(values) => {
         console.log(values);
       }}
@@ -61,130 +75,157 @@ export const MainForm = () => {
       {({
         values,
         errors,
-        handleChange,
         handleSubmit,
-      }) => (
-        <Container onSubmit={handleSubmit}>
-          {console.log(errors)}
-          <PatientComplaintContainer>
-            <Select
-              hasError={errors.complaint ? true : false}
-              options={stateOptions}
-              onChange={handleChange}
-              name="complaint"
-              placeholder="QUEIXA PRINCIPAL"
-            />
-            <PatientComplaintRow>
-              <BirthdayField
-                ageValue={values.age}
-                hasError={errors.birthday}
-                onChange={handleChange}
-                value={values.birthday}
-                placeholder="D. NASCIMENTO"
+        handleBlur,
+        isValid,
+        setValues,
+      }) => {
+        return (
+          <Container onSubmit={handleSubmit}>
+            {console.log(errors)}
+            <PatientComplaintContainer>
+              <Select
+                handleBlur={handleBlur}
+                setValues={setValues}
+                hasError={errors.complaint ? true : false}
+                options={stateOptions}
+                name="complaint"
+                placeholder="QUEIXA PRINCIPAL"
               />
-              <SelectContainer>
-                <Select
-                  hasError={errors.vulnarability}
-                  onChange={handleChange}
-                  options={stateOptions}
-                  name="vulnarability"
-                  placeholder="VULNERABILIDADE"
+              <PatientComplaintRow>
+                <BirthdayField
+                  handleBlur={handleBlur}
+                  setValues={setValues}
+                  ageValue={values.age}
+                  hasError={errors.birthday || errors.age}
+                  value={values.birthday}
+                  placeholder="D. NASCIMENTO"
                 />
-              </SelectContainer>
-            </PatientComplaintRow>
-            <MultiSelect
-              options={stateOptions}
-              onChange={handleChange}
-              name="symptoms"
-              placeholder="SINTOMAS"
-            />
-          </PatientComplaintContainer>
-          <PatientSignsContainer>
-            <PatientSignsTitle>SINAIS</PatientSignsTitle>
-            <FormRow>
-              <TextField
-                hasError={errors.systolicPressure}
-                onChange={handleChange}
-                value={values.systolicPressure}
-                name="systolicPressure"
-                flexValue={"1 1 200px"}
-                label="mmHg"
-                placeholder="PRESSÃO SISTÓLICA"
+                <SelectContainer>
+                  <Select
+                    handleBlur={handleBlur}
+                    setValues={setValues}
+                    hasError={errors.vulnarability}
+                    options={stateOptions}
+                    name="vulnarability"
+                    placeholder="VULNERABILIDADE"
+                  />
+                </SelectContainer>
+              </PatientComplaintRow>
+              <MultiSelect
+                setValues={setValues}
+                handleBlur={handleBlur}
+                options={stateOptions}
+                name="symptoms"
+                placeholder="SINTOMAS"
               />
-              <TextField
-                hasError={errors.diastolicPressure}
-                onChange={handleChange}
-                value={values.diastolicPressure}
-                name="diastolicPressure"
-                flexValue={"1 1 200px"}
-                label="mmHg"
-                placeholder="PRESSÃO DIASTÓLICA"
-              />
-            </FormRow>
-            <FormRow>
-              <TextField
-                hasError={errors.heartRate}
-                onChange={handleChange}
-                value={values.heartRate}
-                name="heartRate"
-                label="bpm"
-                placeholder="FC"
-              />
-              <TextField
-                hasError={errors.respiratoryRate}
-                onChange={handleChange}
-                value={values.respiratoryRate}
-                name="respiratoryRate"
-                label="ipm"
-                placeholder="FR"
-              />
-              <TextField
-                hasError={errors.spO2}
-                onChange={handleChange}
-                value={values.spO2}
-                name="spO2"
-                label="%"
-                placeholder="SpO2"
-              />
-              <TextField
-                hasError={errors.temperature}
-                onChange={handleChange}
-                value={values.temperature}
-                name="temperature"
-                label="ºC"
-                placeholder="Temp"
-              />
-            </FormRow>
-            <FormRow>
-              <TextField
-                hasError={errors.glasgow}
-                onChange={handleChange}
-                value={values.glasgow}
-                name="glasgow"
-                label="/15"
-                placeholder="Glasgow"
-              />
-              <TextField
-                hasError={errors.hgt}
-                onChange={handleChange}
-                value={values.hgt}
-                name="hgt"
-                label="mg/dL"
-                placeholder="HGT"
-              />
-              <TextField
-                hasError={errors.pain}
-                onChange={handleChange}
-                value={values.pain}
-                name="pain"
-                label="/10"
-                placeholder="Dor"
-              />
-            </FormRow>
-          </PatientSignsContainer>
-          <SubmitButton type="submit">RESULTADO</SubmitButton>
-        </Container>
-      )}
+            </PatientComplaintContainer>
+            <PatientSignsContainer>
+              <PatientSignsTitle>SINAIS</PatientSignsTitle>
+              <FormRow>
+                <TextField
+                  setValues={setValues}
+                  hasError={errors.systolicPressure}
+                  handleBlur={handleBlur}
+                  value={values.systolicPressure}
+                  name="systolicPressure"
+                  flexValue={"1 1 200px"}
+                  label="mmHg"
+                  placeholder="PRESSÃO SISTÓLICA"
+                />
+                <TextField
+                  setValues={setValues}
+                  hasError={errors.diastolicPressure}
+                  handleBlur={handleBlur}
+                  value={values.diastolicPressure}
+                  name="diastolicPressure"
+                  flexValue={"1 1 200px"}
+                  label="mmHg"
+                  placeholder="PRESSÃO DIASTÓLICA"
+                />
+              </FormRow>
+              <FormRow>
+                <TextField
+                  setValues={setValues}
+                  hasError={errors.heartRate}
+                  handleBlur={handleBlur}
+                  value={values.heartRate}
+                  name="heartRate"
+                  label="bpm"
+                  placeholder="FC"
+                />
+                <TextField
+                  setValues={setValues}
+                  hasError={errors.respiratoryRate}
+                  handleBlur={handleBlur}
+                  value={values.respiratoryRate}
+                  name="respiratoryRate"
+                  label="ipm"
+                  placeholder="FR"
+                />
+                <TextField
+                  setValues={setValues}
+                  hasError={errors.spO2}
+                  handleBlur={handleBlur}
+                  value={values.spO2}
+                  name="spO2"
+                  label="%"
+                  placeholder="SpO2"
+                />
+                <TextField
+                  setValues={setValues}
+                  hasError={errors.temperature}
+                  handleBlur={handleBlur}
+                  value={values.temperature}
+                  name="temperature"
+                  label="ºC"
+                  placeholder="Temp"
+                />
+              </FormRow>
+              <FormRow>
+                <TextField
+                  setValues={setValues}
+                  hasError={errors.glasgow}
+                  handleBlur={handleBlur}
+                  value={values.glasgow}
+                  name="glasgow"
+                  label="/15"
+                  placeholder="Glasgow"
+                />
+                <TextField
+                  setValues={setValues}
+                  hasError={errors.hgt}
+                  handleBlur={handleBlur}
+                  value={values.hgt}
+                  name="hgt"
+                  label="mg/dL"
+                  placeholder="HGT"
+                />
+                <TextField
+                  setValues={setValues}
+                  hasError={errors.pain}
+                  handleBlur={handleBlur}
+                  value={values.pain}
+                  name="pain"
+                  label="/10"
+                  placeholder="Dor"
+                />
+              </FormRow>
+              <FormErrors errors={errors} />
+              {checkInputFilled(values) < MIN_INPUT_REQUIRED && (
+                <PrecisionWarningMessage />
+              )}
+            </PatientSignsContainer>
+            <SubmitButton
+              disabled={!isValid || !checkInputFilled(values)}
+              active={isValid && checkInputFilled(values)}
+              type="submit"
+            >
+              RESULTADO
+            </SubmitButton>
+          </Container>
+        );
+      }}
     </Formik>
   );
 };

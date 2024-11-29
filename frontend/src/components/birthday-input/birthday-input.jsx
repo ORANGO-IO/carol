@@ -1,4 +1,5 @@
 import { withMask } from "use-mask-input";
+import { DATE_REGEX, NUMERIC_REGEX } from "../../regex";
 import {
   BirthdayInput,
   Container,
@@ -7,45 +8,34 @@ import {
   PatientAge,
   PatientAgeContainer,
   PatientAgeInput,
+  PatientAgeInputContainer,
 } from "./birthday-input.styles";
 
-const DATE_REGEX = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
-
 export const BirthdayField = (
-  { placeholder, value, onChange, hasError, ageValue },
+  { placeholder, value, hasError, ageValue, setValues, handleBlur },
 ) => {
   function onChangeDate(e) {
     const value = e.target.value;
-    onChange({
-      target: {
-        name: "birthday",
-        value: value,
-      },
-    });
 
-    onChange({
-      target: {
-        name: "age",
-        value: "",
-      },
+    setValues((values) => {
+      return {
+        ...values,
+        birthday: value,
+        age: "",
+      };
     });
   }
 
   function onChangeAge(e) {
     const value = e.target.value;
-    onChange({
-      target: {
-        name: "age",
-        value: value,
-      },
-    });
 
-    onChange({
-      target: {
-        name: "birthday",
-        value: "",
-      },
-    });
+    if (NUMERIC_REGEX.test(value) || value === "") {
+      setValues((values) => ({
+        ...values,
+        birthday: "",
+        age: value,
+      }));
+    }
   }
 
   function calculateAge(birthDate) {
@@ -69,6 +59,7 @@ export const BirthdayField = (
     <Container hasError={hasError}>
       <InputContainer>
         <BirthdayInput
+          onBlur={handleBlur}
           ref={withMask("99/99/9999")}
           name="birthday"
           value={value}
@@ -86,8 +77,9 @@ export const BirthdayField = (
           </PatientAgeContainer>
         )
         : (
-          <PatientAgeContainer>
+          <PatientAgeInputContainer>
             <PatientAgeInput
+              onBlur={handleBlur}
               maxLength={3}
               onChange={onChangeAge}
               value={ageValue}
@@ -95,7 +87,7 @@ export const BirthdayField = (
               placeholder="IDADE"
               type="text"
             />
-          </PatientAgeContainer>
+          </PatientAgeInputContainer>
         )}
     </Container>
   );

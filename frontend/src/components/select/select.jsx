@@ -1,17 +1,19 @@
 import SelectComponent from "react-select";
 
-export const Select = ({ placeholder, name, onChange, options, hasError }) => {
+export const Select = (
+  { placeholder, name, options, hasError, setValues, handleBlur },
+) => {
   return (
     <SelectComponent
+      onBlur={handleBlur}
       options={options}
       onChange={(value) => {
-        const event = {
-          target: {
-            name,
-            value: value.value,
-          },
-        };
-        onChange(event);
+        setValues((values) => {
+          return {
+            ...values,
+            [name]: value.value,
+          };
+        });
       }}
       name={name}
       placeholder={placeholder}

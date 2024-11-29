@@ -1,6 +1,8 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
+export const Container = styled.div.withConfig({
+  shouldForwardProp: (props) => props !== "hasError",
+})`
   border: ${(
   { hasError },
 ) => (hasError ? "1px solid red" : "1px solid #9c9c9c")};
@@ -37,10 +39,17 @@ export const Divider = styled.div`
   background-color: #ccc;
 `;
 
-export const PatientAgeContainer = styled.div``;
+export const PatientAgeContainer = styled.div`
+width: 50%;
+text-align: start;
+`;
 
 export const PatientAge = styled.p`
   color: #9C9C9C;
+`;
+
+export const PatientAgeInputContainer = styled.div`
+width: 50%;
 `;
 
 export const PatientAgeInput = styled.input`
