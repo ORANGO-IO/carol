@@ -4,6 +4,9 @@ import { MultiSelect } from "../multi-select/multi-select";
 import { Select } from "../select/select";
 import { TextField } from "../text-field/text-field";
 
+import { useEffect, useState } from "react";
+import { getMainComplaints } from "../../api/get-main-complaints";
+import { FormErrors } from "../form-errors/form-errors";
 import { PrecisionWarningMessage } from "../precision-warning-message/precision-warning-message";
 import { FormSchema } from "./form-schema";
 import {
@@ -16,25 +19,8 @@ import {
   SelectContainer,
   SubmitButton,
 } from "./main-form.styles";
-import { FormErrors } from "../form-errors/form-errors";
-
-export const stateOptions = [
-  { value: "AL", label: "Alabama" },
-  { value: "AK", label: "Alaska" },
-  { value: "AS", label: "American Samoa" },
-  { value: "AZ", label: "Arizona" },
-  { value: "AR", label: "Arkansas" },
-  { value: "CA", label: "California" },
-  { value: "CO", label: "Colorado" },
-  { value: "CT", label: "Connecticut" },
-  { value: "DE", label: "Delaware" },
-  { value: "DC", label: "District Of Columbia" },
-  { value: "FM", label: "Federated States Of Micronesia" },
-  { value: "FL", label: "Florida" },
-  { value: "GA", label: "Georgia" },
-  { value: "GU", label: "Guam" },
-  { value: "HI", label: "Hawaii" },
-];
+import { useAtom } from "jotai";
+import { mainComplaintsAtom } from "../../store/main-store";
 
 const MIN_INPUT_REQUIRED = 4;
 
@@ -56,6 +42,9 @@ const INITIAL_VALUES = {
 };
 
 export const MainForm = () => {
+  const [mainComplaints, setMainComplaints] = useAtom(mainComplaintsAtom);
+  const [isLoadingMainComplaints, setIsLoadingMainComplaints] = useState(true);
+
   function checkInputFilled(values) {
     return Object.values(values).filter(
       (value) =>
@@ -63,6 +52,19 @@ export const MainForm = () => {
         value.length != 0,
     ).length;
   }
+
+  useEffect(() => {
+    getMainComplaints().then((mainComplaints) => {
+      setMainComplaints(mainComplaints.map((item) => {
+        return {
+          label: item.sintoma.toLocaleUpperCase(),
+          value: item.sintoma,
+        };
+      }));
+    }, []).finally(() => {
+      setIsLoadingMainComplaints(false);
+    });
+  }, []);
 
   return (
     <Formik
@@ -82,13 +84,13 @@ export const MainForm = () => {
       }) => {
         return (
           <Container onSubmit={handleSubmit}>
-            {console.log(errors)}
             <PatientComplaintContainer>
               <Select
+                isLoading={isLoadingMainComplaints}
                 handleBlur={handleBlur}
                 setValues={setValues}
                 hasError={errors.complaint ? true : false}
-                options={stateOptions}
+                options={mainComplaints}
                 name="complaint"
                 placeholder="QUEIXA PRINCIPAL"
               />
@@ -106,7 +108,7 @@ export const MainForm = () => {
                     handleBlur={handleBlur}
                     setValues={setValues}
                     hasError={errors.vulnarability}
-                    options={stateOptions}
+                    options={mainComplaints}
                     name="vulnarability"
                     placeholder="VULNERABILIDADE"
                   />
@@ -115,7 +117,7 @@ export const MainForm = () => {
               <MultiSelect
                 setValues={setValues}
                 handleBlur={handleBlur}
-                options={stateOptions}
+                options={mainComplaints}
                 name="symptoms"
                 placeholder="SINTOMAS"
               />

@@ -1,10 +1,19 @@
 import SelectComponent from "react-select";
 
 export const Select = (
-  { placeholder, name, options, hasError, setValues, handleBlur },
+  {
+    placeholder,
+    name,
+    options,
+    hasError,
+    setValues,
+    handleBlur,
+    isLoading = false,
+  },
 ) => {
   return (
     <SelectComponent
+      isLoading={isLoading}
       onBlur={handleBlur}
       options={options}
       onChange={(value) => {
