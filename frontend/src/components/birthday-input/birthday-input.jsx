@@ -85,7 +85,7 @@ export const BirthdayField = (
               value={ageValue}
               name="age"
               placeholder="IDADE"
-              type="text"
+              type="number"
             />
           </PatientAgeInputContainer>
         )}

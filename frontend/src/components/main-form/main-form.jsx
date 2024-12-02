@@ -175,6 +175,7 @@ export const MainForm = () => {
                   placeholder="SpO2"
                 />
                 <TextField
+                  type="number"
                   setValues={setValues}
                   hasError={errors.temperature}
                   handleBlur={handleBlur}
@@ -186,6 +187,7 @@ export const MainForm = () => {
               </FormRow>
               <FormRow>
                 <TextField
+                  type="number"
                   setValues={setValues}
                   hasError={errors.glasgow}
                   handleBlur={handleBlur}
@@ -195,6 +197,7 @@ export const MainForm = () => {
                   placeholder="Glasgow"
                 />
                 <TextField
+                  type="number"
                   setValues={setValues}
                   hasError={errors.hgt}
                   handleBlur={handleBlur}
@@ -204,6 +207,8 @@ export const MainForm = () => {
                   placeholder="HGT"
                 />
                 <TextField
+                  maxLength={2}
+                  type="number"
                   setValues={setValues}
                   hasError={errors.pain}
                   handleBlur={handleBlur}

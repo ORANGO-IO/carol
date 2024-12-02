@@ -16,6 +16,7 @@ export const TextField = (
     hasError,
     handleBlur,
     setValues,
+    type = "text",
   },
 ) => {
   function onChange(event) {
@@ -26,6 +27,7 @@ export const TextField = (
     <Container hasError={hasError} flexValue={flexValue}>
       <TextFieldContainer>
         <BaseTextField
+          type={type}
           onChange={onChange}
           onBlur={handleBlur}
           value={value}
