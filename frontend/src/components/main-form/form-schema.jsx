@@ -12,12 +12,6 @@ import { GasglowValidation } from "./validation/glasgow-validation";
 import { HtgValidation } from "./validation/hgt-validation";
 import { PainValidation } from "./validation/pain-validation";
 
-function validateSystolicPressure(value) {
-  if (value == undefined || value == "") return true;
-
-  return true;
-}
-
 export const FormSchema = Yup.object().shape({
   complaint: Yup.string(),
   birthday: BirthdayValidation,

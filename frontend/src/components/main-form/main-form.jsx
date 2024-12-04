@@ -20,28 +20,12 @@ import {
   SubmitButton,
 } from "./main-form.styles";
 import { useAtom } from "jotai";
-import { mainComplaintsAtom } from "../../store/main-store";
+import { formAtom, mainComplaintsAtom } from "../../store/main-store";
 
 const MIN_INPUT_REQUIRED = 4;
 
-const INITIAL_VALUES = {
-  complaint: "",
-  birthday: "",
-  age: "",
-  vulnarability: "",
-  symptoms: [],
-  systolicPressure: "",
-  diastolicPressure: "",
-  heartRate: "",
-  respiratoryRate: "",
-  spO2: "",
-  temperature: "",
-  glasgow: "",
-  hgt: "",
-  pain: "",
-};
-
 export const MainForm = () => {
+  const [form, setForm] = useAtom(formAtom);
   const [mainComplaints, setMainComplaints] = useAtom(mainComplaintsAtom);
   const [isLoadingMainComplaints, setIsLoadingMainComplaints] = useState(true);
 
@@ -68,8 +52,9 @@ export const MainForm = () => {
 
   return (
     <Formik
-      initialValues={INITIAL_VALUES}
+      initialValues={form}
       onSubmit={(values) => {
+        setForm(values);
         console.log(values);
       }}
       validationSchema={FormSchema}

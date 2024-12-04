@@ -10,6 +10,7 @@ import {
   PatientAgeInput,
   PatientAgeInputContainer,
 } from "./birthday-input.styles";
+import { calculateAge } from "../../utils/calculate-age-from-date";
 
 export const BirthdayField = (
   { placeholder, value, hasError, ageValue, setValues, handleBlur },
@@ -36,23 +37,6 @@ export const BirthdayField = (
         age: value,
       }));
     }
-  }
-
-  function calculateAge(birthDate) {
-    if (!DATE_REGEX.test(birthDate)) "IDADE";
-
-    const [day, month, year] = birthDate.split("/").map(Number);
-    const today = new Date();
-    let age = today.getFullYear() - year;
-
-    const hasBirthdayThisYear = today.getMonth() + 1 > month ||
-      (today.getMonth() + 1 === month && today.getDate() >= day);
-
-    if (!hasBirthdayThisYear) {
-      age--;
-    }
-
-    return age;
   }
 
   return (
