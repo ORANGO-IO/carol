@@ -11,6 +11,10 @@ export const Container = styled.div.withConfig({
   width: 100%;
   justify-content: space-between;
   flex: ${(props) => props.flexValue || "1 1 150px"};
+
+  &:focus-within {
+    border: ${(props) => props.hasError ? "1px solid red" : "1px solid #0074d9"};
+  }
 `;
 
 export const TextFieldContainer = styled.div`
@@ -25,6 +29,7 @@ export const BaseTextField = styled.input`
   font-size: 16px;
   border: none;
   width: 100%;
+
 `;
 
 export const LabelContainer = styled.div`

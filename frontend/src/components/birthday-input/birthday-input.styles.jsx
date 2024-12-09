@@ -18,6 +18,11 @@ export const Container = styled.div.withConfig({
   width: 100%;
   flex: 1 1 240px;
   height: 40px;
+  &:focus-within {
+    border: ${(
+  { hasError },
+) => (hasError ? "1px solid red" : "1px solid #0074d9")};
+  }
 `;
 
 export const InputContainer = styled.div`
