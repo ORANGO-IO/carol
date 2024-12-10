@@ -4,7 +4,7 @@ before_script:
   - apk add -qq git
   - apk add -qq bash
   # Setup SSH deploy keys
-  - 'which ssh-agent || ( apk add openssh-client )'
+  - "which ssh-agent || ( apk add openssh-client )"
   - eval $(ssh-agent -s)
   - bash -c "ssh-add <(echo '$SSH_PRIVATE_KEY')"
   - ssh-add -l
