@@ -16,7 +16,7 @@ from sqlalchemy import func
 from werkzeug.middleware.proxy_fix import ProxyFix
 import sys
 
-base_blueprint = Blueprint("base", __name__,url_prefix="/api")
+v1_blueprint = Blueprint("v1", __name__, url_prefix="/api/v1")
 
 def verificaDescritor(descritor: str) -> bool:
     pass
@@ -89,13 +89,13 @@ def getQP(id: int, session=None) -> list:
     if result:
         return result._asdict()
 
-@base_blueprint.route("/")
+@v1_blueprint.route("/")
 def hello():
     """Return a friendly HTTP greeting."""
     return "Hello World from CAROL!"
 
 
-@base_blueprint.route("/metrics")
+@v1_blueprint.route("/metrics")
 @provide_session
 def metrics(session=None):
     metrics = {}
@@ -106,7 +106,7 @@ def metrics(session=None):
     return jsonify(metrics)
 
 
-@base_blueprint.route("/filter")
+@v1_blueprint.route("/filter")
 @provide_session
 def filter(session=None):
     """Filtra resultados de acordo com sintomas enviados"""
@@ -176,7 +176,7 @@ def filter(session=None):
     return calc(data)
 
 
-@base_blueprint.route("/classificacao")
+@v1_blueprint.route("/classificacao")
 @provide_session
 def classificacao(session=None):
     """Retorna a lista das classificações de risco"""
@@ -194,7 +194,7 @@ def classificacao(session=None):
         return jsonify([])
 
 
-@base_blueprint.route("/sinais")
+@v1_blueprint.route("/sinais")
 @provide_session
 def sinais(session=None):
     """Retorna a lista dos sinais cadastrados"""
@@ -215,7 +215,7 @@ def sinais(session=None):
         return jsonify([])
 
 
-@base_blueprint.route("/sintomas")
+@v1_blueprint.route("/sintomas")
 @provide_session
 def sintomas(session=None):
     """Retorna a lista dos sintomas cadastrados"""
@@ -234,7 +234,7 @@ def sintomas(session=None):
         return jsonify([])
 
 
-@base_blueprint.route("/categorias")
+@v1_blueprint.route("/categorias")
 @provide_session
 def categorias(session=None):
     """Retorna a lista das categorias de qp cadastradas"""
@@ -247,7 +247,7 @@ def categorias(session=None):
         return jsonify([])
 
 
-@base_blueprint.route("/qp/<id>")
+@v1_blueprint.route("/qp/<id>")
 @provide_session
 def qpDetails(id: int, session=None):
     print(id, file=sys.stderr)
@@ -349,7 +349,7 @@ def qpDetails(id: int, session=None):
     return jsonify(data)
 
 
-@base_blueprint.route("/qp", methods=["GET", "PUT"])
+@v1_blueprint.route("/qp", methods=["GET", "PUT"])
 @provide_session
 def qp(session=None):
     print("TESTE", file=sys.stderr)
@@ -377,7 +377,7 @@ def qp(session=None):
         return jsonify(req)
 
 
-@base_blueprint.route("/registro", methods=["PUT"])
+@v1_blueprint.route("/registro", methods=["PUT"])
 @provide_session
 def registro(session=None):
     """Registra um bloco de dados relacionados a uma queixa principal"""
@@ -573,8 +573,8 @@ def registro(session=None):
     # Verifica dentro sintoma
     return jsonify(request.json)
 
- 
-@base_blueprint.route("/edit", methods=["PUT"])
+
+@v1_blueprint.route("/edit", methods=["PUT"])
 @provide_session
 def edit(session=None):
     # Verifica qp
@@ -689,7 +689,7 @@ def edit(session=None):
     return jsonify(request.json)
 
 
-@base_blueprint.route("/specs")
+@v1_blueprint.route("/specs")
 def specs():
     swag = swagger(app)
     swag["info"]["version"] = "1.0"
