@@ -5,6 +5,6 @@ from .base import Base
 class Sintomas(Base):
     __tablename__ = "sintomas"
 
-    ID = Column(BigInteger, primary_key=True)
+    id = Column(BigInteger, primary_key=True)
     sintoma = Column(VARCHAR(256))
     descritor = Column(Text)

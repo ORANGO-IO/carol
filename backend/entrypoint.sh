@@ -8,7 +8,7 @@ tail -n 0 -f /srv/logs/*.log &
 
 echo Starting Gunicorn
 # flask run
-exec gunicorn main:app \
+exec gunicorn app:app \
      --bind 0.0.0.0:5000 \
      --chdir /app \
      --workers 3 \

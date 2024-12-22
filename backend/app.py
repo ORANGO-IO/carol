@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
-from main import base_blueprint
+from v2.main import base_blueprint
 from v1.main import v1_blueprint
 
 app = Flask(__name__)

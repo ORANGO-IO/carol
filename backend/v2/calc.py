@@ -1,8 +1,8 @@
 from flask import jsonify, Response
-from functions import getClassificacao, getCategoriaNome
-from utils.db import provide_session
-from models.queixas_principais import QueixasPrincipais
-from models.classificacao import Classificacao
+from .functions import getClassificacao, getCategoriaNome
+from .utils.db import provide_session
+from .models.queixas_principais import QueixasPrincipais
+from .models.classificacao import Classificacao
 from sqlalchemy.sql.expression import literal
 
 

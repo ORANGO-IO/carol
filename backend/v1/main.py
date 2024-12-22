@@ -2,16 +2,16 @@ from flask import Flask, jsonify, request, Blueprint, Response
 from flask_cors import CORS
 from flask_swagger import swagger
 from pprint import pprint
-from calc import calc
-from functions import getClassificacao, getCategoriaNome
-from utils.db import provide_session
-from models.classificacao import Classificacao
-from models.sinais import Sinais
-from models.queixas_principais import QueixasPrincipais
-from models.registros_sinais import RegistrosSinais
-from models.sintomas import Sintomas
-from models.categorias import Categorias
-from models.registros_sintomas import RegistrosSintomas
+from .calc import calc
+from .functions import getClassificacao, getCategoriaNome
+from .utils.db import provide_session
+from .models.classificacao import Classificacao
+from .models.sinais import Sinais
+from .models.queixas_principais import QueixasPrincipais
+from .models.registros_sinais import RegistrosSinais
+from .models.sintomas import Sintomas
+from .models.categorias import Categorias
+from .models.registros_sintomas import RegistrosSintomas
 from sqlalchemy import func
 from werkzeug.middleware.proxy_fix import ProxyFix
 import sys
@@ -92,7 +92,7 @@ def getQP(id: int, session=None) -> list:
 @v1_blueprint.route("/")
 def hello():
     """Return a friendly HTTP greeting."""
-    return "Hello World from CAROL!"
+    return "Hello World from CAROL V1!"
 
 
 @v1_blueprint.route("/metrics")

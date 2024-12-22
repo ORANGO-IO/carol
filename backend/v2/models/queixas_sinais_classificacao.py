@@ -9,9 +9,9 @@ class QueixasSinaisClassificacao(Base):
     __tablename__ = "queixas_sinais_classificacao"
 
     id = Column(BigInteger, primary_key=True)
-    fk_queixa = Column(BigInteger, ForeignKey(QueixasPrincipais.ID))
-    fk_sinal = Column(BigInteger, ForeignKey(Sinais.ID))
-    fk_classificacao = Column(BigInteger, ForeignKey(Classificacao.ID))
+    fk_queixa = Column(BigInteger, ForeignKey(QueixasPrincipais.id))
+    fk_sinal = Column(BigInteger, ForeignKey(Sinais.id))
+    fk_classificacao = Column(BigInteger, ForeignKey(Classificacao.id))
     min = Column(DECIMAL(5, 2))
     max = Column(DECIMAL(5, 2))
     descritor = Column(Text)

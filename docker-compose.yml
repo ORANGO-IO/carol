@@ -23,7 +23,8 @@ services:
     build: ./backend
     restart: always
     environment:
-      SQL_ALCHEMY_CONN: mysql+pymysql://carol:JVeuiA7E30u8SQx5@db/carol_v1_db
+      SQL_ALCHEMY_CONN_V1: mysql+pymysql://carol:x@carol.orango.io:33061/carol_v1_db
+      SQL_ALCHEMY_CONN_V2: mysql+pymysql://carol:x@carol.orango.io:33061/carol_v2_db
     volumes:
       - ./backend:/app
     ports:

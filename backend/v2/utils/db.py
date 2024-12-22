@@ -1,10 +1,10 @@
 from sqlalchemy.orm import scoped_session, sessionmaker
 import contextlib
 from functools import wraps
-from settings import engine
+from settings import engine2
 
 Session = scoped_session(
-    sessionmaker(autocommit=False, autoflush=False, bind=engine, expire_on_commit=False)
+    sessionmaker(autocommit=False, autoflush=False, bind=engine2, expire_on_commit=False)
 )
 
 
