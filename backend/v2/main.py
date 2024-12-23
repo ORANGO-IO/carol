@@ -9,6 +9,8 @@ from .models.classificacao import Classificacao
 from .models.sinais import Sinais
 from .models.queixas_principais import QueixasPrincipais
 from .models.sintomas_sinonimos import SintomasSinonimos
+from .models.queixas_sinais_classificacao import QueixasSinaisClassificacao
+from .models.queixas_sintomas_classificacao import QueixasSintomasClassificacao
 # from .models.registros_sinais import RegistrosSinais
 from .models.sintomas import Sintomas
 from .models.categorias import Categorias
@@ -18,23 +20,6 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 import sys
 
 base_blueprint = Blueprint("base", __name__, url_prefix="/api")
-
-
-def verificaDescritor(descritor: str) -> bool:
-    pass
-
-
-def verificaQP(qp: str) -> bool:
-    pass
-
-
-def verificaSintoma(sintoma: str) -> bool:
-    pass
-
-
-def verificaSinal(sinal: str) -> bool:
-    pass
-
 
 @provide_session
 def getClassificacaoId(identificador: str, session=None) -> int:
@@ -51,7 +36,7 @@ def getSinalId(identificador: str, session=None) -> int:
     result = session.query(Sinais).filter(
         Sinais.identificador == identificador).first()
     if result:
-        return result.ID
+        return result.id
 
 
 @provide_session
@@ -66,13 +51,13 @@ def getClassificacaoNome(id: int, session=None) -> str:
 def getSinal(id: int, session=None) -> list:
     result = (
         session.query(
-            Sinais.ID.label("ID"),
-            Sinais.nome.label("nome"),
-            Sinais.descritor.label("descritor"),
-            Sinais.identificador.label("identificador"),
-            Sinais.unidade.label("unidade"),
+            Sinais.id,
+            Sinais.sinal,
+            Sinais.descritor,
+            Sinais.identificador,
+            Sinais.unidade,
         )
-        .filter(Sinais.ID == id)
+        .filter(Sinais.id == id)
         .first()
     )
     if result:
@@ -83,12 +68,12 @@ def getSinal(id: int, session=None) -> list:
 def getQP(id: int, session=None) -> list:
     result = (
         session.query(
-            QueixasPrincipais.ID.label("ID"),
-            QueixasPrincipais.sintoma.label("sintoma"),
-            QueixasPrincipais.observacao.label("observacao"),
-            QueixasPrincipais.categoria.label("categoria"),
+            QueixasPrincipais.id,
+            QueixasPrincipais.queixa_principal,
+            QueixasPrincipais.observacoes,
+            QueixasPrincipais.fk_categoria.label("categoria"),
         )
-        .filter(QueixasPrincipais.ID == id)
+        .filter(QueixasPrincipais.id == id)
         .first()
     )
     if result:
@@ -112,75 +97,72 @@ def metrics(session=None):
     return jsonify(metrics)
 
 
-# @base_blueprint.route("/filter")
-# @provide_session
-# def filter(session=None):
-#     """Filtra resultados de acordo com sintomas enviados"""
-#     pprint(request.args)
-#     data = []
-#     for key, value in request.args.items():
-#         if key != "categoria":
-#             print("SINTOMA ---- ", key, value)
-#             if value and value != "NaN":
-#                 value = float(value)
-#                 pprint(getSinalId(key))
-#                 result = (
-#                     session.query(
-#                         RegistrosSinais.ID.label("ID"),
-#                         RegistrosSinais.id_qp.label("id_qp"),
-#                         RegistrosSinais.id_sinal.label("id_sinal"),
-#                         RegistrosSinais.id_classificacao.label("id_classificacao"),
-#                         func.coalesce(RegistrosSinais.min, 0).label("min"),
-#                         func.coalesce(RegistrosSinais.max, 0).label("max"),
-#                         RegistrosSinais.descritor.label("descritor"),
-#                     )
-#                     .filter(RegistrosSinais.id_sinal == getSinalId(key))
-#                     .all()
-#                 )
-#                 if result:
-#                     result = [x._asdict() for x in result]
-#                     treated_result = []
-#                     for row in result:
-#                         if (
-#                             row.get("min")
-#                             and row.get("max")
-#                             and row["min"] < row["max"]
-#                         ):
-#                             if (row["min"] >= value or not row["min"]) or (
-#                                 row["max"] <= value or not row["max"]
-#                             ):
-#                                 treated_result.append(row)
-#                         else:
-#                             if (row.get("min", 0) >= value or not row["min"]) and (
-#                                 row.get("max", 0) <= value or not row["max"]
-#                             ):
-#                                 treated_result.append(row)
-#                     fetch = treated_result
+@base_blueprint.route("/filter")
+@provide_session
+def filter(session=None):
+    """Filtra resultados de acordo com sintomas enviados"""
+    pprint(request.args)
+    data = []
+    for key, value in request.args.items():
+        if key != "categoria":
+            print("SINTOMA ---- ", key, value)
+            if value and value != "NaN":
+                value = float(value)
+                sinal_id = getSinalId(key)
+                result = (
+                    session.query(
+                        QueixasSinaisClassificacao.id,
+                        QueixasSinaisClassificacao.fk_queixa.label("id_qp"),
+                        QueixasSinaisClassificacao.fk_sinal.label("id_sinal"),
+                        QueixasSinaisClassificacao.fk_classificacao.label("id_classificacao"),
+                        func.coalesce(QueixasSinaisClassificacao.min, 0).label("min"),
+                        func.coalesce(QueixasSinaisClassificacao.max, 0).label("max"),
+                        QueixasSinaisClassificacao.descritor.label("descritor"),
+                    )
+                    .filter(QueixasSinaisClassificacao.fk_sinal == sinal_id)
+                    .all()
+                )
+                if result:
+                    result = [x._asdict() for x in result]
+                    treated_result = []
+                    for row in result:
+                        if (
+                            row.get("min")
+                            and row.get("max")
+                            and row["min"] < row["max"]
+                        ):
+                            if (row["min"] >= value or not row["min"]) or (
+                                row["max"] <= value or not row["max"]
+                            ):
+                                treated_result.append(row)
+                        else:
+                            if (row.get("min", 0) >= value or not row["min"]) and (
+                                row.get("max", 0) <= value or not row["max"]
+                            ):
+                                treated_result.append(row)
 
-#                     fetch = treated_result
-#                     tmp = getSinal(getSinalId(key))
-#                     for match in fetch:
-#                         match["sinal"] = getSinal(match["id_sinal"])
-#                         match["classificacao"] = getClassificacao(
-#                             match["id_classificacao"]
-#                         )
-#                         match["qp"] = getQP(match["id_qp"])
+                    fetch = treated_result
+                    tmp = getSinal(sinal_id)
+                    for match in fetch:
+                        match["sinal"] = getSinal(match["id_sinal"])
+                        match["classificacao"] = getClassificacao(
+                            match["id_classificacao"]
+                        )
+                        match["qp"] = getQP(match["id_qp"])
 
-#                     if request.args["categoria"] != "null":
-#                         fetch = [
-#                             m
-#                             for m in fetch
-#                             if m["qp"]["categoria"] == int(request.args["categoria"])
-#                             or not m["qp"]["categoria"]
-#                         ]
-#                     else:
-#                         fetch = [m for m in fetch if not m["qp"]["categoria"]]
+                    if request.args["categoria"] != "null":
+                        fetch = [
+                            m
+                            for m in fetch
+                            if m["qp"]["categoria"] == int(request.args["categoria"])
+                            or not m["qp"]["categoria"]
+                        ]
+                    else:
+                        fetch = [m for m in fetch if not m["qp"]["categoria"]]
 
-#                     tmp["matches"] = fetch
-#                     data.append(tmp)
-
-#     return calc(data)
-
+                    tmp["matches"] = fetch
+                    data.append(tmp)
+    return calc(data)
 
 @base_blueprint.route("/classificacao")
 @provide_session
@@ -253,108 +235,42 @@ def categorias(session=None):
         return jsonify([])
 
 
-# @base_blueprint.route("/qp/<id>")
-# @provide_session
-# def qpDetails(id: int, session=None):
-#     print(id, file=sys.stderr)
-#     # coleta dados de qp
-#     qp = {}
+@base_blueprint.route("/qp/<id>")
+@provide_session
+def qpDetails(id: int, session=None):
+    print(id, file=sys.stderr)
 
-#     result = (
-#         session.query(
-#             QueixasPrincipais.ID.label("ID"),
-#             QueixasPrincipais.sintoma.label("sintoma"),
-#             QueixasPrincipais.observacao.label("observacao"),
-#             QueixasPrincipais.categoria.label("categoria"),
-#         )
-#         .filter(QueixasPrincipais.ID == id)
-#         .first()
-#     )
-
-#     qp["qp"] = result._asdict()
-
-#     # coleta dados de sintomas associados
-
-#     result = (
-#         session.query(
-#             RegistrosSinais.ID.label("ID"),
-#             RegistrosSinais.id_qp.label("id_qp"),
-#             RegistrosSinais.id_sinal.label("id_sinal"),
-#             RegistrosSinais.id_classificacao.label("id_classificacao"),
-#             RegistrosSinais.min.label("min"),
-#             RegistrosSinais.max.label("max"),
-#             RegistrosSinais.descritor.label("descritor"),
-#         )
-#         .filter(RegistrosSinais.id_qp == id)
-#         .all()
-#     )
-
-#     if result:
-#         qp["sinais"] = [x._asdict() for x in result]
-#     else:
-#         qp["sinais"] = []
-
-#     for sinal in qp["sinais"]:
-#         sinal["sinal"] = getSinal(sinal["id_sinal"])
-
-#     # coleta dados de sinais associados
-#     result = (
-#         session.query(
-#             RegistrosSintomas.ID.label("ID"),
-#             RegistrosSintomas.id_qp.label("id_qp"),
-#             RegistrosSintomas.id_classificacao.label("id_classificacao"),
-#             RegistrosSintomas.sintoma.label("sintoma"),
-#             RegistrosSintomas.descritor.label("descritor"),
-#         )
-#         .filter(RegistrosSintomas.id_qp == id)
-#         .all()
-#     )
-
-#     if result:
-#         qp["sintomas"] = [x._asdict() for x in result]
-#     else:
-#         qp["sintomas"] = []
-
-#     # coleta classificacao
-#     result = session.query(
-#         Classificacao.ID.label("ID"),
-#         Classificacao.prioridade.label("prioridade"),
-#         Classificacao.nome.label("nome"),
-#         Classificacao.descritor.label("descritor"),
-#         Classificacao.tempo.label("tempo"),
-#         Classificacao.cor_hex.label("cor_hex"),
-#     ).all()
-
-#     if result:
-#         qp["classificacao"] = [x._asdict() for x in result]
-#     else:
-#         qp["classificacao"] = []
-
-#     data = {**qp["qp"]}
-#     if not data["categoria"]:
-#         data["id_categoria"] = data["categoria"]
-#         data["categoria"] = getCategoriaNome(data["categoria"])
-
-#     for classificacao in qp["classificacao"]:
-#         if "classificacao" not in data.keys():
-#             data["classificacao"] = {}
-#         data["classificacao"][classificacao["nome"]] = {}
-#         data["classificacao"][classificacao["nome"]]["ID"] = classificacao["ID"]
-#         data["classificacao"][classificacao["nome"]]["cor"] = classificacao["cor_hex"]
-#         data["classificacao"][classificacao["nome"]]["nome"] = classificacao["nome"]
-#         data["classificacao"][classificacao["nome"]]["sinais"] = [
-#             sinal
-#             for sinal in qp["sinais"]
-#             if sinal["id_classificacao"] == classificacao["ID"]
-#         ]
-#         data["classificacao"][classificacao["nome"]]["sintomas"] = [
-#             sintoma
-#             for sintoma in qp["sintomas"]
-#             if sintoma["id_classificacao"] == classificacao["ID"]
-#         ]
-#     return jsonify(data)
-
-
+    result = (
+        session.query(
+            QueixasPrincipais.id,
+            QueixasPrincipais.queixa_principal,
+            QueixasPrincipais.observacoes,
+            Categorias.nome.label("categoria"),
+            func.group_concat(Sintomas.sintoma).label("sintomas"),
+        )
+        .select_from(QueixasPrincipais)
+        .where(QueixasPrincipais.id == id)
+        .outerjoin(Categorias, QueixasPrincipais.fk_categoria == Categorias.id)
+        .outerjoin(QueixasSintomasClassificacao, QueixasSintomasClassificacao.fk_queixa == QueixasPrincipais.id)
+        .outerjoin(Sintomas, Sintomas.id == QueixasSintomasClassificacao.fk_sintoma)
+        .group_by(
+            QueixasPrincipais.id,
+            QueixasPrincipais.queixa_principal,
+            QueixasPrincipais.observacoes,
+            Categorias.nome,
+        )
+        .first()
+    )
+    if result:
+        return jsonify({
+            "id": result.id,
+            "queixa_principal": result.queixa_principal,
+            "observacoes": result.observacoes,
+            "categoria": result.categoria,
+            "sintomas": [s for s in (result.sintomas.split(",") if result.sintomas else []) if s],
+        })
+    return jsonify({"mensagem": "Queixa principal não encontrada"}), 404
+   
 @base_blueprint.route("/qp", methods=["GET", "PUT"])
 @provide_session
 def qp(session=None):
@@ -362,7 +278,6 @@ def qp(session=None):
 
     """Retorna e inclui queixas_principais"""
     if request.method == "GET":
-        # Ajustando a consulta para concatenar os sinônimos
         result = (
             session.query(
                 QueixasPrincipais.id,
@@ -371,8 +286,8 @@ def qp(session=None):
                 QueixasPrincipais.queixa_principal,
                 Categorias.nome.label("categoria"),
             )
-            .join(Categorias, QueixasPrincipais.fk_categoria == Categorias.id)
-            .join(SintomasSinonimos, SintomasSinonimos.fk_queixa == QueixasPrincipais.id)
+            .outerjoin(Categorias, QueixasPrincipais.fk_categoria == Categorias.id)
+            .outerjoin(SintomasSinonimos, SintomasSinonimos.fk_queixa == QueixasPrincipais.id)
             .group_by(
                 QueixasPrincipais.id,
                 QueixasPrincipais.observacoes,
@@ -385,7 +300,7 @@ def qp(session=None):
             return jsonify([
                 {
                     "id": row.id,
-                    "sinonimos": row.sinonimos.split(",") if row.sinonimos else [],
+                    "sinonimos": [s for s in (row.sinonimos.split(",") if row.sinonimos else []) if s],
                     "observacoes": row.observacoes,
                     "queixa_principal": row.queixa_principal,
                     "categoria": row.categoria,

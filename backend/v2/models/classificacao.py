@@ -7,7 +7,7 @@ class Classificacao(Base):
 
     id = Column(BigInteger, primary_key=True)
     prioridade = Column(BigInteger)
-    classificao = Column(VARCHAR(20))
+    classificacao = Column(VARCHAR(20))
     descritor = Column(Text)
     tempo_atendimento = Column(VARCHAR(100))
     cor_hex = Column(CHAR(6))

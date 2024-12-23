@@ -7,14 +7,14 @@ from .models.categorias import Categorias
 def getClassificacao(id: int, session=None) -> "Classificacao":
     result = (
         session.query(
-            Classificacao.ID.label("id"),
-            Classificacao.prioridade.label("prioridade"),
-            Classificacao.nome.label("nome"),
-            Classificacao.descritor.label("descritor"),
-            Classificacao.tempo.label("tempo"),
-            Classificacao.cor_hex.label("cor_hex"),
+            Classificacao.id,
+            Classificacao.prioridade,
+            Classificacao.classificacao,
+            Classificacao.descritor,
+            Classificacao.tempo_atendimento,
+            Classificacao.cor_hex,
         )
-        .filter(Classificacao.ID == id)
+        .filter(Classificacao.id == id)
         .first()
     )
 
@@ -28,9 +28,9 @@ def getClassificacao(id: int, session=None) -> "Classificacao":
 def getCategoriaNome(id: int, session=None) -> str:
     result = (
         session.query(
-            Categorias.ID.label("id"), Categorias.categoria.label("categoria")
+            Categorias.id.label("id"), Categorias.nome.label("categoria")
         )
-        .filter(Categorias.ID == id)
+        .filter(Categorias.id == id)
         .first()
     )
 

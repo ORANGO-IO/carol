@@ -20,6 +20,7 @@ def checkItem(item: tuple, *lists: list) -> bool:
 def intersection(*lists: list) -> list:
     """Captura a intercessão de tuplas dentro de um array"""
     intersections = []
+    print(lists)
     for lista in lists:
         for tupla in lista:
             intersections.append(checkItem(tupla, *lists))
@@ -42,6 +43,7 @@ def calc(filterData: dict, session=None) -> Response:
     data["resultados"] = []
     qp_ids = []
     qp_classif_ids = []
+    print(filterData, "filterData")
     for sinal in filterData:
         # Verificar qual a maior classificacao, prioridade 1 é a maior
         prioridadeMax = 9
@@ -67,10 +69,11 @@ def calc(filterData: dict, session=None) -> Response:
                 if x["classificacao"]["prioridade"] != prioridadeMax
             ],
             key=lambda x: x["classificacao"]["prioridade"],
-        )
-
+     )
+    print(qp_classif_ids,qp_ids,data)
     # Aqueles que só combinam a queixa principal
     resultados = intersection(*qp_classif_ids)
+    return jsonify(resultados)
     tmp_resultados = []
     for resultado in resultados["sugestions"]:
         fetch = (
