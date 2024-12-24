@@ -51,10 +51,18 @@ def calc(filterData: dict, session=None) -> Response:
         qp_classif_ids_sinal = []
         for match in sinal["matches"]:
             # Definindo o grau de gravidade máxima do sinal pesquisado
+
+            for sintomas in match["sintomas_descritivos"]:
+                if sintomas["prioridade_classificacao"] < prioridadeMax:
+                    prioridadeMax = sintomas["prioridade_classificacao"]
+
             if match["classificacao"]["prioridade"] < prioridadeMax:
                 prioridadeMax = match["classificacao"]["prioridade"]
+
             qp_ids_sinal.append(match["id_qp"])
             qp_classif_ids_sinal.append((match["id_qp"], match["id_classificacao"]))
+            for sintomas in match["sintomas_descritivos"]:
+                qp_classif_ids_sinal.append((match["id_qp"], sintomas["classificacao_id"]))
         qp_ids.append(qp_ids_sinal)
         qp_classif_ids.append(qp_classif_ids_sinal)
         sinal["matchesPrincipais"] = [
@@ -70,20 +78,19 @@ def calc(filterData: dict, session=None) -> Response:
             ],
             key=lambda x: x["classificacao"]["prioridade"],
      )
-    print(qp_classif_ids,qp_ids,data)
     # Aqueles que só combinam a queixa principal
     resultados = intersection(*qp_classif_ids)
-    return jsonify(resultados)
+
     tmp_resultados = []
     for resultado in resultados["sugestions"]:
         fetch = (
             session.query(
-                QueixasPrincipais.ID.label("id"),
-                QueixasPrincipais.sintoma.label("sintoma"),
-                QueixasPrincipais.observacao.label("observacao"),
-                QueixasPrincipais.categoria.label("categoria"),
+                QueixasPrincipais.id,
+                QueixasPrincipais.queixa_principal.label("sintoma"),
+                QueixasPrincipais.observacoes.label("observacao"),
+                QueixasPrincipais.fk_categoria.label("categoria"),
             )
-            .filter(QueixasPrincipais.ID == resultado["item"][0])
+            .filter(QueixasPrincipais.id == resultado["item"][0])
             .first()
         )
 
@@ -112,15 +119,15 @@ def calc(filterData: dict, session=None) -> Response:
     for qp in resultados["intersections"]:
         result = (
             session.query(
-                QueixasPrincipais.ID.label("id"),
-                QueixasPrincipais.sintoma.label("sintoma"),
-                QueixasPrincipais.observacao.label("observacao"),
-                QueixasPrincipais.categoria.label("categoria"),
+                QueixasPrincipais.id,
+                QueixasPrincipais.queixa_principal.label("sintoma"),
+                QueixasPrincipais.observacoes.label("observacao"),
+                QueixasPrincipais.fk_categoria.label("categoria"),
                 Classificacao.cor_hex.label("cor_hex"),
             )
             .outerjoin(Classificacao, literal(True))
-            .filter(QueixasPrincipais.ID == qp["item"][0])
-            .filter(Classificacao.ID == qp["item"][1])
+            .filter(QueixasPrincipais.id == qp["item"][0])
+            .filter(Classificacao.id == qp["item"][1])
             .first()
         )
 

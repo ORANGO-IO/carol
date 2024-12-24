@@ -28,7 +28,7 @@ def getClassificacao(id: int, session=None) -> "Classificacao":
 def getCategoriaNome(id: int, session=None) -> str:
     result = (
         session.query(
-            Categorias.id.label("id"), Categorias.nome.label("categoria")
+            Categorias.id, Categorias.nome.label("categoria")
         )
         .filter(Categorias.id == id)
         .first()

@@ -79,6 +79,22 @@ def getQP(id: int, session=None) -> list:
     if result:
         return result._asdict()
 
+@provide_session
+def getSintomasDescritivosBySintomaIds(ids: list, qp:int,session=None) -> list:
+    result = (
+        session.query(
+            QueixasSintomasClassificacao.id,
+            Classificacao.prioridade.label("prioridade_classificacao"),
+            Classificacao.id.label("classificacao_id"),
+        )
+        .outerjoin(Classificacao, QueixasSintomasClassificacao.fk_classificacao == Classificacao.id)
+        .filter(QueixasSintomasClassificacao.fk_sintoma.in_(ids))
+        .filter(QueixasSintomasClassificacao.fk_queixa == qp)
+        .all()
+    )
+    if result:
+        return [x._asdict() for x in result]
+    return []
 
 @base_blueprint.route("/")
 def hello():
@@ -96,6 +112,22 @@ def metrics(session=None):
     metrics["cadastros"] = result
     return jsonify(metrics)
 
+@base_blueprint.route("/sintomas_descritivos")
+@provide_session
+def inserir_sintomas_descritivos(session=None):
+    """Insere sintomas descritivos"""
+    req = request.json["sintomas_descritivos"]
+    for sintoma in req:
+        sintoma_descritivo = QueixasSintomasClassificacao(
+            fk_queixa=sintoma["id_queixa"],
+            fk_classificacao=sintoma["id_classificacao"],
+            fk_sintoma=sintoma["id_sintoma"],
+            descritor=sintoma["descritor"],
+            revisado_por=sintoma["revisado_por"],
+        )
+        session.add(sintoma_descritivo)
+        session.commit()
+    return jsonify(req), 201
 
 @base_blueprint.route("/filter")
 @provide_session
@@ -104,7 +136,7 @@ def filter(session=None):
     pprint(request.args)
     data = []
     for key, value in request.args.items():
-        if key != "categoria":
+        if key != "categoria" and key != "sintomas":
             print("SINTOMA ---- ", key, value)
             if value and value != "NaN":
                 value = float(value)
@@ -149,6 +181,7 @@ def filter(session=None):
                             match["id_classificacao"]
                         )
                         match["qp"] = getQP(match["id_qp"])
+                        match["sintomas_descritivos"] = getSintomasDescritivosBySintomaIds(request.args['sintomas'].split(","), match["id_qp"])
 
                     if request.args["categoria"] != "null":
                         fetch = [
@@ -161,7 +194,7 @@ def filter(session=None):
                         fetch = [m for m in fetch if not m["qp"]["categoria"]]
 
                     tmp["matches"] = fetch
-                    data.append(tmp)
+                    data.append(tmp)    
     return calc(data)
 
 @base_blueprint.route("/classificacao")
