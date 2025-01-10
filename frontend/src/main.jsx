@@ -2,7 +2,7 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import "semantic-ui-css/semantic.min.css";
 import "./axios-config";
-import "./index.css";
+
 import HomeV1 from "./v1/pages/home";
 import AppContext from "./context";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -10,6 +10,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { HomePage } from "./pages/home/home";
 import { Modal } from "semantic-ui-react";
 import Qp_description from "./v1/components/qp_description";
+import { GlobalStyle } from "./global-style";
 
 const Main = () => {
   const [state, setState] = React.useState({
@@ -58,6 +59,7 @@ const Main = () => {
 
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
+    <GlobalStyle/>
     <Main />
   </React.StrictMode>,
 );
