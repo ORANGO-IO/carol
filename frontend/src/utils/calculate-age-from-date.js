@@ -1,4 +1,4 @@
-import { DATE_REGEX } from "../regex";
+import { DATE_REGEX } from "@/regex";
 
 export function calculateAge(birthDate) {
   if (!DATE_REGEX.test(birthDate)) "IDADE";

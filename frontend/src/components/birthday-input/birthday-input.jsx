@@ -1,5 +1,5 @@
 import { withMask } from "use-mask-input";
-import { DATE_REGEX, NUMERIC_REGEX } from "../../regex";
+import { DATE_REGEX, NUMERIC_REGEX } from "@/regex";
 import {
   BirthdayInput,
   Container,
@@ -9,8 +9,8 @@ import {
   PatientAgeContainer,
   PatientAgeInput,
   PatientAgeInputContainer,
-} from "./birthday-input.styles";
-import { calculateAge } from "../../utils/calculate-age-from-date";
+} from "@/components/birthday-input/birthday-input.styles";
+import { calculateAge } from "@/utils/calculate-age-from-date";
 
 export const BirthdayField = (
   { placeholder, value, hasError, ageValue, setValues, handleBlur },

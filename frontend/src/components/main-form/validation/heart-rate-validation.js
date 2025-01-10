@@ -1,6 +1,6 @@
 import * as Yup from "yup";
-import { calculateAge } from "../../../utils/calculate-age-from-date";
-import { DATE_REGEX } from "../../../regex";
+import { calculateAge } from "@/utils/calculate-age-from-date";
+import { DATE_REGEX } from "@/regex";
 
 function validateHeartRateByAge(value) {
   if (value == undefined || value == "") return true;

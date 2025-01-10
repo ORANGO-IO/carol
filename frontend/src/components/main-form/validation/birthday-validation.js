@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import { DATE_REGEX } from "../../../regex";
+import { DATE_REGEX } from "@/regex";
 
 function validateBirthday(value) {
   if (value == undefined || value == "") return true;

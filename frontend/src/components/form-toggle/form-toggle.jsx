@@ -7,8 +7,8 @@ import {
   SwitchSlider,
   ToggleSwitchContainer,
 } from "./form-toggle.styles";
-import HospitalImage from "../../assets/hospital.png";
-import BasicAttendence from "../../assets/basic.png";
+import HospitalImage from "@/assets/hospital.png";
+import BasicAttendence from "@/assets/basic.png";
 
 export const FormSwitch = ({ onToggle, leftLabel, rightLabel }) => {
   const [isChecked, setIsChecked] = useState(false);

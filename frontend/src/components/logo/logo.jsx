@@ -5,8 +5,8 @@ import {
   Popup,
   PopupText,
 } from "./logo.styles";
-import LogoImage from "../../assets/logo.png";
-import AboutIcon from "../../assets/about.svg";
+import LogoImage from "@/assets/logo.png";
+import AboutIcon from "@/assets/about.svg";
 import { useState } from "react";
 
 export const Logo = () => {

@@ -1,13 +1,13 @@
 import { Formik } from "formik";
-import { BirthdayField } from "../birthday-input/birthday-input";
-import { MultiSelect } from "../multi-select/multi-select";
-import { Select } from "../select/select";
-import { TextField } from "../text-field/text-field";
+import { BirthdayField } from "@/components/birthday-input/birthday-input";
+import { MultiSelect } from "@/components/multi-select/multi-select";
+import { Select } from "@/components/select/select";
+import { TextField } from "@/components/text-field/text-field";
 
 import { useEffect, useState } from "react";
-import { getMainComplaints } from "../../api/get-main-complaints";
-import { FormErrors } from "../form-errors/form-errors";
-import { PrecisionWarningMessage } from "../precision-warning-message/precision-warning-message";
+import { getMainComplaints } from "@/api/get-main-complaints";
+import { FormErrors } from "@/components/form-errors/form-errors";
+import { PrecisionWarningMessage } from "@/components/precision-warning-message/precision-warning-message";
 import { FormSchema } from "./form-schema";
 import {
   Container,
@@ -20,7 +20,7 @@ import {
   SubmitButton,
 } from "./main-form.styles";
 import { useAtom } from "jotai";
-import { formAtom, mainComplaintsAtom } from "../../store/main-store";
+import { formAtom, mainComplaintsAtom } from "@/store/main-store";
 
 const MIN_INPUT_REQUIRED = 4;
 

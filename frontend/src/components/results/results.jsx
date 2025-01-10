@@ -1,6 +1,6 @@
 import { useAtomValue } from "jotai";
 import { useState } from "react";
-import { formAtom } from "../../store/main-store";
+import { formAtom } from "@/store/main-store";
 import {
   Container,
   CopyMessage,
@@ -11,7 +11,7 @@ import {
   Title,
   TitleContainer,
 } from "./results.styles";
-import { calculateAge } from "../../utils/calculate-age-from-date";
+import { calculateAge } from "@/utils/calculate-age-from-date";
 
 function getCopyMessage(
   age,
