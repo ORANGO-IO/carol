@@ -5,11 +5,12 @@ export const Container = styled.form`
   flex-direction: column;
   border: 1px solid #2578fa;
   border-radius: 24px;
-  max-width: 768px;
+  max-width: 513px;
+ 
 `;
 
 export const FormRow = styled.div`
-  gap: 8px;
+  gap: ${(props) => (props.gap ? props.gap : "5px")};
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -25,6 +26,12 @@ export const PatientComplaintContainer = styled.div`
   padding: 10px;
 `;
 
+export const FormErrorContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+`
+
 export const PatientComplaintRow = styled.div`
 flex-direction: row;
 flex-wrap: wrap;
@@ -35,7 +42,8 @@ justify-content: space-between;
 
 export const SelectContainer = styled.div`
   width: 100%;
-  flex: 1 1 240px;
+  flex: 1 1 248px;
+  max-width: 248px;
 `;
 
 export const PatientSignsContainer = styled.div`
@@ -47,14 +55,23 @@ export const PatientSignsContainer = styled.div`
   align-items: center;
   display: flex;
   border: 1px solid #2578fa;
-  gap: 12px;
   padding: 10px;
 `;
+
+export const PatientSignsInputContainer = styled.div`
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+`
 
 export const PatientSignsTitle = styled.p`
   font-weight: bold;
   color: #9c9c9c;
-  font-size: 16px;
+  font-size: 12x;
+  line-height: 12px;
+  font-weight: 700;
+  margin: 0px;
+  margin-bottom: 10px;
 `;
 
 export const PatientSignsRow = styled.div`
@@ -75,7 +92,7 @@ export const SubmitButton = styled.button.withConfig({
   border: none;
   cursor: ${(props) => (props.active ? "pointer" : "not-allowed")};
   color: ${(props) => (props.active ? "white" : "#666")};
-  font-weight: bold;
+  font-weight: 700;
   font-size: 18px;
   transition: background-color 0.3s;
 

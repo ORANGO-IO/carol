@@ -19,13 +19,19 @@ export const MultiSelect = (
       options={options}
       placeholder={placeholder}
       styles={{
+        input: (provided) => ({
+          ...provided,
+          margin: 0,
+        
+        }),
         control: (provided) => ({
           ...provided,
           borderRadius: "24px",
           textAlign: "left",
           borderColor: "#9c9c9c",
-          fontSize: 16,
-          minHeight: 60,
+          fontSize: 12,
+          minHeight: 57,
+        
         }),
         option: (provided) => ({
           ...provided,
@@ -38,6 +44,7 @@ export const MultiSelect = (
         }),
         placeholder: (provided) => ({
           ...provided,
+          color: "#9C9C9C"
         }),
         multiValue: (provided) => ({
           ...provided,
@@ -46,6 +53,9 @@ export const MultiSelect = (
         multiValueRemove: (provided) => ({
           ...provided,
           borderRadius: "24px",
+        }),
+        indicatorSeparator: state => ({
+          display: 'none',
         }),
       }}
     />

@@ -5,9 +5,8 @@ export const Container = styled.div.withConfig({
 })`
   border: ${(
   { hasError },
-) => (hasError ? "1px solid red" : "1px solid #9c9c9c")};
+) => (hasError ? "1px solid #D40000" : "1px solid #9c9c9c")};
   border-radius: 24px;
-  font-size: 16px;
   background-color: white;
   transition: 0.2s;
   flex-direction: row;
@@ -16,12 +15,14 @@ export const Container = styled.div.withConfig({
   gap: 6px;
   padding: 0px 10px;
   width: 100%;
-  flex: 1 1 240px;
+  flex: 1 1 24px;
+  max-height: 31px;
+  max-width: 248px;
   height: 40px;
   &:focus-within {
     border: ${(
   { hasError },
-) => (hasError ? "1px solid red" : "1px solid #0074d9")};
+) => (hasError ? "1px solid #D40000" : "1px solid #0074d9")};
   }
 `;
 
@@ -32,9 +33,9 @@ export const InputContainer = styled.div`
 export const BirthdayInput = styled.input`
   width: 100%;
   background-color: white;
-  color: black;
+  color: #3A3A3A;
   outline: none;
-  font-size: 16px;
+  font-size: 12px;
   border: none;
 `;
 
@@ -51,6 +52,7 @@ text-align: start;
 
 export const PatientAge = styled.p`
   color: #9C9C9C;
+  font-size: 12px;
 `;
 
 export const PatientAgeInputContainer = styled.div`
@@ -60,8 +62,8 @@ width: 50%;
 export const PatientAgeInput = styled.input`
    width: 100%;
   background-color: white;
-  color: black;
+  color: #3A3A3A;
   outline: none;
-  font-size: 16px;
   border: none;
+  font-size: 12px;
 `;

@@ -10,12 +10,16 @@ export const SwitchLabel = ({
   return (
     <Container>
       {leftImage && <LeftImage src={leftImage} alt="leftImage" />}
-      <Label enabled={enabled} color={textColor}>
+      <Label   
+          width={23}
+          height={23}
+          enabled={enabled} color={textColor}>
         {text}
       </Label>
       {rightImage && (
         <RightImage
           width={23}
+          height={23}
           src={rightImage}
           alt="rightImage"
         />

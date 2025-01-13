@@ -1,14 +1,12 @@
 import { useState } from "react";
 
-import {
-  SwitchInput,
-  SwitchInputContainer,
-  SwitchLabel,
-  SwitchSlider,
-  ToggleSwitchContainer,
-} from "./form-toggle.styles";
-import HospitalImage from "@/assets/hospital.png";
 import BasicAttendence from "@/assets/basic.png";
+import HospitalImage from "@/assets/hospital.png";
+import {
+  SwitchLabel,
+  ToggleSwitchContainer
+} from "./form-toggle.styles";
+import Switch from "./components/switch/switch";
 
 export const FormSwitch = ({ onToggle, leftLabel, rightLabel }) => {
   const [isChecked, setIsChecked] = useState(false);
@@ -28,15 +26,7 @@ export const FormSwitch = ({ onToggle, leftLabel, rightLabel }) => {
           text={leftLabel}
         />
       )}
-      <SwitchInputContainer>
-        <SwitchInput
-          name="switch"
-          type="checkbox"
-          checked={isChecked}
-          onChange={handleToggle}
-        />
-        <SwitchSlider />
-      </SwitchInputContainer>
+     <Switch onToggle={handleToggle} isChecked={isChecked} />
       {rightLabel && (
         <SwitchLabel
           enabled={isChecked}

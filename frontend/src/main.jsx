@@ -52,7 +52,7 @@ const Main = () => {
       {state.showedQP ? <Qp_description showedQP={state.showedQP} /> : null}
     </Modal>,
     <AppContext.Provider key={'contet'} value={state}>
-      <RouterProvider router={router} />;
+      <RouterProvider router={router} />
     </AppContext.Provider>,
   ];
 };

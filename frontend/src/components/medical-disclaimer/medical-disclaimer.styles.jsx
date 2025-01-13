@@ -5,4 +5,8 @@ max-width: 800px;
 padding: 26px;
 `;
 
-export const Text = styled.p`font-weight:bold`;
+export const Text = styled.p`
+    font-weight:700;
+    font-size: 12px;
+    line-height: 12px;
+`;

@@ -1,7 +1,8 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  max-width: 768px;
+  max-width: 513px;
+  margin-top: 35px;
 `;
 
 export const TitleContainer = styled.div`
@@ -12,35 +13,40 @@ align-items: start;
 `;
 
 export const Title = styled.p`
-  font-weight: bold;
-  font-size: 14px;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 12px;
   color: black;
 `;
 
 export const ResultContainer = styled.div`
+  margin-top: 30px;
   flex-direction: column;
   justify-content: flex-start;
   text-align: start;
   display: flex;
-  gap: 12px;
-  padding: 24px;
+  gap: 11px;
+  padding: 23px;
   background-color: #ffb100;
   border: 1px solid #956d10;
   border-radius: 24px;
 `;
 
 export const ResultTitle = styled.p`
-  font-size: 16px;
-  font-weight: bold;
-  color: black;
+  font-size: 12px;
+  line-height: 12px;
+  font-weight: 700;
+  color: #3A3A3A;
 `;
 
 export const ResultMessage = styled.p`
-  color: black;
+  color: #3A3A3A;
+  line-height: 12px;
+  font-size: 10px;
 `;
 
 export const CopyResult = styled.button`
-   margin-top: 16px;
+  margin-top: 16px;
   background-color: #2578fa;
   color: white;
   border: none;
@@ -50,6 +56,7 @@ export const CopyResult = styled.button`
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.2s;
+  font-size: 12px;
 
   &:hover {
     background-color: #1354d8;

@@ -7,15 +7,10 @@ export const ToggleSwitchContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 11px;
+  margin-bottom: 17px;
 `;
 
-export const SwitchInputContainer = styled.label`
-  position: relative;
-  display: inline-block;
-  width: 50px;
-  height: 26px;
-`;
 
 export const SwitchInput = styled.input`
   opacity: 0;
@@ -41,7 +36,7 @@ export const SwitchSlider = styled.span`
   &:before {
     position: absolute;
     content: "";
-    height: 20px;
+    height: 30px;
     width: 20px;
     left: 4px;
     bottom: 3px;
