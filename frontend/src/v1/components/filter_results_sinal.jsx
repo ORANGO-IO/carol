@@ -1,7 +1,7 @@
-import React, { useContext, useState } from "react";
-import { Accordion, Icon } from "semantic-ui-react";
-import qpDetails from "../functions/qp_details";
-import AppContext from "../../context";
+import React, { useContext, useState } from 'react';
+import { Accordion, Icon } from 'semantic-ui-react';
+import qpDetails from '../functions/qp_details';
+import AppContext from '../../context';
 
 export default (props) => {
   const [activeIndex, setActiveIndex] = useState(0);

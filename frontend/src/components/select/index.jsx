@@ -1,16 +1,14 @@
-import SelectComponent from "react-select";
+import SelectComponent from 'react-select';
 
-export const Select = (
-  {
-    placeholder,
-    name,
-    options,
-    hasError,
-    setValues,
-    handleBlur,
-    isLoading = false,
-  },
-) => {
+export const Select = ({
+  placeholder,
+  name,
+  options,
+  hasError,
+  setValues,
+  handleBlur,
+  isLoading = false,
+}) => {
   return (
     <SelectComponent
       isLoading={isLoading}
@@ -29,13 +27,13 @@ export const Select = (
       styles={{
         input: (provided) => ({
           ...provided,
-          margin:0,
+          margin: 0,
         }),
         control: (provided) => ({
           ...provided,
-          borderRadius: "24px",
-          textAlign: "left",
-          borderColor: hasError ? "#D40000" : "#9c9c9c",
+          borderRadius: '24px',
+          textAlign: 'left',
+          borderColor: hasError ? '#D40000' : '#9c9c9c',
           fontSize: 12,
           minHeight: 31,
           height: 31,
@@ -43,18 +41,18 @@ export const Select = (
         valueContainer: (provided, state) => ({
           ...provided,
           height: '31px',
-          padding: '0 6px'
+          padding: '0 6px',
         }),
         option: (provided) => ({
           ...provided,
-          cursor: "pointer",
-          borderRadius: "24px",
+          cursor: 'pointer',
+          borderRadius: '24px',
         }),
         menu: (provided) => ({
           ...provided,
-          borderRadius: "24px",
+          borderRadius: '24px',
         }),
-        indicatorSeparator: state => ({
+        indicatorSeparator: (state) => ({
           display: 'none',
         }),
         indicatorsContainer: (provided, state) => ({
@@ -63,7 +61,7 @@ export const Select = (
         }),
         placeholder: (provided) => ({
           ...provided,
-          color: "#9C9C9C"
+          color: '#9C9C9C',
         }),
       }}
     />

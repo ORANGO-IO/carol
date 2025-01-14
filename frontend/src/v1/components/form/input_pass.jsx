@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 class InputPass extends Component {
   constructor(props) {
@@ -6,8 +6,8 @@ class InputPass extends Component {
 
     this.state = {
       focusedOrFilled: false,
-      inputType: "password",
-      eyeIcon: "img/icones/olho.svg",
+      inputType: 'password',
+      eyeIcon: 'img/icones/olho.svg',
     };
 
     this.label = React.createRef();
@@ -29,22 +29,22 @@ class InputPass extends Component {
   // Adiciona ou remove classe css baseado em state.focus
   setLabelStyle = () => {
     if (this.state.focusedOrFilled) {
-      this.label.current.classList.add("focused_or_filled");
-      this.input.current.classList.add("focused_or_filled");
+      this.label.current.classList.add('focused_or_filled');
+      this.input.current.classList.add('focused_or_filled');
     } else {
-      this.label.current.classList.remove("focused_or_filled");
-      this.input.current.classList.remove("focused_or_filled");
+      this.label.current.classList.remove('focused_or_filled');
+      this.input.current.classList.remove('focused_or_filled');
     }
   };
 
   toggleType = (e) => {
-    if (this.state.inputType === "password") {
+    if (this.state.inputType === 'password') {
       this.setState({
-        inputType: "text",
-        eyeIcon: "img/icones/olho-cortado.svg",
+        inputType: 'text',
+        eyeIcon: 'img/icones/olho-cortado.svg',
       });
     } else {
-      this.setState({ inputType: "password", eyeIcon: "img/icones/olho.svg" });
+      this.setState({ inputType: 'password', eyeIcon: 'img/icones/olho.svg' });
     }
   };
 

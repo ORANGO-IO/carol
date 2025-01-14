@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 class InputText extends Component {
   constructor(props) {
@@ -27,11 +27,11 @@ class InputText extends Component {
   // Adiciona ou remove classe css baseado em state.focus
   setLabelStyle = () => {
     if (this.state.focused_or_filled) {
-      this.label.current.classList.add("focused_or_filled");
-      this.input.current.classList.add("focused_or_filled");
+      this.label.current.classList.add('focused_or_filled');
+      this.input.current.classList.add('focused_or_filled');
     } else {
-      this.label.current.classList.remove("focused_or_filled");
-      this.input.current.classList.remove("focused_or_filled");
+      this.label.current.classList.remove('focused_or_filled');
+      this.input.current.classList.remove('focused_or_filled');
     }
   };
 

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Container = styled.div`
   display: flex;
@@ -10,18 +10,16 @@ export const Container = styled.div`
 `;
 
 export const Label = styled.p.withConfig({
-  shouldForwardProp: (prop) => !["enabled", "color"].includes(prop),
+  shouldForwardProp: (prop) => !['enabled', 'color'].includes(prop),
 })`
-  color: ${(props) => (props.enabled ? props.color ?? "black" : "#ccc")};
+  color: ${(props) => (props.enabled ? (props.color ?? 'black') : '#ccc')};
   transition: 0.2s;
-  margin:0px;
-  flex-wrap:wrap;
+  margin: 0px;
+  flex-wrap: wrap;
   padding: 0px;
-  font-size: 12px
+  font-size: 12px;
 `;
 
-export const RightImage = styled.img`
-
-`;
+export const RightImage = styled.img``;
 
 export const LeftImage = styled.img``;

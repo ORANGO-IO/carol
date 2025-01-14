@@ -129,8 +129,9 @@ header.main {
       }
     }
 
-    &:before, &:after {
-      content: "";
+    &:before,
+    &:after {
+      content: '';
       display: block;
       position: absolute;
       width: 0;
@@ -161,7 +162,8 @@ header.main {
       flex-basis: auto;
       margin-right: 15px;
 
-      &:hover, a:hover {
+      &:hover,
+      a:hover {
         cursor: pointer;
         text-decoration: underline;
         font-weight: normal;
@@ -177,7 +179,8 @@ header.main {
           margin-bottom: 16px;
         }
 
-        &:first-child, &.mt-0 {
+        &:first-child,
+        &.mt-0 {
           margin-top: 0;
         }
       }
@@ -259,7 +262,7 @@ header.main {
     label {
       &.focused_or_filled {
         &::after {
-          content: "";
+          content: '';
         }
       }
     }

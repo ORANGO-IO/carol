@@ -1,5 +1,5 @@
-import { withMask } from "use-mask-input";
-import { DATE_REGEX, NUMERIC_REGEX } from "@/regex";
+import { withMask } from 'use-mask-input';
+import { DATE_REGEX, NUMERIC_REGEX } from '@/regex';
 import {
   BirthdayInput,
   Container,
@@ -9,12 +9,17 @@ import {
   PatientAgeContainer,
   PatientAgeInput,
   PatientAgeInputContainer,
-} from "@/components/birthday-input/styles";
-import { calculateAge } from "@/utils/calculate-age-from-date";
+} from '@/components/birthday-input/styles';
+import { calculateAge } from '@/utils/calculate-age-from-date';
 
-export const BirthdayField = (
-  { placeholder, value, hasError, ageValue, setValues, handleBlur },
-) => {
+export const BirthdayField = ({
+  placeholder,
+  value,
+  hasError,
+  ageValue,
+  setValues,
+  handleBlur,
+}) => {
   function onChangeDate(e) {
     const value = e.target.value;
 
@@ -22,7 +27,7 @@ export const BirthdayField = (
       return {
         ...values,
         birthday: value,
-        age: "",
+        age: '',
       };
     });
   }
@@ -30,10 +35,10 @@ export const BirthdayField = (
   function onChangeAge(e) {
     const value = e.target.value;
 
-    if (NUMERIC_REGEX.test(value) || value === "") {
+    if (NUMERIC_REGEX.test(value) || value === '') {
       setValues((values) => ({
         ...values,
-        birthday: "",
+        birthday: '',
         age: value,
       }));
     }
@@ -44,7 +49,7 @@ export const BirthdayField = (
       <InputContainer>
         <BirthdayInput
           onBlur={handleBlur}
-          ref={withMask("99/99/9999")}
+          ref={withMask('99/99/9999')}
           name="birthday"
           value={value}
           onChange={onChangeDate}
@@ -54,25 +59,23 @@ export const BirthdayField = (
         />
       </InputContainer>
       <Divider />
-      {DATE_REGEX.test(value)
-        ? (
-          <PatientAgeContainer>
-            <PatientAge>{`${calculateAge(value)} ANOS`}</PatientAge>
-          </PatientAgeContainer>
-        )
-        : (
-          <PatientAgeInputContainer>
-            <PatientAgeInput
-              onBlur={handleBlur}
-              maxLength={3}
-              onChange={onChangeAge}
-              value={ageValue}
-              name="age"
-              placeholder="IDADE"
-              type="number"
-            />
-          </PatientAgeInputContainer>
-        )}
+      {DATE_REGEX.test(value) ? (
+        <PatientAgeContainer>
+          <PatientAge>{`${calculateAge(value)} ANOS`}</PatientAge>
+        </PatientAgeContainer>
+      ) : (
+        <PatientAgeInputContainer>
+          <PatientAgeInput
+            onBlur={handleBlur}
+            maxLength={3}
+            onChange={onChangeAge}
+            value={ageValue}
+            name="age"
+            placeholder="IDADE"
+            type="number"
+          />
+        </PatientAgeInputContainer>
+      )}
     </Container>
   );
 };

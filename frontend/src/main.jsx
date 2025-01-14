@@ -1,16 +1,16 @@
-import React from "react";
-import { createRoot } from "react-dom/client";
-import "semantic-ui-css/semantic.min.css";
-import "./axios-config";
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import 'semantic-ui-css/semantic.min.css';
+import './axios-config';
 
-import HomeV1 from "./v1/pages/home";
-import AppContext from "./context";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import HomeV1 from './v1/pages/home';
+import AppContext from './context';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import { HomePage } from "./pages/home";
-import { Modal } from "semantic-ui-react";
-import Qp_description from "./v1/components/qp_description";
-import { GlobalStyle } from "./global-style";
+import { HomePage } from './pages/home';
+import { Modal } from 'semantic-ui-react';
+import Qp_description from './v1/components/qp_description';
+import { GlobalStyle } from './global-style';
 
 const Main = () => {
   const [state, setState] = React.useState({
@@ -25,29 +25,31 @@ const Main = () => {
 
   const router = createBrowserRouter([
     {
-      path: "/",
+      path: '/',
       element: <HomePage />,
     },
     {
-      path: "/v1",
+      path: '/v1',
       element: <HomeV1 />,
     },
   ]);
 
   return [
     <Modal
-      key={"modal-qp"}
+      key={'modal-qp'}
       size="small"
       open={state.isShowingQp}
-      onClose={() => setState({
-        isShowingQp: false,
-        showedQP: null,
-        showQp: (showedQP) =>
-          setState({
-            isShowingQp: true,
-            showedQP,
-          }),
-      })}
+      onClose={() =>
+        setState({
+          isShowingQp: false,
+          showedQP: null,
+          showQp: (showedQP) =>
+            setState({
+              isShowingQp: true,
+              showedQP,
+            }),
+        })
+      }
     >
       {state.showedQP ? <Qp_description showedQP={state.showedQP} /> : null}
     </Modal>,
@@ -57,9 +59,9 @@ const Main = () => {
   ];
 };
 
-createRoot(document.getElementById("root")).render(
+createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <GlobalStyle/>
+    <GlobalStyle />
     <Main />
-  </React.StrictMode>,
+  </React.StrictMode>
 );

@@ -1,6 +1,6 @@
-import { useAtomValue } from "jotai";
-import { useState } from "react";
-import { formAtom } from "@/store/main-store";
+import { useAtomValue } from 'jotai';
+import { useState } from 'react';
+import { formAtom } from '@/store/main-store';
 import {
   Container,
   CopyMessage,
@@ -10,8 +10,8 @@ import {
   ResultTitle,
   Title,
   TitleContainer,
-} from "./styles";
-import { calculateAge } from "@/utils/calculate-age-from-date";
+} from './styles';
+import { calculateAge } from '@/utils/calculate-age-from-date';
 
 function getCopyMessage(
   age,
@@ -26,21 +26,23 @@ function getCopyMessage(
   glasgow,
   hgt,
   pain,
-  birthday,
+  birthday
 ) {
   function getAgeMessage() {
     let parsedAge;
     if (
-      age == undefined || age == "" && birthday == undefined || birthday == ""
+      age == undefined ||
+      (age == '' && birthday == undefined) ||
+      birthday == ''
     ) {
-      return "";
+      return '';
     }
 
-    if (age !== undefined && age !== "") {
+    if (age !== undefined && age !== '') {
       parsedAge = age;
     }
 
-    if (birthday !== undefined && birthday !== "") {
+    if (birthday !== undefined && birthday !== '') {
       parsedAge = calculateAge(birthday);
     }
 
@@ -48,76 +50,78 @@ function getCopyMessage(
   }
 
   function getComplaintMessage() {
-    if (complaint !== undefined && complaint !== "") {
+    if (complaint !== undefined && complaint !== '') {
       return ` com queixa de ${complaint}`;
     }
-    return "";
+    return '';
   }
 
   function getSymptomsMessage() {
     if (symptoms !== undefined && symptoms.length > 0) {
-      return ` apresenta ${symptoms.join(", ")}`;
+      return ` apresenta ${symptoms.join(', ')}`;
     }
-    return "";
+    return '';
   }
 
   function getPhysicalExamMessage() {
     if (
-      systolicPressure !== undefined && systolicPressure !== "" &&
-      diastolicPressure !== undefined && diastolicPressure !== ""
+      systolicPressure !== undefined &&
+      systolicPressure !== '' &&
+      diastolicPressure !== undefined &&
+      diastolicPressure !== ''
     ) {
       return `PA ${systolicPressure}/${diastolicPressure}mmHg, `;
     }
-    return "";
+    return '';
   }
 
   function getHeartRateMessage() {
-    if (heartRate !== undefined && heartRate !== "") {
+    if (heartRate !== undefined && heartRate !== '') {
       return `FC ${heartRate}bpm, `;
     }
-    return "";
+    return '';
   }
 
   function getRespiratoryRateMessage() {
-    if (respiratoryRate !== undefined && respiratoryRate !== "") {
+    if (respiratoryRate !== undefined && respiratoryRate !== '') {
       return `FR ${respiratoryRate}irpm, `;
     }
-    return "";
+    return '';
   }
 
   function getSpO2Message() {
-    if (spO2 !== undefined && spO2 !== "") {
+    if (spO2 !== undefined && spO2 !== '') {
       return `SpO2 ${spO2}%, `;
     }
-    return "";
+    return '';
   }
 
   function getTemperatureMessage() {
-    if (temperature !== undefined && temperature !== "") {
+    if (temperature !== undefined && temperature !== '') {
       return `temperatura ${temperature}°C, `;
     }
-    return "";
+    return '';
   }
 
   function getGlasgowMessage() {
-    if (glasgow !== undefined && glasgow !== "") {
+    if (glasgow !== undefined && glasgow !== '') {
       return `escala de Glasgow ${glasgow}, `;
     }
-    return "";
+    return '';
   }
 
   function getHgtMessage() {
-    if (hgt !== undefined && hgt !== "") {
+    if (hgt !== undefined && hgt !== '') {
       return `HGT ${hgt}mg/dL, `;
     }
-    return "";
+    return '';
   }
 
   function getPainMessage() {
-    if (pain !== undefined && pain !== "") {
+    if (pain !== undefined && pain !== '') {
       return `dor ${pain}/10`;
     }
-    return "";
+    return '';
   }
 
   return `Paciente${getAgeMessage()}${getComplaintMessage()}${getSymptomsMessage()}. Exame físico: ${getPhysicalExamMessage()}${getHeartRateMessage()}${getRespiratoryRateMessage()}${getSpO2Message()}${getTemperatureMessage()}${getGlasgowMessage()}${getHgtMessage()}${getPainMessage()}.`;
@@ -142,8 +146,8 @@ export const Results = () => {
         form.glasgow,
         form.hgt,
         form.pain,
-        form.birthday,
-      ),
+        form.birthday
+      )
     );
 
     setCopyMessage(true);

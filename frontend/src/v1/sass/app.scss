@@ -1,27 +1,27 @@
 // Importar fontes
-@import url("https://fonts.googleapis.com/css?family=Hind+Guntur");
+@import url('https://fonts.googleapis.com/css?family=Hind+Guntur');
 
 // Importar variáveis
-@import "variables";
+@import 'variables';
 
 // Importar mixins
-@import "mixins";
+@import 'mixins';
 
 // Importar páginas
-@import "./pages/home";
+@import './pages/home';
 
 // Importar layouts
 // @import 'layouts/login';
 
 // Importar componentes
-@import "components/form/form";
+@import 'components/form/form';
 
 * {
   @include mp0;
 }
 
 html {
-  font-family: "Hind Guntur", sans-serif;
+  font-family: 'Hind Guntur', sans-serif;
   color: $preto;
 }
 
@@ -47,7 +47,8 @@ a {
   cursor: pointer;
 }
 
-#root, .modals {
+#root,
+.modals {
   h1,
   h2,
   h3 {
@@ -176,12 +177,11 @@ section {
   max-height: 50vh;
   overflow-y: auto;
 
-
   > button {
     width: 100%;
     padding: 10px 20px;
     background: #fff;
     border: 1px solid #ccc;
-    color:#000;
+    color: #000;
   }
 }

@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 export default (props) => {
-  const [display, setDisplay] = useState("none");
+  const [display, setDisplay] = useState('none');
 
   const setState = () => {
-    if (display == "none") {
-      setDisplay("block");
+    if (display == 'none') {
+      setDisplay('block');
     } else {
-      setDisplay("none");
+      setDisplay('none');
     }
   };
 

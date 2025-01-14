@@ -1,16 +1,16 @@
-import { BirthdayField } from "@/components/birthday-input";
-import { MultiSelect } from "@/components/multi-select";
-import { Select } from "@/components/select";
-import { TextField } from "@/components/text-field";
-import { Formik } from "formik";
+import { BirthdayField } from '@/components/birthday-input';
+import { MultiSelect } from '@/components/multi-select';
+import { Select } from '@/components/select';
+import { TextField } from '@/components/text-field';
+import { Formik } from 'formik';
 
-import { getMainComplaints } from "@/api/get-main-complaints";
-import { FormErrors } from "@/components/form-errors";
-import { PrecisionWarningMessage } from "@/components/precision-warning-message";
-import { formAtom, mainComplaintsAtom } from "@/store/main-store";
-import { useAtom } from "jotai";
-import { useEffect, useState } from "react";
-import { FormSchema } from "./form-schema";
+import { getMainComplaints } from '@/api/get-main-complaints';
+import { FormErrors } from '@/components/form-errors';
+import { PrecisionWarningMessage } from '@/components/precision-warning-message';
+import { formAtom, mainComplaintsAtom } from '@/store/main-store';
+import { useAtom } from 'jotai';
+import { useEffect, useState } from 'react';
+import { FormSchema } from './form-schema';
 import {
   Container,
   FormErrorContainer,
@@ -21,8 +21,8 @@ import {
   PatientSignsInputContainer,
   PatientSignsTitle,
   SelectContainer,
-  SubmitButton
-} from "./styles";
+  SubmitButton,
+} from './styles';
 
 const MIN_INPUT_REQUIRED = 4;
 
@@ -34,22 +34,28 @@ export const MainForm = () => {
   function checkInputFilled(values) {
     return Object.values(values).filter(
       (value) =>
-        value !== "" && value !== null && value !== undefined &&
-        value.length != 0,
+        value !== '' &&
+        value !== null &&
+        value !== undefined &&
+        value.length != 0
     ).length;
   }
 
   useEffect(() => {
-    getMainComplaints().then((mainComplaints) => {
-      setMainComplaints(mainComplaints.map((item) => {
-        return {
-          label: item.sintoma.toLocaleUpperCase(),
-          value: item.sintoma,
-        };
-      }));
-    }, []).finally(() => {
-      setIsLoadingMainComplaints(false);
-    });
+    getMainComplaints()
+      .then((mainComplaints) => {
+        setMainComplaints(
+          mainComplaints.map((item) => {
+            return {
+              label: item.sintoma.toLocaleUpperCase(),
+              value: item.sintoma,
+            };
+          })
+        );
+      }, [])
+      .finally(() => {
+        setIsLoadingMainComplaints(false);
+      });
   }, []);
 
   return (
@@ -61,26 +67,19 @@ export const MainForm = () => {
       }}
       validationSchema={FormSchema}
     >
-      {({
-        values,
-        errors,
-        handleSubmit,
-        handleBlur,
-        isValid,
-        setValues,
-      }) => {
+      {({ values, errors, handleSubmit, handleBlur, isValid, setValues }) => {
         return (
           <Container onSubmit={handleSubmit}>
             <PatientComplaintContainer>
-                <Select
-                  isLoading={isLoadingMainComplaints}
-                  handleBlur={handleBlur}
-                  setValues={setValues}
-                  hasError={errors.complaint ? true : false}
-                  options={mainComplaints}
-                  name="complaint"
-                  placeholder="QUEIXA PRINCIPAL"
-                />
+              <Select
+                isLoading={isLoadingMainComplaints}
+                handleBlur={handleBlur}
+                setValues={setValues}
+                hasError={errors.complaint ? true : false}
+                options={mainComplaints}
+                name="complaint"
+                placeholder="QUEIXA PRINCIPAL"
+              />
               <PatientComplaintRow>
                 <BirthdayField
                   handleBlur={handleBlur}
@@ -119,7 +118,7 @@ export const MainForm = () => {
                     handleBlur={handleBlur}
                     value={values.systolicPressure}
                     name="systolicPressure"
-                    flexValue={"1 1 200px"}
+                    flexValue={'1 1 200px'}
                     label="mmHg"
                     placeholder="PRESSÃO SISTÓLICA"
                   />
@@ -129,7 +128,7 @@ export const MainForm = () => {
                     handleBlur={handleBlur}
                     value={values.diastolicPressure}
                     name="diastolicPressure"
-                    flexValue={"1 1 200px"}
+                    flexValue={'1 1 200px'}
                     label="mmHg"
                     placeholder="PRESSÃO DIASTÓLICA"
                   />
@@ -141,7 +140,7 @@ export const MainForm = () => {
                     handleBlur={handleBlur}
                     value={values.heartRate}
                     name="heartRate"
-                    flexValue={"1 1 108px"}
+                    flexValue={'1 1 108px'}
                     label="bpm"
                     placeholder="FC"
                   />
@@ -149,7 +148,7 @@ export const MainForm = () => {
                     setValues={setValues}
                     hasError={errors.respiratoryRate}
                     handleBlur={handleBlur}
-                    flexValue={"1 1 126px"}
+                    flexValue={'1 1 126px'}
                     value={values.respiratoryRate}
                     name="respiratoryRate"
                     label="ipm"
@@ -159,7 +158,7 @@ export const MainForm = () => {
                     setValues={setValues}
                     hasError={errors.spO2}
                     handleBlur={handleBlur}
-                    flexValue={"1 1 122px"}
+                    flexValue={'1 1 122px'}
                     value={values.spO2}
                     name="spO2"
                     label="%"
@@ -171,7 +170,7 @@ export const MainForm = () => {
                     hasError={errors.temperature}
                     handleBlur={handleBlur}
                     value={values.temperature}
-                    flexValue={"1 1 116px"}
+                    flexValue={'1 1 116px'}
                     name="temperature"
                     label="ºC"
                     placeholder="Temp"
@@ -180,7 +179,7 @@ export const MainForm = () => {
                 <FormRow gap="12px">
                   <TextField
                     type="number"
-                    flexValue={"1 1 154px"}
+                    flexValue={'1 1 154px'}
                     setValues={setValues}
                     hasError={errors.glasgow}
                     handleBlur={handleBlur}
@@ -191,7 +190,7 @@ export const MainForm = () => {
                   />
                   <TextField
                     type="number"
-                    flexValue={"1 1 154px"}
+                    flexValue={'1 1 154px'}
                     setValues={setValues}
                     hasError={errors.hgt}
                     handleBlur={handleBlur}
@@ -203,7 +202,7 @@ export const MainForm = () => {
                   <TextField
                     maxLength={2}
                     type="number"
-                    flexValue={"1 1 154px"}
+                    flexValue={'1 1 154px'}
                     setValues={setValues}
                     hasError={errors.pain}
                     handleBlur={handleBlur}

@@ -1,8 +1,12 @@
-import SelectComponent from "react-select";
+import SelectComponent from 'react-select';
 
-export const MultiSelect = (
-  { placeholder, name, options, setValues, handleBlur },
-) => {
+export const MultiSelect = ({
+  placeholder,
+  name,
+  options,
+  setValues,
+  handleBlur,
+}) => {
   return (
     <SelectComponent
       onBlur={handleBlur}
@@ -22,39 +26,37 @@ export const MultiSelect = (
         input: (provided) => ({
           ...provided,
           margin: 0,
-        
         }),
         control: (provided) => ({
           ...provided,
-          borderRadius: "24px",
-          textAlign: "left",
-          borderColor: "#9c9c9c",
+          borderRadius: '24px',
+          textAlign: 'left',
+          borderColor: '#9c9c9c',
           fontSize: 12,
           minHeight: 57,
-        
         }),
         option: (provided) => ({
           ...provided,
-          cursor: "pointer",
-          borderRadius: "24px",
+          cursor: 'pointer',
+          borderRadius: '24px',
         }),
         menu: (provided) => ({
           ...provided,
-          borderRadius: "24px",
+          borderRadius: '24px',
         }),
         placeholder: (provided) => ({
           ...provided,
-          color: "#9C9C9C"
+          color: '#9C9C9C',
         }),
         multiValue: (provided) => ({
           ...provided,
-          borderRadius: "24px",
+          borderRadius: '24px',
         }),
         multiValueRemove: (provided) => ({
           ...provided,
-          borderRadius: "24px",
+          borderRadius: '24px',
         }),
-        indicatorSeparator: state => ({
+        indicatorSeparator: (state) => ({
           display: 'none',
         }),
       }}

@@ -1,5 +1,5 @@
-import axios from "axios";
-import React, { Component } from "react";
+import axios from 'axios';
+import React, { Component } from 'react';
 import {
   Button,
   Container,
@@ -9,12 +9,12 @@ import {
   Input,
   Loader,
   Modal,
-  Segment
-} from "semantic-ui-react";
-import AppContext from "../../context";
-import FilterResults from "../components/filter_results";
-import HintedInput from "../components/form/input_hinted";
-import "../sass/app.scss";
+  Segment,
+} from 'semantic-ui-react';
+import AppContext from '../../context';
+import FilterResults from '../components/filter_results';
+import HintedInput from '../components/form/input_hinted';
+import '../sass/app.scss';
 export default class newHome extends Component {
   static contextType = AppContext;
 
@@ -40,7 +40,7 @@ export default class newHome extends Component {
         })
         .catch((e) => {
           console.log(e);
-          console.log("Não foi possível capturar a queixa principal");
+          console.log('Não foi possível capturar a queixa principal');
         });
     });
   };
@@ -62,17 +62,15 @@ export default class newHome extends Component {
   searchResults = () => {
     this.setState({ isLoading: true });
     console.log(this.state.dados, Object.entries(this.state.dados));
-    let url = `filter?${
-      Object.entries(this.state.dados).map((dado) => `${dado[0]}=${dado[1]}&`)
-        .join("")
-    }`;
+    let url = `filter?${Object.entries(this.state.dados)
+      .map((dado) => `${dado[0]}=${dado[1]}&`)
+      .join('')}`;
     url += `categoria=${this.state.categoria}`;
     console.log(url);
     axios(`${import.meta.env.VITE_API_URL}/${url}`)
       .then((response) =>
-        this.setState(
-          { results: response.data, isLoading: false },
-          () => console.log(this.state.results),
+        this.setState({ results: response.data, isLoading: false }, () =>
+          console.log(this.state.results)
         )
       )
       .catch((err) => console.log(err));
@@ -99,7 +97,7 @@ export default class newHome extends Component {
           });
           this.setState({ dbQP: data, isLoading: false });
         })
-        .catch(() => console.log("Não foi possível capturar as categorias"));
+        .catch(() => console.log('Não foi possível capturar as categorias'));
       // qpData().then(data => {
       //   this.setState({ dbQP : data }, () => console.log(this.state))
       // })
@@ -157,7 +155,7 @@ export default class newHome extends Component {
                 fluid
                 name="pas"
                 type="number"
-                label={{ basic: true, content: "mmHg" }}
+                label={{ basic: true, content: 'mmHg' }}
                 labelPosition="right"
                 placeholder="Pressão sitólica"
                 onChange={this.handleChangeDados}
@@ -168,7 +166,7 @@ export default class newHome extends Component {
                 fluid
                 name="pad"
                 type="number"
-                label={{ basic: true, content: "mmHg" }}
+                label={{ basic: true, content: 'mmHg' }}
                 labelPosition="right"
                 placeholder="Pressão diastólica"
                 onChange={this.handleChangeDados}
@@ -179,7 +177,7 @@ export default class newHome extends Component {
                 fluid
                 name="fc"
                 type="number"
-                label={{ basic: true, content: "bpm" }}
+                label={{ basic: true, content: 'bpm' }}
                 labelPosition="right"
                 placeholder="FC"
                 onChange={this.handleChangeDados}
@@ -190,7 +188,7 @@ export default class newHome extends Component {
                 fluid
                 name="fr"
                 type="number"
-                label={{ basic: true, content: "ipm" }}
+                label={{ basic: true, content: 'ipm' }}
                 labelPosition="right"
                 placeholder="FR"
                 onChange={this.handleChangeDados}
@@ -201,7 +199,7 @@ export default class newHome extends Component {
                 fluid
                 name="spo2"
                 type="number"
-                label={{ basic: true, content: "%" }}
+                label={{ basic: true, content: '%' }}
                 labelPosition="right"
                 placeholder="Saturação de O2"
                 onChange={this.handleChangeDados}
@@ -212,7 +210,7 @@ export default class newHome extends Component {
                 fluid
                 name="temp"
                 type="number"
-                label={{ basic: true, content: "ºC" }}
+                label={{ basic: true, content: 'ºC' }}
                 labelPosition="right"
                 placeholder="Temperatura"
                 onChange={this.handleChangeDados}
@@ -232,7 +230,7 @@ export default class newHome extends Component {
                 fluid
                 name="glicemia"
                 type="number"
-                label={{ basic: true, content: "ml/dL" }}
+                label={{ basic: true, content: 'ml/dL' }}
                 labelPosition="right"
                 placeholder="HGT"
                 onChange={this.handleChangeDados}
@@ -258,9 +256,9 @@ export default class newHome extends Component {
           </Grid>
           {/* <pre>{JSON.stringify(this.state.dados, null, 2)}</pre> */}
         </Segment>
-        {this.state.results
-          ? <FilterResults results={this.state.results} />
-          : null}
+        {this.state.results ? (
+          <FilterResults results={this.state.results} />
+        ) : null}
       </Container>,
       <footer className="main">
         <Dropdown text="Classificações">
@@ -270,7 +268,7 @@ export default class newHome extends Component {
           </Dropdown.Menu>
         </Dropdown>
         <br />
-        Encontrou algum erro? Sugestão? Críticas?{" "}
+        Encontrou algum erro? Sugestão? Críticas?{' '}
         <a
           href="https://gitlab.com/medapps/carol/frontend/issues"
           target="_blank"

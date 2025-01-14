@@ -1,5 +1,5 @@
-import React from "react";
-import { SwitchChild, SwitchContainer } from "./styles";
+import React from 'react';
+import { SwitchChild, SwitchContainer } from './styles';
 
 const Switch = ({ onToggle, isChecked, opacity = 1 }) => {
   const toggleSwitch = () => {

@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import { Input } from "semantic-ui-react";
-import { remove as removeDiacritics } from "diacritics";
+import React, { Component } from 'react';
+import { Input } from 'semantic-ui-react';
+import { remove as removeDiacritics } from 'diacritics';
 
 export default class HintedInput extends Component {
   state = {
@@ -10,21 +10,20 @@ export default class HintedInput extends Component {
   };
 
   handleChange = (hint) => () => {
-    this.setState(
-      { value: hint.value, isOpened: false },
-      () => console.log(this.state),
+    this.setState({ value: hint.value, isOpened: false }, () =>
+      console.log(this.state)
     );
     if (this.props.onOptionClick) this.props.onOptionClick(hint);
   };
 
   filterHints = (e, { value }) => {
     console.log(this.state.value);
-    let regex = new RegExp(`.*${removeDiacritics(value)}.*`, "gi");
+    let regex = new RegExp(`.*${removeDiacritics(value)}.*`, 'gi');
     let filteredHints = this.props.hints.filter((hint) => {
       return removeDiacritics(hint.content).match(regex) !== null;
     });
     console.log(value, regex, this.props.hints, filteredHints);
-    if (filteredHints.length && value !== "") {
+    if (filteredHints.length && value !== '') {
       this.setState({
         isOpened: true,
         filteredHints,
@@ -47,21 +46,15 @@ export default class HintedInput extends Component {
         value={this.state.value}
       >
         <input />
-        {this.state.filteredHints.length
-          ? (
-            <div className="input_hint">
-              {this.state.filteredHints.map((hint) => (
-                this.state.isOpened
-                  ? (
-                    <button onClick={this.handleChange(hint)}>
-                      {hint.label}
-                    </button>
-                  )
-                  : null
-              ))}
-            </div>
-          )
-          : null}
+        {this.state.filteredHints.length ? (
+          <div className="input_hint">
+            {this.state.filteredHints.map((hint) =>
+              this.state.isOpened ? (
+                <button onClick={this.handleChange(hint)}>{hint.label}</button>
+              ) : null
+            )}
+          </div>
+        ) : null}
       </Input>
     );
   }

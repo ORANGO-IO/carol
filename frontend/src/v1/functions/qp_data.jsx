@@ -1,5 +1,5 @@
-import React from "react";
-import axios from "axios";
+import React from 'react';
+import axios from 'axios';
 
 export default async () => {
   let rtn = null;
@@ -24,7 +24,7 @@ export default async () => {
       rtn = data;
       console.log(rtn);
     })
-    .catch(() => console.log("Não foi possível capturar as categorias"));
+    .catch(() => console.log('Não foi possível capturar as categorias'));
 
   if (rtn.length) {
   }

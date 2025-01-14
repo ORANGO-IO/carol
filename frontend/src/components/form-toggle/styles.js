@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { SwitchLabel as BaseSwitchLabel } from "./components/switch-label";
+import styled from 'styled-components';
+import { SwitchLabel as BaseSwitchLabel } from './components/switch-label';
 
 export const ToggleContainer = styled.div``;
 
@@ -10,7 +10,6 @@ export const ToggleSwitchContainer = styled.div`
   gap: 11px;
   margin-bottom: 17px;
 `;
-
 
 export const SwitchInput = styled.input`
   opacity: 0;
@@ -35,7 +34,7 @@ export const SwitchSlider = styled.span`
 
   &:before {
     position: absolute;
-    content: "";
+    content: '';
     height: 30px;
     width: 20px;
     left: 4px;

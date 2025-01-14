@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
-import FilterResultsSinal from "./filter_results_sinal";
-import { Segment } from "semantic-ui-react";
-import qpDetails from "../functions/qp_details";
-import AppContext from "../../context";
+import React, { useContext } from 'react';
+import FilterResultsSinal from './filter_results_sinal';
+import { Segment } from 'semantic-ui-react';
+import qpDetails from '../functions/qp_details';
+import AppContext from '../../context';
 
 export default (props) => {
   const { triagem, resultados, sugestoes } = props.results;
@@ -16,33 +16,32 @@ export default (props) => {
   };
 
   return [
-    triagem
-      ? <h2>Resultado de triagem</h2>
-      : "Sem dados de triagem, investigação manual",
-    triagem
-      ? (
-        <Segment
-          className={`classificacao background ${triagem.classificacao.nome}`}
-        >
-          <a onClick={getQp(triagem.ID)}>
-            <h4>
-              {triagem.sintoma}{" "}
-              {triagem.categoria ? `(${triagem.categoria})` : null}
-            </h4>
-          </a>
-          {triagem.observacao ? <p>{triagem.observacao}</p> : null}
-          <Segment>
-            <p>
-              Tempo de atendimento:{" "}
-              <strong>{triagem.classificacao.tempo}</strong>
-            </p>
-            <p>
-              {triagem.classificacao.nome} : {triagem.classificacao.descritor}
-            </p>
-          </Segment>
+    triagem ? (
+      <h2>Resultado de triagem</h2>
+    ) : (
+      'Sem dados de triagem, investigação manual'
+    ),
+    triagem ? (
+      <Segment
+        className={`classificacao background ${triagem.classificacao.nome}`}
+      >
+        <a onClick={getQp(triagem.ID)}>
+          <h4>
+            {triagem.sintoma}{' '}
+            {triagem.categoria ? `(${triagem.categoria})` : null}
+          </h4>
+        </a>
+        {triagem.observacao ? <p>{triagem.observacao}</p> : null}
+        <Segment>
+          <p>
+            Tempo de atendimento: <strong>{triagem.classificacao.tempo}</strong>
+          </p>
+          <p>
+            {triagem.classificacao.nome} : {triagem.classificacao.descritor}
+          </p>
         </Segment>
-      )
-      : null,
+      </Segment>
+    ) : null,
     <h2>Resultado possíveis</h2>,
     resultados.map((resultado) => (
       <Segment
@@ -50,14 +49,14 @@ export default (props) => {
       >
         <a onClick={getQp(resultado.ID)}>
           <h4>
-            {resultado.sintoma}{" "}
+            {resultado.sintoma}{' '}
             {resultado.categoria ? `(${resultado.categoria})` : null}
           </h4>
         </a>
         {resultado.observacao ? <p>{resultado.observacao}</p> : null}
         <Segment>
           <p>
-            Tempo de atendimento:{" "}
+            Tempo de atendimento:{' '}
             <strong>{resultado.classificacao.tempo}</strong>
           </p>
           <p>

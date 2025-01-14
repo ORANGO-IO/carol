@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Container = styled.div`
   max-width: 513px;
@@ -6,10 +6,10 @@ export const Container = styled.div`
 `;
 
 export const TitleContainer = styled.div`
-display: flex;
-flex-direction: row;
-justify-content: space-between;
-align-items: start;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: start;
 `;
 
 export const Title = styled.p`
@@ -36,11 +36,11 @@ export const ResultTitle = styled.p`
   font-size: 12px;
   line-height: 12px;
   font-weight: 700;
-  color: #3A3A3A;
+  color: #3a3a3a;
 `;
 
 export const ResultMessage = styled.p`
-  color: #3A3A3A;
+  color: #3a3a3a;
   line-height: 12px;
   font-size: 10px;
 `;
@@ -64,9 +64,9 @@ export const CopyResult = styled.button`
 `;
 
 export const CopyMessage = styled.p.withConfig({
-  shouldForwardProp: (prop) => !["active"].includes(prop),
+  shouldForwardProp: (prop) => !['active'].includes(prop),
 })`
-  opacity: ${(props) => (props.active ? "1" : "0")};
+  opacity: ${(props) => (props.active ? '1' : '0')};
   transition: opacity 0.2s;
   color: #2578fa;
   margin-top: 6px;

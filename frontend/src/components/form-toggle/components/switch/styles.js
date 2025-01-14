@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const SwitchContainer = styled.div`
   width: 86px;
@@ -9,7 +9,7 @@ export const SwitchContainer = styled.div`
   align-items: center;
   gap: 0;
   border-radius: 24px;
-  background-color: #D9D9D9;
+  background-color: #d9d9d9;
   transition: background-color 0.3s ease;
   cursor: pointer;
 `;
@@ -17,10 +17,10 @@ export const SwitchContainer = styled.div`
 export const SwitchChild = styled.div`
   width: 55px;
   height: 26px;
-  background-color: #9C9C9C;
+  background-color: #9c9c9c;
   border-radius: 24px;
   position: absolute;
   top: 2px;
-  left: ${(props) => (props.isChecked ? "29px" : "2px")};
+  left: ${(props) => (props.isChecked ? '29px' : '2px')};
   transition: left 0.3s ease;
 `;

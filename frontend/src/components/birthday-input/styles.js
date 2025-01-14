@@ -1,11 +1,10 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Container = styled.div.withConfig({
-  shouldForwardProp: (props) => props !== "hasError",
+  shouldForwardProp: (props) => props !== 'hasError',
 })`
-  border: ${(
-  { hasError },
-) => (hasError ? "1px solid #D40000" : "1px solid #9c9c9c")};
+  border: ${({ hasError }) =>
+    hasError ? '1px solid #D40000' : '1px solid #9c9c9c'};
   border-radius: 24px;
   background-color: white;
   transition: 0.2s;
@@ -20,9 +19,8 @@ export const Container = styled.div.withConfig({
   max-width: 248px;
   height: 40px;
   &:focus-within {
-    border: ${(
-  { hasError },
-) => (hasError ? "1px solid #D40000" : "1px solid #0074d9")};
+    border: ${({ hasError }) =>
+      hasError ? '1px solid #D40000' : '1px solid #0074d9'};
   }
 `;
 
@@ -33,7 +31,7 @@ export const InputContainer = styled.div`
 export const BirthdayInput = styled.input`
   width: 100%;
   background-color: white;
-  color: #3A3A3A;
+  color: #3a3a3a;
   outline: none;
   font-size: 12px;
   border: none;
@@ -46,23 +44,23 @@ export const Divider = styled.div`
 `;
 
 export const PatientAgeContainer = styled.div`
-width: 50%;
-text-align: start;
+  width: 50%;
+  text-align: start;
 `;
 
 export const PatientAge = styled.p`
-  color: #9C9C9C;
+  color: #9c9c9c;
   font-size: 12px;
 `;
 
 export const PatientAgeInputContainer = styled.div`
-width: 50%;
+  width: 50%;
 `;
 
 export const PatientAgeInput = styled.input`
-   width: 100%;
+  width: 100%;
   background-color: white;
-  color: #3A3A3A;
+  color: #3a3a3a;
   outline: none;
   border: none;
   font-size: 12px;

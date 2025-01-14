@@ -4,21 +4,19 @@ import {
   Label,
   LabelContainer,
   TextFieldContainer,
-} from "./styles";
+} from './styles';
 
-export const TextField = (
-  {
-    placeholder,
-    label,
-    flexValue,
-    name,
-    value,
-    hasError,
-    handleBlur,
-    setValues,
-    type = "text",
-  },
-) => {
+export const TextField = ({
+  placeholder,
+  label,
+  flexValue,
+  name,
+  value,
+  hasError,
+  handleBlur,
+  setValues,
+  type = 'text',
+}) => {
   function onChange(event) {
     setValues((prev) => ({ ...prev, [name]: event.target.value }));
   }
