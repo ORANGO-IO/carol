@@ -1,4 +1,4 @@
-import { Container, Label, LeftImage, RightImage } from "./switch-label.styles";
+import { Container, Label, LeftImage, RightImage } from "./styles";
 
 export const SwitchLabel = ({
   text,

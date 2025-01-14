@@ -1,4 +1,4 @@
-import { Container, Text } from "./medical-disclaimer.styles";
+import { Container, Text } from "./styles";
 
 export const MedicalDisclaimer = () => {
   return (

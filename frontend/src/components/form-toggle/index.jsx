@@ -5,8 +5,8 @@ import HospitalImage from "@/assets/hospital.png";
 import {
   SwitchLabel,
   ToggleSwitchContainer
-} from "./form-toggle.styles";
-import Switch from "./components/switch/switch";
+} from "./styles";
+import Switch from "./components/switch";
 
 export const FormSwitch = ({ onToggle, leftLabel, rightLabel }) => {
   const [isChecked, setIsChecked] = useState(false);

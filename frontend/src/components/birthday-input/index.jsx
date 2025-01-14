@@ -9,7 +9,7 @@ import {
   PatientAgeContainer,
   PatientAgeInput,
   PatientAgeInputContainer,
-} from "@/components/birthday-input/birthday-input.styles";
+} from "@/components/birthday-input/styles";
 import { calculateAge } from "@/utils/calculate-age-from-date";
 
 export const BirthdayField = (

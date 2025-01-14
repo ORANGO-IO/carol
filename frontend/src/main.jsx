@@ -7,7 +7,7 @@ import HomeV1 from "./v1/pages/home";
 import AppContext from "./context";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import { HomePage } from "./pages/home/home";
+import { HomePage } from "./pages/home";
 import { Modal } from "semantic-ui-react";
 import Qp_description from "./v1/components/qp_description";
 import { GlobalStyle } from "./global-style";

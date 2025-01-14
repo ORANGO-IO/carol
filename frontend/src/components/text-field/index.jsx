@@ -4,7 +4,7 @@ import {
   Label,
   LabelContainer,
   TextFieldContainer,
-} from "./text-field.styles";
+} from "./styles";
 
 export const TextField = (
   {

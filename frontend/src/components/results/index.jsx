@@ -10,7 +10,7 @@ import {
   ResultTitle,
   Title,
   TitleContainer,
-} from "./results.styles";
+} from "./styles";
 import { calculateAge } from "@/utils/calculate-age-from-date";
 
 function getCopyMessage(

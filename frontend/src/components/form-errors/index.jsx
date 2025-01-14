@@ -1,4 +1,4 @@
-import { Container, Error } from "./form-errors.styles";
+import { Container, Error } from "./styles";
 
 export const FormErrors = ({ errors }) => {
   return (

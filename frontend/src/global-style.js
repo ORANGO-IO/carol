@@ -29,4 +29,5 @@ export const GlobalStyle = createGlobalStyle`
         font-weight: 400;
         color: #9C9C9C
     }
+    
 `

@@ -4,7 +4,7 @@ import {
   LogoContainer,
   Popup,
   PopupText,
-} from "./logo.styles";
+} from "./styles";
 import LogoImage from "@/assets/logo.png";
 import AboutIcon from "@/assets/about.svg";
 import { useState } from "react";

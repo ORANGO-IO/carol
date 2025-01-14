@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { SwitchLabel as BaseSwitchLabel } from "./components/switch-label/switch-label";
+import { SwitchLabel as BaseSwitchLabel } from "./components/switch-label";
 
 export const ToggleContainer = styled.div``;
 

@@ -1,12 +1,12 @@
-import { BirthdayField } from "@/components/birthday-input/birthday-input";
-import { MultiSelect } from "@/components/multi-select/multi-select";
-import { Select } from "@/components/select/select";
-import { TextField } from "@/components/text-field/text-field";
+import { BirthdayField } from "@/components/birthday-input";
+import { MultiSelect } from "@/components/multi-select";
+import { Select } from "@/components/select";
+import { TextField } from "@/components/text-field";
 import { Formik } from "formik";
 
 import { getMainComplaints } from "@/api/get-main-complaints";
-import { FormErrors } from "@/components/form-errors/form-errors";
-import { PrecisionWarningMessage } from "@/components/precision-warning-message/precision-warning-message";
+import { FormErrors } from "@/components/form-errors";
+import { PrecisionWarningMessage } from "@/components/precision-warning-message";
 import { formAtom, mainComplaintsAtom } from "@/store/main-store";
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
@@ -22,7 +22,7 @@ import {
   PatientSignsTitle,
   SelectContainer,
   SubmitButton
-} from "./main-form.styles";
+} from "./styles";
 
 const MIN_INPUT_REQUIRED = 4;
 

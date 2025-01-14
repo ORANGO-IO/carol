@@ -1,7 +1,7 @@
 import {
   WarningContainer,
   WarningMessage,
-} from "./precision-warning-message.styles";
+} from "./styles";
 
 export const PrecisionWarningMessage = () => {
   return (
