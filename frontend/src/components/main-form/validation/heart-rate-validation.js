@@ -1,33 +1,20 @@
 import * as Yup from "yup";
 import { calculateAge } from "@/utils/calculate-age-from-date";
 import { DATE_REGEX } from "@/regex";
+import { getVitalRange } from "@/utils/get-vital-range";
+import { getPatientAge } from "@/utils/get-patient-age";
 
 function validateHeartRateByAge(value) {
   if (value == undefined || value == "") return true;
   
-  const { age,birthday} = this.parent;
-  let pacientAge = -1;
+  const { age, birthday } = this.parent;
+  const pacientAge = getPatientAge(age, birthday);
+  if (pacientAge === null) return true;
 
-  if (age == undefined || age == "") {
-    if (birthday == undefined || birthday == "" || !DATE_REGEX.test(birthday)) return true;
-    pacientAge = calculateAge(birthday);
-  } else {
-    pacientAge = age;
-  }
+  const range = getVitalRange("heartRate", pacientAge);
+  if (!range) return true;
 
-  if (pacientAge >= 1 && pacientAge <= 2)
-    return value >= 98 && value <= 140; // 1 infancia
-
-  if (pacientAge >= 3 && pacientAge <= 5)
-    return value >= 80 && value <= 120; // pre-escolar
-
-  if (pacientAge >= 6 && pacientAge <= 9)
-    return value >= 75 && value <= 118; // escolar
-
-  if(pacientAge >= 18)
-    return value >= 60 && value <= 100; // adulto
-
-  return true;
+  return value >= range.min && value <= range.max;
 }
 
 
