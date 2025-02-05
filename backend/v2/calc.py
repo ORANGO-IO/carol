@@ -1,5 +1,5 @@
 from flask import jsonify, Response
-from .functions import getClassificacao, getCategoriaNome
+from .functions import get_classificacao, get_categoria_nome
 from .utils.db import provide_session
 from .models.queixas_principais import QueixasPrincipais
 from .models.classificacao import Classificacao
@@ -103,9 +103,9 @@ def calc(filterData: dict, session=None) -> Response:
         tmp_resultados.append(fetch)
 
     for resultado in tmp_resultados:
-        resultado["classificacao"] = getClassificacao(resultado["classificacao"])
+        resultado["classificacao"] = get_classificacao(resultado["classificacao"])
         if resultado.get("categoria"):
-            resultado["categoria"] = getCategoriaNome(resultado["categoria"])
+            resultado["categoria"] = get_categoria_nome(resultado["categoria"])
 
     data["resultados"] = tmp_resultados
     data["triagem"] = (
