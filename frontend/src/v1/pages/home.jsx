@@ -115,7 +115,7 @@ export default class newHome extends Component {
       </Modal>,
 
       <Container id="home-search-box" text>
-        <img src="/sm_carol.svg" />
+        <img src="/sm_carol_v1.svg" />
         <Segment>
           <Grid className="queixa">
             <Grid.Column mobile={16} tablet={16} computer={16}>
