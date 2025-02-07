@@ -26,7 +26,7 @@ import {
 
 const MIN_INPUT_REQUIRED = 4;
 
-export const MainForm = () => {
+export const MainForm = ({switchState}) => {
   const [form, setForm] = useAtom(formAtom);
   const [mainComplaints, setMainComplaints] = useAtom(mainComplaintsAtom);
   const [isLoadingMainComplaints, setIsLoadingMainComplaints] = useState(true);
@@ -96,7 +96,7 @@ export const MainForm = () => {
                     hasError={errors.vulnarability}
                     options={mainComplaints}
                     name="vulnarability"
-                    placeholder="VULNERABILIDADE"
+                    placeholder={switchState}
                   />
                 </SelectContainer>
               </PatientComplaintRow>
