@@ -5,6 +5,7 @@ from .models.classificacao import Classificacao
 from .models.sinais import Sinais
 from .models.queixas_principais import QueixasPrincipais
 from .models.queixas_sintomas_classificacao import QueixasSintomasClassificacao
+from .models.sintomas import Sintomas
 
 @provide_session
 def get_classificacao(id: int, session=None) -> "Classificacao":
@@ -43,7 +44,19 @@ def get_categoria_nome(id: int, session=None) -> str:
         return {}
 
 @provide_session
-def get_sintomas_descritivos_by_sintoma_ids(ids: list, qp:int,session=None) -> list:
+def get_sintomas_descritivos_by_sintoma(sintomas: list, qp:int,session=None) -> list:
+    sintomas = (
+        session.query(
+            Sintomas.id,
+            Sintomas.sintoma,
+            Sintomas.descritor,
+        )
+        .filter(Sintomas.sintoma.in_(sintomas))
+    ).all()
+    sintomas_ids = []
+    for s in sintomas:
+        sintomas_ids.append(s[0])
+
     result = (
         session.query(
             QueixasSintomasClassificacao.id,
@@ -51,7 +64,7 @@ def get_sintomas_descritivos_by_sintoma_ids(ids: list, qp:int,session=None) -> l
             Classificacao.id.label("classificacao_id"),
         )
         .outerjoin(Classificacao, QueixasSintomasClassificacao.fk_classificacao == Classificacao.id)
-        .filter(QueixasSintomasClassificacao.fk_sintoma.in_(ids))
+        .filter(QueixasSintomasClassificacao.fk_sintoma.in_(sintomas_ids))
         .filter(QueixasSintomasClassificacao.fk_queixa == qp)
         .all()
     )

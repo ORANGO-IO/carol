@@ -10,7 +10,7 @@ from .functions import (
     get_qp,
     get_sinal,
     get_sinal_id,
-    get_sintomas_descritivos_by_sintoma_ids,
+    get_sintomas_descritivos_by_sintoma,
 )
 from .utils.db import provide_session
 from .models.classificacao import Classificacao
@@ -105,7 +105,7 @@ def filter(session=None):
                 result["sinal"] = get_sinal(result["id_sinal"])
                 result["classificacao"] = get_classificacao(result["id_classificacao"])
                 result["qp"] = get_qp(result["id_qp"])
-                result["sintomas_descritivos"] = get_sintomas_descritivos_by_sintoma_ids(
+                result["sintomas_descritivos"] = get_sintomas_descritivos_by_sintoma(
                     sintomas_list, result["id_qp"]
                 )
 
