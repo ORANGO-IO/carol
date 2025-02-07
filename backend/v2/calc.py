@@ -16,11 +16,9 @@ def checkItem(item: tuple, *lists: list) -> bool:
     retorno = {"item": item, "pontos": pontos}
     return retorno
 
-
 def intersection(*lists: list) -> list:
     """Captura a intercessão de tuplas dentro de um array"""
     intersections = []
-    print(lists)
     for lista in lists:
         for tupla in lista:
             intersections.append(checkItem(tupla, *lists))
@@ -31,10 +29,8 @@ def intersection(*lists: list) -> list:
     sugestions = [
         item for item in intersections if item["pontos"] == intersections[0]["pontos"]
     ]
-    print({"intersections": intersections, "sugestions": sugestions})
 
     return {"intersections": intersections, "sugestions": sugestions}
-
 
 @provide_session
 def calc(filterData: dict, session=None) -> Response:
@@ -43,38 +39,39 @@ def calc(filterData: dict, session=None) -> Response:
     data["resultados"] = []
     qp_ids = []
     qp_classif_ids = []
-    print(filterData, "filterData")
     for sinal in filterData:
         # Verificar qual a maior classificacao, prioridade 1 é a maior
-        prioridadeMax = 9
+        prioridade_max = 9
         qp_ids_sinal = []
         qp_classif_ids_sinal = []
         for match in sinal["matches"]:
             # Definindo o grau de gravidade máxima do sinal pesquisado
 
             for sintomas in match["sintomas_descritivos"]:
-                if sintomas["prioridade_classificacao"] < prioridadeMax:
-                    prioridadeMax = sintomas["prioridade_classificacao"]
+                if sintomas["prioridade_classificacao"] < prioridade_max:
+                    prioridade_max = sintomas["prioridade_classificacao"]
 
-            if match["classificacao"]["prioridade"] < prioridadeMax:
-                prioridadeMax = match["classificacao"]["prioridade"]
+            if match["classificacao"]["prioridade"] < prioridade_max:
+                prioridade_max = match["classificacao"]["prioridade"]
 
             qp_ids_sinal.append(match["id_qp"])
             qp_classif_ids_sinal.append((match["id_qp"], match["id_classificacao"]))
+
             for sintomas in match["sintomas_descritivos"]:
                 qp_classif_ids_sinal.append((match["id_qp"], sintomas["classificacao_id"]))
+
         qp_ids.append(qp_ids_sinal)
         qp_classif_ids.append(qp_classif_ids_sinal)
         sinal["matchesPrincipais"] = [
             x
             for x in sinal["matches"]
-            if x["classificacao"]["prioridade"] == prioridadeMax
+            if x["classificacao"]["prioridade"] == prioridade_max
         ]
         sinal["matchesSecundarios"] = sorted(
             [
                 x
                 for x in sinal["matches"]
-                if x["classificacao"]["prioridade"] != prioridadeMax
+                if x["classificacao"]["prioridade"] != prioridade_max
             ],
             key=lambda x: x["classificacao"]["prioridade"],
      )

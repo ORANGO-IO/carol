@@ -55,6 +55,7 @@ def get_sintomas_descritivos_by_sintoma_ids(ids: list, qp:int,session=None) -> l
         .filter(QueixasSintomasClassificacao.fk_queixa == qp)
         .all()
     )
+
     if result:
         return [x._asdict() for x in result]
     return []

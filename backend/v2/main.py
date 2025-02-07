@@ -25,12 +25,10 @@ from .models.vulnerabilidades import Vulnerabilidades
 
 base_blueprint = Blueprint("base", __name__, url_prefix="/api")
 
-
 @base_blueprint.route("/")
 def hello():
     """Retorna uma mensagem de saudação."""
     return "Hello World from CAROL V2!"
-
 
 @base_blueprint.route("/sintomas_descritivos")
 @provide_session
@@ -49,7 +47,6 @@ def inserir_sintomas_descritivos(session=None):
     session.commit()
     return jsonify(sintomas), 201
 
-
 def processa_resultado(result, value):
     """Filtra cada linha retornada da consulta."""
     processed = []
@@ -64,7 +61,6 @@ def processa_resultado(result, value):
             if (min_val >= value or not min_val) and (max_val <= value or not max_val):
                 processed.append(row_dict)
     return processed
-
 
 @base_blueprint.route("/filter")
 @provide_session
@@ -127,11 +123,9 @@ def filter(session=None):
             data.append(sinal_info)
     return calc(data)
 
-
 def query_to_json(query_result):
     """Converte o resultado da consulta para lista de dicionários."""
     return [row._asdict() for row in query_result] if query_result else []
-
 
 @base_blueprint.route("/classificacao")
 @provide_session
@@ -146,7 +140,6 @@ def classificacao(session=None):
         Classificacao.cor_hex.label("cor_hex"),
     ).all()
     return jsonify(query_to_json(result))
-
 
 @base_blueprint.route("/sinais")
 @provide_session
@@ -165,7 +158,6 @@ def sinais(session=None):
     result = query.all()
     return jsonify(query_to_json(result))
 
-
 @base_blueprint.route("/sintomas")
 @provide_session
 def sintomas(session=None):
@@ -181,7 +173,6 @@ def sintomas(session=None):
     result = query.all()
     return jsonify(query_to_json(result))
 
-
 @base_blueprint.route("/categorias")
 @provide_session
 def categorias(session=None):
@@ -191,47 +182,6 @@ def categorias(session=None):
         Categorias.categoria.label("categoria"),
     ).all()
     return jsonify(query_to_json(result))
-
-
-@base_blueprint.route("/qp/<int:id>")
-@provide_session
-def qpDetails(id, session=None):
-    """Retorna os detalhes da queixa principal especificada."""
-    print(id, file=sys.stderr)
-    query = (
-        session.query(
-            QueixasPrincipais.id,
-            QueixasPrincipais.queixa_principal,
-            QueixasPrincipais.observacoes,
-            Categorias.nome.label("categoria"),
-            func.group_concat(Sintomas.sintoma).label("sintomas"),
-        )
-        .select_from(QueixasPrincipais)
-        .filter(QueixasPrincipais.id == id)
-        .outerjoin(Categorias, QueixasPrincipais.fk_categoria == Categorias.id)
-        .outerjoin(QueixasSintomasClassificacao, QueixasSintomasClassificacao.fk_queixa == QueixasPrincipais.id)
-        .outerjoin(Sintomas, Sintomas.id == QueixasSintomasClassificacao.fk_sintoma)
-        .group_by(
-            QueixasPrincipais.id,
-            QueixasPrincipais.queixa_principal,
-            QueixasPrincipais.observacoes,
-            Categorias.nome,
-        )
-    )
-    result = query.first()
-    if result:
-        sintomas_lista = (
-            [s for s in result.sintomas.split(",") if s]
-            if result.sintomas else []
-        )
-        return jsonify({
-            "id": result.id,
-            "queixa_principal": result.queixa_principal,
-            "observacoes": result.observacoes,
-            "categoria": result.categoria,
-            "sintomas": sintomas_lista,
-        })
-    return jsonify({"mensagem": "Queixa principal não encontrada"}), 404
 
 @base_blueprint.route("/vulnerabilidades")
 @provide_session
@@ -250,34 +200,41 @@ def vulnerabilidades(session=None):
 def qp(session=None):
     """Retorna a lista de queixas principais ou insere uma nova."""
     if request.method == "GET":
-        query = (
+        
+        queixa_query = (
             session.query(
-                QueixasPrincipais.id,
-                func.group_concat(SintomasSinonimos.sinonimos).label("sinonimos"),
-                QueixasPrincipais.observacoes,
-                QueixasPrincipais.queixa_principal,
-                func.group_concat(Sintomas.sintoma).label("sintomas"),
+                QueixasPrincipais.id.label("id"),
+                QueixasPrincipais.queixa_principal.label("queixa_principal"),
+                QueixasPrincipais.observacoes.label("observacoes"),
+                func.group_concat(func.distinct(Sintomas.sintoma)).label("sintomas"),
+                func.group_concat(func.distinct(SintomasSinonimos.sinonimos)).label("sinonimos"),
             )
-            .outerjoin(QueixasSintomasClassificacao, QueixasSintomasClassificacao.fk_queixa == QueixasPrincipais.id)
+            .outerjoin(
+                QueixasSintomasClassificacao,
+                QueixasPrincipais.id == QueixasSintomasClassificacao.fk_queixa
+            )
             .outerjoin(Sintomas, Sintomas.id == QueixasSintomasClassificacao.fk_sintoma)
-            .outerjoin(SintomasSinonimos, SintomasSinonimos.fk_queixa == QueixasPrincipais.id)
+            .outerjoin(SintomasSinonimos, SintomasSinonimos.fk_sintoma == Sintomas.id)
             .group_by(
                 QueixasPrincipais.id,
-                QueixasPrincipais.observacoes,
                 QueixasPrincipais.queixa_principal,
+                QueixasPrincipais.observacoes
             )
         )
-        result = query.all()
-        resp = [
-            {
-                "id": row.id,
-                "sinonimos": list(set([s for s in (row.sinonimos.split(",") if row.sinonimos else []) if s])),
-                "observacoes": row.observacoes,
-                "queixa_principal": row.queixa_principal,
-                "sintomas": list(set([s for s in (row.sintomas.split(",") if row.sintomas else []) if s])),
-            }
-            for row in result
-        ]
+        queixas = queixa_query.all()
+        resp = []
+        for q in queixas:
+            sintomas_list = q.sintomas.split(",") if q.sintomas else []
+            sinonimos_list = q.sinonimos.split(",") if q.sinonimos else []
+            resp.append(
+                {
+                    "id": q.id,
+                    "queixa_principal": q.queixa_principal,
+                    "observacoes": q.observacoes,
+                    "sintomas": list(set(sintomas_list)),
+                    "sinonimos": list(set(sinonimos_list)),
+                }
+            )
         return jsonify(resp)
     else:
         req = request.json.get("qp", {})
@@ -289,7 +246,6 @@ def qp(session=None):
         session.add(nova_queixa)
         session.commit()
         return jsonify(req)
-
 
 @base_blueprint.route("/specs/v2")
 def specs():
