@@ -1,25 +1,26 @@
-version: '3.1'
-
 services:
-  db:
+  db-carol:
     image: mysql:5.7
-    container_name: carol_db
     restart: always
     environment:
-      # Change to secure credentials
-      MYSQL_DATABASE: carol_v1_db
-      MYSQL_USER: carol
-      MYSQL_PASSWORD: JVeuiA7E30u8SQx5
-      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     volumes:
       # Change to an empty volume in prod
       - ./data:/var/lib/mysql
       - ./backend/mycustom.cnf:/etc/mysql/conf.d/custom.cnf
-      - ./mysql_v1:/docker-entrypoint-initdb.d
+      # Adicione os scripts SQL dos dois bancos
+      - ./mysql_v1/wworan_carol_v1.sql:/docker-entrypoint-initdb.d/v1.sql
+      - ./mysql_v2/wworan_carol_v2.sql:/docker-entrypoint-initdb.d/v2.sql
+    networks:
+      - carol-network
+      - appsmith-network
+      - cloudbeaver
     ports:
       - 33061:3306
+
   api:
-    container_name: carol_api
     build: ./backend
     restart: always
     environment:
@@ -30,7 +31,10 @@ services:
     ports:
       - 8009:5000
     depends_on:
-      - db
+      - db-carol
+    networks:
+      - carol-network
+
   nginx:
     restart: always
     build:
@@ -39,7 +43,16 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
     ports:
-      - 99:80
+      - ${NGINX_PORT}:80
     depends_on:
       - api
+    networks:
+      - carol-network
 
+networks:
+  appsmith-network:
+    external: true
+  cloudbeaver:
+    external: true
+  carol-network:
+    driver: bridge

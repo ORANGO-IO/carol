@@ -6,32 +6,54 @@ from .models.classificacao import Classificacao
 from sqlalchemy.sql.expression import literal
 
 
-def checkItem(item: tuple, *lists: list) -> bool:
-    """Função checa se tem match de sinais em uma queixa principal e atribui pontuações"""
+def checkItem(item: tuple, *lists: list) -> dict:
+    """
+    Função checa se tem match de sinais em uma queixa principal e atribui pontuações
+
+    :param item: uma tupla contendo o id da queixa principal e a sua respectiva
+                 classifica o
+    :param lists: um vari n mero de listas contendo as interse es de sinais
+    :return: um dicion rio contendo o item e a sua respectiva pontua o
+    """
     pontos = 0
     for lista in lists:
         if item in lista:
             pontos += 1
+    # Atribuindo 5 pontos para cada match de sinal, dividindo pela classificão,
+    # para que as classificações mais altas tenham prioridade
     pontos += 5 / item[1]
     retorno = {"item": item, "pontos": pontos}
     return retorno
 
 
-def intersection(*lists: list) -> list:
-    """Captura a intercessão de tuplas dentro de um array"""
+def intersection(*lists: list) -> dict:
+    """
+    Captura a intercess o de tuplas dentro de um array e ordena de acordo com a
+    pontua o. A fun o retorna um dicion rio contendo as interse es e as sugest es
+    mais prov veis.
+
+    :param lists: Vari n mero de listas contendo as interse es de sinais
+    :return: um dicion rio contendo as interse es e as sugest es mais prov veis
+    """
+    # Inicializando a lista de interse es
     intersections = []
+
+    # Percorrendo as listas e verificando se h  match de sinais
     for lista in lists:
         for tupla in lista:
+            # Atribuindo a pontua o do item e incluindo na lista de interse es
             intersections.append(checkItem(tupla, *lists))
 
     # Excluindo dados repetidos e organizando-os do maior para o menor
     intersections = [dict(t) for t in {tuple(d.items()) for d in intersections}]
     intersections = sorted(intersections, key=lambda x: x["pontos"], reverse=True)
+
+    # Capturando as sugest es mais prov veis
     sugestions = [
         item for item in intersections if item["pontos"] == intersections[0]["pontos"]
     ]
-    print({"intersections": intersections, "sugestions": sugestions})
 
+    # Retornando as interse es e as sugest es mais prov veis
     return {"intersections": intersections, "sugestions": sugestions}
 
 
@@ -131,3 +153,4 @@ def calc(filterData: dict, session=None) -> Response:
     data["sinais"] = filterData
 
     return jsonify(data)
+
