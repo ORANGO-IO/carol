@@ -5,6 +5,7 @@ import { TextField } from '@/components/text-field';
 import { Formik } from 'formik';
 
 import { getMainComplaints } from '@/api/get-main-complaints';
+import { getVulnerabilities } from '@/api/get-vulnerabilities';
 import { FormErrors } from '@/components/form-errors';
 import { PrecisionWarningMessage } from '@/components/precision-warning-message';
 import { formAtom, mainComplaintsAtom } from '@/store/main-store';
@@ -29,7 +30,10 @@ const MIN_INPUT_REQUIRED = 4;
 export const MainForm = ({switchState}) => {
   const [form, setForm] = useAtom(formAtom);
   const [mainComplaints, setMainComplaints] = useAtom(mainComplaintsAtom);
+  const [vulnerabilities, setVulnerabilities] = useState([]);
   const [isLoadingMainComplaints, setIsLoadingMainComplaints] = useState(true);
+  const [isLoadingVulnerabilities, setIsLoadingVulnerabilities] = useState(true);
+  const [symptoms, setSymptoms] = useState([]);
 
   function checkInputFilled(values) {
     return Object.values(values).filter(
@@ -47,14 +51,33 @@ export const MainForm = ({switchState}) => {
         setMainComplaints(
           mainComplaints.map((item) => {
             return {
-              label: item.sintoma.toLocaleUpperCase(),
-              value: item.sintoma,
+              label: item.queixa_principal.toLocaleUpperCase(),
+              sinonimos: item.sinonimos,
+              sintomas: item.sintomas,
+              value: item.queixa_principal,
+              id: item.id,
             };
           })
         );
       }, [])
       .finally(() => {
         setIsLoadingMainComplaints(false);
+      });
+    
+    getVulnerabilities()
+      .then((vulnerabilities) => {
+        setVulnerabilities(
+          vulnerabilities.map((item) => {
+            return {
+              label: item.nome.toLocaleUpperCase(),
+              value: item.nome,
+              id: item.id,
+            };
+          })
+        );
+      }, [])
+      .finally(() => {
+        setIsLoadingVulnerabilities(false);
       });
   }, []);
 
@@ -91,10 +114,11 @@ export const MainForm = ({switchState}) => {
                 />
                 <SelectContainer>
                   <Select
+                    isLoading={isLoadingVulnerabilities}
                     handleBlur={handleBlur}
                     setValues={setValues}
                     hasError={errors.vulnarability}
-                    options={mainComplaints}
+                    options={vulnerabilities}
                     name="vulnarability"
                     placeholder={switchState}
                   />

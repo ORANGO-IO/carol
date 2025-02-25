@@ -4,7 +4,7 @@ import axios from 'axios';
 export default async () => {
   let rtn = null;
 
-  await axios(`${import.meta.env.VITE_API_URL}/qp`)
+  await axios(`${import.meta.env.VITE_API_URL_V1}/qp`)
     .then((response) => {
       let data = [];
       response.data.forEach((qp) => {
