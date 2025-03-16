@@ -1,8 +1,8 @@
 import axios from '@/axios-config';
 
-export async function getVulnerabilities() {
+export async function getSymptoms() {
   try {
-    const request = await axios.get(`/vulnerabilidades`);
+    const request = await axios.get(`/sintomas`);
     return request.data;
   } catch (error) {
     return [];

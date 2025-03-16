@@ -24,18 +24,23 @@ import {
   SelectContainer,
   SubmitButton,
 } from './styles';
+import { getSymptoms } from '@/api/get-symptom';
 
 const MIN_INPUT_REQUIRED = 4;
 
-export const MainForm = ({switchState}) => {
+export const MainForm = ({ switchState }) => {
   const [form, setForm] = useAtom(formAtom);
   const [mainComplaints, setMainComplaints] = useAtom(mainComplaintsAtom);
   const [vulnerabilities, setVulnerabilities] = useState([]);
   const [isLoadingMainComplaints, setIsLoadingMainComplaints] = useState(true);
-  const [isLoadingVulnerabilities, setIsLoadingVulnerabilities] = useState(true);
+  const [isLoadingVulnerabilities, setIsLoadingVulnerabilities] =
+    useState(true);
+  const [isLoadingSymptoms, setIsLoadingSymptoms] = useState(true);
+  const [selectedSymptoms, setSelectedSymptoms] = useState([]);
+
   const [symptoms, setSymptoms] = useState([]);
 
-  function checkInputFilled(values) {
+  function areInputsFilled(values) {
     return Object.values(values).filter(
       (value) =>
         value !== '' &&
@@ -63,7 +68,23 @@ export const MainForm = ({switchState}) => {
       .finally(() => {
         setIsLoadingMainComplaints(false);
       });
-    
+
+    getSymptoms()
+      .then((s) => {
+        setSymptoms(
+          s.map((item) => {
+            return {
+              label: item.sintoma,
+              value: item.sintoma,
+              id: item.id,
+            };
+          })
+        );
+      })
+      .finally(() => {
+        setIsLoadingSymptoms(false);
+      });
+
     getVulnerabilities()
       .then((vulnerabilities) => {
         setVulnerabilities(
@@ -81,6 +102,23 @@ export const MainForm = ({switchState}) => {
       });
   }, []);
 
+  function onSelectQp(value) {
+    console.log(value);
+    if (!value || !value.sintomas) return;
+    setSelectedSymptoms((prev) => {
+      const sintomas = value.sintomas.map((sintoma) => {
+        if (prev.find((item) => item.label === sintoma) == undefined) {
+          return symptoms.find((item) => item.label === sintoma);
+        }
+      }).filter(Boolean);
+      return [...prev, ...sintomas];
+    });
+  }
+
+  function onSelectSymptoms(value) {
+    setSelectedSymptoms(value);
+  }
+
   return (
     <Formik
       initialValues={form}
@@ -88,13 +126,15 @@ export const MainForm = ({switchState}) => {
         setForm(values);
         console.log(values);
       }}
+      
       validationSchema={FormSchema}
     >
       {({ values, errors, handleSubmit, handleBlur, isValid, setValues }) => {
         return (
-          <Container onSubmit={handleSubmit}>
+          <Container>
             <PatientComplaintContainer>
               <Select
+                onSelect={onSelectQp}
                 isLoading={isLoadingMainComplaints}
                 handleBlur={handleBlur}
                 setValues={setValues}
@@ -125,9 +165,12 @@ export const MainForm = ({switchState}) => {
                 </SelectContainer>
               </PatientComplaintRow>
               <MultiSelect
+                onChange={onSelectSymptoms}
+                value={selectedSymptoms}
+                isLoading={isLoadingSymptoms}
                 setValues={setValues}
                 handleBlur={handleBlur}
-                options={mainComplaints}
+                options={symptoms}
                 name="symptoms"
                 placeholder="SINTOMAS"
               />
@@ -239,14 +282,15 @@ export const MainForm = ({switchState}) => {
               </PatientSignsInputContainer>
               <FormErrorContainer>
                 <FormErrors errors={errors} />
-                {checkInputFilled(values) < MIN_INPUT_REQUIRED && (
+                {areInputsFilled(values) < MIN_INPUT_REQUIRED && (
                   <PrecisionWarningMessage />
                 )}
               </FormErrorContainer>
             </PatientSignsContainer>
             <SubmitButton
-              disabled={!isValid || !checkInputFilled(values)}
-              active={isValid && checkInputFilled(values)}
+              onClick={handleSubmit}
+              disabled={!areInputsFilled(values)}
+              active={areInputsFilled(values)}
               type="submit"
             >
               RESULTADO

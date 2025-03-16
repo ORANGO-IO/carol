@@ -164,7 +164,7 @@ def sintomas(session=None):
     """Retorna a lista dos sintomas cadastrados."""
     query = (
         session.query(
-            Sintomas.ID.label("ID"),
+            Sintomas.id.label("id"),
             Sintomas.sintoma.label("sintoma"),
             Sintomas.descritor.label("descritor"),
         )
@@ -178,7 +178,7 @@ def sintomas(session=None):
 def categorias(session=None):
     """Retorna a lista das categorias de queixas principais cadastradas."""
     result = session.query(
-        Categorias.ID.label("ID"),
+        Categorias.ID.label("id"),
         Categorias.categoria.label("categoria"),
     ).all()
     return jsonify(query_to_json(result))
