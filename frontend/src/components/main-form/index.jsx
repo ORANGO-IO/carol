@@ -119,6 +119,11 @@ export const MainForm = ({ switchState }) => {
     setSelectedSymptoms(value);
   }
 
+  function handleSubmit(e, values) {
+    e.preventDefault();
+    console.log(values);
+  }
+
   return (
     <Formik
       initialValues={form}
@@ -126,12 +131,11 @@ export const MainForm = ({ switchState }) => {
         setForm(values);
         console.log(values);
       }}
-      
       validationSchema={FormSchema}
     >
-      {({ values, errors, handleSubmit, handleBlur, isValid, setValues }) => {
+      {({ values, errors, handleBlur, setValues }) => {
         return (
-          <Container>
+          <Container onSubmit={(e) => handleSubmit(e, values)}>
             <PatientComplaintContainer>
               <Select
                 onSelect={onSelectQp}
@@ -288,7 +292,6 @@ export const MainForm = ({ switchState }) => {
               </FormErrorContainer>
             </PatientSignsContainer>
             <SubmitButton
-              onClick={handleSubmit}
               disabled={!areInputsFilled(values)}
               active={areInputsFilled(values)}
               type="submit"
