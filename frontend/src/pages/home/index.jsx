@@ -5,10 +5,14 @@ import { MedicalDisclaimer } from '@/components/medical-disclaimer';
 import { Logo } from '@/components/logo';
 import { Container, Title } from './styles';
 import { useState } from 'react';
+import { useAtomValue } from 'jotai';
+import { isLoadingAtom, searchResultsAtom } from '@/store/main-store';
+import Loading from '@/components/loading';
 
 export const HomePage = () => {
   const [swtichState, setSwitchState] = useState('VULNERABILIDADE');
-  
+  const results = useAtomValue(searchResultsAtom);
+  const loading = useAtomValue(isLoadingAtom);
   const handleSwitch = (isChecked) => {
     setSwitchState(isChecked ? 'CONDIÇÕES ESPECIAIS' : 'VULNERABILIDADE');
   }
@@ -23,8 +27,9 @@ export const HomePage = () => {
         onToggle={handleSwitch}
       />
       <MainForm switchState={swtichState} />
-      <Results />
+      {results.resultados.length > 0 && <Results switchState={swtichState} />}
       <MedicalDisclaimer />
+      {loading && <Loading />}
     </Container>
   );
 };

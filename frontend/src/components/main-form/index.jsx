@@ -8,8 +8,13 @@ import { getMainComplaints } from '@/api/get-main-complaints';
 import { getVulnerabilities } from '@/api/get-vulnerabilities';
 import { FormErrors } from '@/components/form-errors';
 import { PrecisionWarningMessage } from '@/components/precision-warning-message';
-import { formAtom, mainComplaintsAtom } from '@/store/main-store';
-import { useAtom } from 'jotai';
+import {
+  formAtom,
+  isLoadingAtom,
+  mainComplaintsAtom,
+  searchResultsAtom,
+} from '@/store/main-store';
+import { useAtom, useSetAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import { FormSchema } from './form-schema';
 import {
@@ -25,11 +30,14 @@ import {
   SubmitButton,
 } from './styles';
 import { getSymptoms } from '@/api/get-symptom';
+import { searchResult } from '@/api/search-results';
 
 const MIN_INPUT_REQUIRED = 4;
 
 export const MainForm = ({ switchState }) => {
+  const setSearchResults = useSetAtom(searchResultsAtom);
   const [form, setForm] = useAtom(formAtom);
+  const setIsLoading = useSetAtom(isLoadingAtom);
   const [mainComplaints, setMainComplaints] = useAtom(mainComplaintsAtom);
   const [vulnerabilities, setVulnerabilities] = useState([]);
   const [isLoadingMainComplaints, setIsLoadingMainComplaints] = useState(true);
@@ -37,6 +45,7 @@ export const MainForm = ({ switchState }) => {
     useState(true);
   const [isLoadingSymptoms, setIsLoadingSymptoms] = useState(true);
   const [selectedSymptoms, setSelectedSymptoms] = useState([]);
+  const [formValues, setFormValues] = useState({});
 
   const [symptoms, setSymptoms] = useState([]);
 
@@ -103,14 +112,15 @@ export const MainForm = ({ switchState }) => {
   }, []);
 
   function onSelectQp(value) {
-    console.log(value);
     if (!value || !value.sintomas) return;
     setSelectedSymptoms((prev) => {
-      const sintomas = value.sintomas.map((sintoma) => {
-        if (prev.find((item) => item.label === sintoma) == undefined) {
-          return symptoms.find((item) => item.label === sintoma);
-        }
-      }).filter(Boolean);
+      const sintomas = value.sintomas
+        .map((sintoma) => {
+          if (prev.find((item) => item.label === sintoma) == undefined) {
+            return symptoms.find((item) => item.label === sintoma);
+          }
+        })
+        .filter(Boolean);
       return [...prev, ...sintomas];
     });
   }
@@ -119,29 +129,33 @@ export const MainForm = ({ switchState }) => {
     setSelectedSymptoms(value);
   }
 
-  function handleSubmit(e, values) {
+  function handleSubmit(e) {
     e.preventDefault();
-    console.log(values);
+    setIsLoading(true);
+    setForm(formValues);
+    searchResult(formValues)
+      .then((result) => {
+        setSearchResults(result);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }
 
   return (
-    <Formik
-      initialValues={form}
-      onSubmit={(values) => {
-        setForm(values);
-        console.log(values);
-      }}
-      validationSchema={FormSchema}
-    >
-      {({ values, errors, handleBlur, setValues }) => {
+    <Formik initialValues={form} validationSchema={FormSchema}>
+      {({ errors, handleBlur, setValues }) => {
         return (
-          <Container onSubmit={(e) => handleSubmit(e, values)}>
+          <Container onSubmit={(e) => handleSubmit(e)}>
             <PatientComplaintContainer>
               <Select
                 onSelect={onSelectQp}
                 isLoading={isLoadingMainComplaints}
                 handleBlur={handleBlur}
-                setValues={setValues}
+                setValues={(values) => {
+                  setFormValues(values);
+                  setValues(values);
+                }}
                 hasError={errors.complaint ? true : false}
                 options={mainComplaints}
                 name="complaint"
@@ -150,17 +164,23 @@ export const MainForm = ({ switchState }) => {
               <PatientComplaintRow>
                 <BirthdayField
                   handleBlur={handleBlur}
-                  setValues={setValues}
-                  ageValue={values.age}
+                  setValues={(values) => {
+                    setFormValues(values);
+                    setValues(values);
+                  }}
+                  ageValue={formValues.age}
                   hasError={errors.birthday || errors.age}
-                  value={values.birthday}
+                  value={formValues.birthday}
                   placeholder="D. NASCIMENTO"
                 />
                 <SelectContainer>
                   <Select
                     isLoading={isLoadingVulnerabilities}
                     handleBlur={handleBlur}
-                    setValues={setValues}
+                    setValues={(values) => {
+                      setFormValues(values);
+                      setValues(values);
+                    }}
                     hasError={errors.vulnarability}
                     options={vulnerabilities}
                     name="vulnarability"
@@ -172,7 +192,10 @@ export const MainForm = ({ switchState }) => {
                 onChange={onSelectSymptoms}
                 value={selectedSymptoms}
                 isLoading={isLoadingSymptoms}
-                setValues={setValues}
+                setValues={(values) => {
+                  setFormValues(values);
+                  setValues(values);
+                }}
                 handleBlur={handleBlur}
                 options={symptoms}
                 name="symptoms"
@@ -184,20 +207,26 @@ export const MainForm = ({ switchState }) => {
               <PatientSignsInputContainer>
                 <FormRow>
                   <TextField
-                    setValues={setValues}
+                    setValues={(values) => {
+                      setFormValues(values);
+                      setValues(values);
+                    }}
                     hasError={errors.systolicPressure}
                     handleBlur={handleBlur}
-                    value={values.systolicPressure}
+                    value={formValues.systolicPressure}
                     name="systolicPressure"
                     flexValue={'1 1 200px'}
                     label="mmHg"
                     placeholder="PRESSÃO SISTÓLICA"
                   />
                   <TextField
-                    setValues={setValues}
+                    setValues={(values) => {
+                      setFormValues(values);
+                      setValues(values);
+                    }}
                     hasError={errors.diastolicPressure}
                     handleBlur={handleBlur}
-                    value={values.diastolicPressure}
+                    value={formValues.diastolicPressure}
                     name="diastolicPressure"
                     flexValue={'1 1 200px'}
                     label="mmHg"
@@ -206,41 +235,53 @@ export const MainForm = ({ switchState }) => {
                 </FormRow>
                 <FormRow>
                   <TextField
-                    setValues={setValues}
+                    setValues={(values) => {
+                      setFormValues(values);
+                      setValues(values);
+                    }}
                     hasError={errors.heartRate}
                     handleBlur={handleBlur}
-                    value={values.heartRate}
+                    value={formValues.heartRate}
                     name="heartRate"
                     flexValue={'1 1 108px'}
                     label="bpm"
                     placeholder="FC"
                   />
                   <TextField
-                    setValues={setValues}
+                    setValues={(values) => {
+                      setFormValues(values);
+                      setValues(values);
+                    }}
                     hasError={errors.respiratoryRate}
                     handleBlur={handleBlur}
                     flexValue={'1 1 126px'}
-                    value={values.respiratoryRate}
+                    value={formValues.respiratoryRate}
                     name="respiratoryRate"
                     label="ipm"
                     placeholder="FR"
                   />
                   <TextField
-                    setValues={setValues}
+                    setValues={(values) => {
+                      setFormValues(values);
+                      setValues(values);
+                    }}
                     hasError={errors.spO2}
                     handleBlur={handleBlur}
                     flexValue={'1 1 122px'}
-                    value={values.spO2}
+                    value={formValues.spO2}
                     name="spO2"
                     label="%"
                     placeholder="SpO2"
                   />
                   <TextField
                     type="number"
-                    setValues={setValues}
+                    setValues={(values) => {
+                      setFormValues(values);
+                      setValues(values);
+                    }}
                     hasError={errors.temperature}
                     handleBlur={handleBlur}
-                    value={values.temperature}
+                    value={formValues.temperature}
                     flexValue={'1 1 116px'}
                     name="temperature"
                     label="ºC"
@@ -251,10 +292,13 @@ export const MainForm = ({ switchState }) => {
                   <TextField
                     type="number"
                     flexValue={'1 1 154px'}
-                    setValues={setValues}
+                    setValues={(values) => {
+                      setFormValues(values);
+                      setValues(values);
+                    }}
                     hasError={errors.glasgow}
                     handleBlur={handleBlur}
-                    value={values.glasgow}
+                    value={formValues.glasgow}
                     name="glasgow"
                     label="/15"
                     placeholder="Glasgow"
@@ -262,10 +306,13 @@ export const MainForm = ({ switchState }) => {
                   <TextField
                     type="number"
                     flexValue={'1 1 154px'}
-                    setValues={setValues}
+                    setValues={(values) => {
+                      setFormValues(values);
+                      setValues(values);
+                    }}
                     hasError={errors.hgt}
                     handleBlur={handleBlur}
-                    value={values.hgt}
+                    value={formValues.hgt}
                     name="hgt"
                     label="mg/dL"
                     placeholder="HGT"
@@ -274,10 +321,13 @@ export const MainForm = ({ switchState }) => {
                     maxLength={2}
                     type="number"
                     flexValue={'1 1 154px'}
-                    setValues={setValues}
+                    setValues={(values) => {
+                      setFormValues(values);
+                      setValues(values);
+                    }}
                     hasError={errors.pain}
                     handleBlur={handleBlur}
-                    value={values.pain}
+                    value={formValues.pain}
                     name="pain"
                     label="/10"
                     placeholder="Dor"
@@ -286,14 +336,14 @@ export const MainForm = ({ switchState }) => {
               </PatientSignsInputContainer>
               <FormErrorContainer>
                 <FormErrors errors={errors} />
-                {areInputsFilled(values) < MIN_INPUT_REQUIRED && (
+                {areInputsFilled(formValues) < MIN_INPUT_REQUIRED && (
                   <PrecisionWarningMessage />
                 )}
               </FormErrorContainer>
             </PatientSignsContainer>
             <SubmitButton
-              disabled={!areInputsFilled(values)}
-              active={areInputsFilled(values)}
+              disabled={!areInputsFilled(formValues)}
+              active={areInputsFilled(formValues)}
               type="submit"
             >
               RESULTADO

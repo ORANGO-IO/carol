@@ -1,10 +1,11 @@
 import { useAtomValue } from 'jotai';
 import { useState } from 'react';
-import { formAtom } from '@/store/main-store';
+import { formAtom, searchResultsAtom } from '@/store/main-store';
 import {
   Container,
   CopyMessage,
   CopyResult,
+  MoreResults,
   ResultContainer,
   ResultMessage,
   ResultTitle,
@@ -127,9 +128,11 @@ function getCopyMessage(
   return `Paciente${getAgeMessage()}${getComplaintMessage()}${getSymptomsMessage()}. Exame físico: ${getPhysicalExamMessage()}${getHeartRateMessage()}${getRespiratoryRateMessage()}${getSpO2Message()}${getTemperatureMessage()}${getGlasgowMessage()}${getHgtMessage()}${getPainMessage()}.`;
 }
 
-export const Results = () => {
+export const Results = ({switchState}) => {
   const form = useAtomValue(formAtom);
+  const result = useAtomValue(searchResultsAtom);
   const [copyMessage, setCopyMessage] = useState(false);
+  const [showOtherResults, setShowOtherResults] = useState(false);
 
   function onCopyResult() {
     navigator.clipboard.writeText(
@@ -158,28 +161,30 @@ export const Results = () => {
 
   return (
     <Container>
-      <Title>RESULTADO MAIS SENSÍVEL CARREGADO</Title>
-      <ResultContainer>
-        <TitleContainer>
-          <ResultTitle>TÍTULO DA SUGESTÃO DE</ResultTitle>
-        </TitleContainer>
-        <ResultMessage>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-          convallis, nulla a gravida auctor, arcu eros aliquet elit, eu maximus
-          dolor libero in ipsum. Curabitur in nisi purus. Aenean a hendrerit
-          massa. Donec condimentum eu ante non egestas. Morbi non venenatis
-          lacus. Vivamus faucibus enim sapien, eu vehicula augue venenatis ut.
-          Ut malesuada mi ac risus iaculis, ac vulputate risus elementum. Donec
-          vel orci egestas, ullamcorper nibh id, facilisis est. Proin aliquet
-          tellus a ultricies tincidunt. Integer vulputate convallis orci id
-          posuere. Maecenas at pharetra elit, nec consectetur massa. Proin
-          finibus lacus ante, vitae tincidunt quam efficitur id. Nunc semper
-          facilisis ipsum sit amet molestie. Vivamus eget convallis mauris. Sed
-          ac sapien luctus, vestibulum erat eget, fringilla quam.
-        </ResultMessage>
-      </ResultContainer>
       <CopyResult onClick={onCopyResult}>Copiar</CopyResult>
       <CopyMessage active={copyMessage}>Resultado copiado!</CopyMessage>
+      <Title>RESULTADO MAIS SENSÍVEL CARREGADO</Title>
+      <ResultContainer swtichState={switchState}>
+        <TitleContainer>
+          <ResultTitle switchState={switchState}>{`TÍTULO DA SUGESTÃO DE ${result.resultados[0].sintoma}`}</ResultTitle>
+        </TitleContainer>
+        <ResultMessage switchState={switchState}>{result.resultados[0].observacao}</ResultMessage>
+      </ResultContainer>
+      <MoreResults onClick={() => setShowOtherResults((prev) => !prev)}>
+        OUTROS RESULTADOS ⬇️
+      </MoreResults>
+      {showOtherResults && (
+        <>
+          {result.sugestoes.map((sugestao, index) => (
+            <ResultContainer key={index} swtichState={switchState}>
+              <TitleContainer>
+                <ResultTitle switchState={switchState}>{`${sugestao.sintoma}`}</ResultTitle>
+              </TitleContainer>
+              <ResultMessage switchState={switchState}>{sugestao.observacao}</ResultMessage>
+            </ResultContainer>
+          ))}
+        </>
+      )}
     </Container>
   );
 };
