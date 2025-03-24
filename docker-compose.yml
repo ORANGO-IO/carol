@@ -55,5 +55,3 @@ networks:
     external: true
   carol-network:
     driver: bridge
-  
-

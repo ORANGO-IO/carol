@@ -5,10 +5,9 @@ Classificação de Agravos Reais Objetiva e Ligeira
 Uma Aplicação idealizada e desenvolvida por https://github.com/filiperochalopes com a colaboração de:
 
 - https://github.com/brennoflavio (Desenvolvedor) 
+- https://github.com/Henrique-Gomesz (Desenvolvedor) 
 
 Utilitário Web para triagem de pessoas por sinais, tendo como referência consultável o Protocolo do Hospital de Brasília. Mais informações e Live: https://carol.orango.io
-
-Em breve V2
 
 ## Docker structure
 ```
