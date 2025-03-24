@@ -1,6 +1,6 @@
-from models.classificacao import Classificacao
-from utils.db import provide_session
-from models.categorias import Categorias
+from .models.classificacao import Classificacao
+from .utils.db import provide_session
+from .models.categorias import Categorias
 
 
 @provide_session

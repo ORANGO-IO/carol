@@ -2,7 +2,7 @@ from logging.config import fileConfig
 
 from alembic import context
 
-import models
+import v1.models as models
 import settings
 
 
@@ -39,7 +39,7 @@ def run_migrations_offline():
 
     """
     context.configure(
-        url=settings.SQL_ALCHEMY_CONN,
+        url=settings.SQL_ALCHEMY_CONN_V1,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},

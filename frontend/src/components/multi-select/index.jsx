@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import SelectComponent from 'react-select';
 
 export const MultiSelect = ({
@@ -6,13 +7,27 @@ export const MultiSelect = ({
   options,
   setValues,
   handleBlur,
+  value = [],
+  onChange = () => {},
 }) => {
+  
+  useEffect(() => {
+    setValues((prev) => {
+      return {
+        ...prev,
+        [name]: value.map((value) => value.value),
+      };
+    });
+  }, [value]);
+
   return (
     <SelectComponent
       onBlur={handleBlur}
       name={name}
-      isMulti
+      isMulti={true}
+      value={value}
       onChange={(values) => {
+        onChange(values);
         setValues((prev) => {
           return {
             ...prev,

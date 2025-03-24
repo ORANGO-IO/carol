@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export default async (qpId, success, error) => {
-  axios(`${import.meta.env.VITE_API_URL}/qp/${qpId}`)
+  axios(`${import.meta.env.VITE_API_URL_V1}/qp/${qpId}`)
     .then((response) => {
       if (success) success(response);
     })
