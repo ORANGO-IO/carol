@@ -18,3 +18,11 @@ export const formAtom = atom({
   hgt: '',
   pain: '',
 });
+
+export const searchResultsAtom = atom({
+  resultados: [],
+  sinais: [],
+  sugestoes: [],
+});
+
+export const isLoadingAtom = atom(false);

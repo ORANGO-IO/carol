@@ -5,10 +5,16 @@ import { TextField } from '@/components/text-field';
 import { Formik } from 'formik';
 
 import { getMainComplaints } from '@/api/get-main-complaints';
+import { getVulnerabilities } from '@/api/get-vulnerabilities';
 import { FormErrors } from '@/components/form-errors';
 import { PrecisionWarningMessage } from '@/components/precision-warning-message';
-import { formAtom, mainComplaintsAtom } from '@/store/main-store';
-import { useAtom } from 'jotai';
+import {
+  formAtom,
+  isLoadingAtom,
+  mainComplaintsAtom,
+  searchResultsAtom,
+} from '@/store/main-store';
+import { useAtom, useSetAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import { FormSchema } from './form-schema';
 import {
@@ -23,15 +29,27 @@ import {
   SelectContainer,
   SubmitButton,
 } from './styles';
+import { getSymptoms } from '@/api/get-symptom';
+import { searchResult } from '@/api/search-results';
 
 const MIN_INPUT_REQUIRED = 4;
 
-export const MainForm = () => {
+export const MainForm = ({ switchState }) => {
+  const setSearchResults = useSetAtom(searchResultsAtom);
   const [form, setForm] = useAtom(formAtom);
+  const setIsLoading = useSetAtom(isLoadingAtom);
   const [mainComplaints, setMainComplaints] = useAtom(mainComplaintsAtom);
+  const [vulnerabilities, setVulnerabilities] = useState([]);
   const [isLoadingMainComplaints, setIsLoadingMainComplaints] = useState(true);
+  const [isLoadingVulnerabilities, setIsLoadingVulnerabilities] =
+    useState(true);
+  const [isLoadingSymptoms, setIsLoadingSymptoms] = useState(true);
+  const [selectedSymptoms, setSelectedSymptoms] = useState([]);
+  const [formValues, setFormValues] = useState({});
 
-  function checkInputFilled(values) {
+  const [symptoms, setSymptoms] = useState([]);
+
+  function areInputsFilled(values) {
     return Object.values(values).filter(
       (value) =>
         value !== '' &&
@@ -47,8 +65,11 @@ export const MainForm = () => {
         setMainComplaints(
           mainComplaints.map((item) => {
             return {
-              label: item.sintoma.toLocaleUpperCase(),
-              value: item.sintoma,
+              label: item.queixa_principal.toLocaleUpperCase(),
+              sinonimos: item.sinonimos,
+              sintomas: item.sintomas,
+              value: item.queixa_principal,
+              id: item.id,
             };
           })
         );
@@ -56,25 +77,85 @@ export const MainForm = () => {
       .finally(() => {
         setIsLoadingMainComplaints(false);
       });
+
+    getSymptoms()
+      .then((s) => {
+        setSymptoms(
+          s.map((item) => {
+            return {
+              label: item.sintoma,
+              value: item.sintoma,
+              id: item.id,
+            };
+          })
+        );
+      })
+      .finally(() => {
+        setIsLoadingSymptoms(false);
+      });
+
+    getVulnerabilities()
+      .then((vulnerabilities) => {
+        setVulnerabilities(
+          vulnerabilities.map((item) => {
+            return {
+              label: item.nome.toLocaleUpperCase(),
+              value: item.nome,
+              id: item.id,
+            };
+          })
+        );
+      }, [])
+      .finally(() => {
+        setIsLoadingVulnerabilities(false);
+      });
   }, []);
 
+  function onSelectQp(value) {
+    if (!value || !value.sintomas) return;
+    setSelectedSymptoms((prev) => {
+      const sintomas = value.sintomas
+        .map((sintoma) => {
+          if (prev.find((item) => item.label === sintoma) == undefined) {
+            return symptoms.find((item) => item.label === sintoma);
+          }
+        })
+        .filter(Boolean);
+      return [...prev, ...sintomas];
+    });
+  }
+
+  function onSelectSymptoms(value) {
+    setSelectedSymptoms(value);
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    setIsLoading(true);
+    setForm(formValues);
+    searchResult(formValues)
+      .then((result) => {
+        setSearchResults(result);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }
+
   return (
-    <Formik
-      initialValues={form}
-      onSubmit={(values) => {
-        setForm(values);
-        console.log(values);
-      }}
-      validationSchema={FormSchema}
-    >
-      {({ values, errors, handleSubmit, handleBlur, isValid, setValues }) => {
+    <Formik initialValues={form} validationSchema={FormSchema}>
+      {({ errors, handleBlur, setValues }) => {
         return (
-          <Container onSubmit={handleSubmit}>
+          <Container onSubmit={(e) => handleSubmit(e)}>
             <PatientComplaintContainer>
               <Select
+                onSelect={onSelectQp}
                 isLoading={isLoadingMainComplaints}
                 handleBlur={handleBlur}
-                setValues={setValues}
+                setValues={(values) => {
+                  setFormValues(values);
+                  setValues(values);
+                }}
                 hasError={errors.complaint ? true : false}
                 options={mainComplaints}
                 name="complaint"
@@ -83,27 +164,40 @@ export const MainForm = () => {
               <PatientComplaintRow>
                 <BirthdayField
                   handleBlur={handleBlur}
-                  setValues={setValues}
-                  ageValue={values.age}
+                  setValues={(values) => {
+                    setFormValues(values);
+                    setValues(values);
+                  }}
+                  ageValue={formValues.age}
                   hasError={errors.birthday || errors.age}
-                  value={values.birthday}
+                  value={formValues.birthday}
                   placeholder="D. NASCIMENTO"
                 />
                 <SelectContainer>
                   <Select
+                    isLoading={isLoadingVulnerabilities}
                     handleBlur={handleBlur}
-                    setValues={setValues}
+                    setValues={(values) => {
+                      setFormValues(values);
+                      setValues(values);
+                    }}
                     hasError={errors.vulnarability}
-                    options={mainComplaints}
+                    options={vulnerabilities}
                     name="vulnarability"
-                    placeholder="VULNERABILIDADE"
+                    placeholder={switchState}
                   />
                 </SelectContainer>
               </PatientComplaintRow>
               <MultiSelect
-                setValues={setValues}
+                onChange={onSelectSymptoms}
+                value={selectedSymptoms}
+                isLoading={isLoadingSymptoms}
+                setValues={(values) => {
+                  setFormValues(values);
+                  setValues(values);
+                }}
                 handleBlur={handleBlur}
-                options={mainComplaints}
+                options={symptoms}
                 name="symptoms"
                 placeholder="SINTOMAS"
               />
@@ -113,20 +207,26 @@ export const MainForm = () => {
               <PatientSignsInputContainer>
                 <FormRow>
                   <TextField
-                    setValues={setValues}
+                    setValues={(values) => {
+                      setFormValues(values);
+                      setValues(values);
+                    }}
                     hasError={errors.systolicPressure}
                     handleBlur={handleBlur}
-                    value={values.systolicPressure}
+                    value={formValues.systolicPressure}
                     name="systolicPressure"
                     flexValue={'1 1 200px'}
                     label="mmHg"
                     placeholder="PRESSÃO SISTÓLICA"
                   />
                   <TextField
-                    setValues={setValues}
+                    setValues={(values) => {
+                      setFormValues(values);
+                      setValues(values);
+                    }}
                     hasError={errors.diastolicPressure}
                     handleBlur={handleBlur}
-                    value={values.diastolicPressure}
+                    value={formValues.diastolicPressure}
                     name="diastolicPressure"
                     flexValue={'1 1 200px'}
                     label="mmHg"
@@ -135,41 +235,53 @@ export const MainForm = () => {
                 </FormRow>
                 <FormRow>
                   <TextField
-                    setValues={setValues}
+                    setValues={(values) => {
+                      setFormValues(values);
+                      setValues(values);
+                    }}
                     hasError={errors.heartRate}
                     handleBlur={handleBlur}
-                    value={values.heartRate}
+                    value={formValues.heartRate}
                     name="heartRate"
                     flexValue={'1 1 108px'}
                     label="bpm"
                     placeholder="FC"
                   />
                   <TextField
-                    setValues={setValues}
+                    setValues={(values) => {
+                      setFormValues(values);
+                      setValues(values);
+                    }}
                     hasError={errors.respiratoryRate}
                     handleBlur={handleBlur}
                     flexValue={'1 1 126px'}
-                    value={values.respiratoryRate}
+                    value={formValues.respiratoryRate}
                     name="respiratoryRate"
                     label="ipm"
                     placeholder="FR"
                   />
                   <TextField
-                    setValues={setValues}
+                    setValues={(values) => {
+                      setFormValues(values);
+                      setValues(values);
+                    }}
                     hasError={errors.spO2}
                     handleBlur={handleBlur}
                     flexValue={'1 1 122px'}
-                    value={values.spO2}
+                    value={formValues.spO2}
                     name="spO2"
                     label="%"
                     placeholder="SpO2"
                   />
                   <TextField
                     type="number"
-                    setValues={setValues}
+                    setValues={(values) => {
+                      setFormValues(values);
+                      setValues(values);
+                    }}
                     hasError={errors.temperature}
                     handleBlur={handleBlur}
-                    value={values.temperature}
+                    value={formValues.temperature}
                     flexValue={'1 1 116px'}
                     name="temperature"
                     label="ºC"
@@ -180,10 +292,13 @@ export const MainForm = () => {
                   <TextField
                     type="number"
                     flexValue={'1 1 154px'}
-                    setValues={setValues}
+                    setValues={(values) => {
+                      setFormValues(values);
+                      setValues(values);
+                    }}
                     hasError={errors.glasgow}
                     handleBlur={handleBlur}
-                    value={values.glasgow}
+                    value={formValues.glasgow}
                     name="glasgow"
                     label="/15"
                     placeholder="Glasgow"
@@ -191,10 +306,13 @@ export const MainForm = () => {
                   <TextField
                     type="number"
                     flexValue={'1 1 154px'}
-                    setValues={setValues}
+                    setValues={(values) => {
+                      setFormValues(values);
+                      setValues(values);
+                    }}
                     hasError={errors.hgt}
                     handleBlur={handleBlur}
-                    value={values.hgt}
+                    value={formValues.hgt}
                     name="hgt"
                     label="mg/dL"
                     placeholder="HGT"
@@ -203,10 +321,13 @@ export const MainForm = () => {
                     maxLength={2}
                     type="number"
                     flexValue={'1 1 154px'}
-                    setValues={setValues}
+                    setValues={(values) => {
+                      setFormValues(values);
+                      setValues(values);
+                    }}
                     hasError={errors.pain}
                     handleBlur={handleBlur}
-                    value={values.pain}
+                    value={formValues.pain}
                     name="pain"
                     label="/10"
                     placeholder="Dor"
@@ -215,14 +336,14 @@ export const MainForm = () => {
               </PatientSignsInputContainer>
               <FormErrorContainer>
                 <FormErrors errors={errors} />
-                {checkInputFilled(values) < MIN_INPUT_REQUIRED && (
+                {areInputsFilled(formValues) < MIN_INPUT_REQUIRED && (
                   <PrecisionWarningMessage />
                 )}
               </FormErrorContainer>
             </PatientSignsContainer>
             <SubmitButton
-              disabled={!isValid || !checkInputFilled(values)}
-              active={isValid && checkInputFilled(values)}
+              disabled={!areInputsFilled(formValues)}
+              active={areInputsFilled(formValues)}
               type="submit"
             >
               RESULTADO

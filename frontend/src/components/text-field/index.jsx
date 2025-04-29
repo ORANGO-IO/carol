@@ -25,6 +25,7 @@ export const TextField = ({
     <Container hasError={hasError} flexValue={flexValue}>
       <TextFieldContainer>
         <BaseTextField
+          hasError={hasError}
           type={type}
           onChange={onChange}
           onBlur={handleBlur}
