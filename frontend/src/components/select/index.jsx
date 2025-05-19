@@ -15,7 +15,16 @@ export const Select = ({
       isLoading={isLoading}
       onBlur={handleBlur}
       options={options}
+      isClearable
       onChange={(value) => {
+        if (value === null)
+          return setValues((values) => {
+            return {
+              ...values,
+              [name]: '',
+            };
+          });
+
         onSelect(value);
         setValues((values) => {
           return {

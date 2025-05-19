@@ -5,7 +5,6 @@ import { TextField } from '@/components/text-field';
 import { Formik } from 'formik';
 
 import { getMainComplaints } from '@/api/get-main-complaints';
-import { getVulnerabilities } from '@/api/get-vulnerabilities';
 import { FormErrors } from '@/components/form-errors';
 import { PrecisionWarningMessage } from '@/components/precision-warning-message';
 import {
@@ -39,10 +38,21 @@ export const MainForm = ({ switchState }) => {
   const [form, setForm] = useAtom(formAtom);
   const setIsLoading = useSetAtom(isLoadingAtom);
   const [mainComplaints, setMainComplaints] = useAtom(mainComplaintsAtom);
-  const [vulnerabilities, setVulnerabilities] = useState([]);
+  const [vulnerabilities, setVulnerabilities] = useState([
+    {
+      label: "GESTANTE",
+      value: 1,
+      id: 1,
+    },
+    {
+      label: "CRIANÇA",
+      value: 3,
+      id: 3,
+    },
+  ]);
   const [isLoadingMainComplaints, setIsLoadingMainComplaints] = useState(true);
   const [isLoadingVulnerabilities, setIsLoadingVulnerabilities] =
-    useState(true);
+    useState(false);
   const [isLoadingSymptoms, setIsLoadingSymptoms] = useState(true);
   const [selectedSymptoms, setSelectedSymptoms] = useState([]);
   const [formValues, setFormValues] = useState({});
@@ -92,22 +102,6 @@ export const MainForm = ({ switchState }) => {
       })
       .finally(() => {
         setIsLoadingSymptoms(false);
-      });
-
-    getVulnerabilities()
-      .then((vulnerabilities) => {
-        setVulnerabilities(
-          vulnerabilities.map((item) => {
-            return {
-              label: item.nome.toLocaleUpperCase(),
-              value: item.nome,
-              id: item.id,
-            };
-          })
-        );
-      }, [])
-      .finally(() => {
-        setIsLoadingVulnerabilities(false);
       });
   }, []);
 

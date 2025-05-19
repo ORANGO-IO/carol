@@ -1,6 +1,7 @@
 import axios from '@/axios-config';
 
 export async function searchResult(values) {
+  console.log('values', values);
   const queryParameters = {
     pas: values?.systolicPressure ?? '',
     pad: values?.diastolicPressure ?? '',
@@ -11,13 +12,19 @@ export async function searchResult(values) {
     glasgow: values?.glasgow ?? '',
     glicemia: values?.hgt ?? '',
     sintomas: values?.symptoms ?? '',
-    categoria: 1
+    categoria: values?.vulnarability ?? ''
   };
 
   try {
     const url = `/filter?${Object.entries(queryParameters)
-      .map((value) => `${value[0]}=${value[1]}&`)
+      .map((value) => {
+        if (value[1] === '') {
+          return '';
+        }
+        return `${value[0]}=${value[1]}&`
+      })
       .join('')}`;
+    console.log('url', url);
     const request = await axios.get(url);
 
     console.log(request.data);
