@@ -69,6 +69,15 @@ export const MainForm = ({ switchState }) => {
     ).length;
   }
 
+  function areInvalidErrors(errors){
+    errors = Object.values(errors).filter((value) => {
+      return !value.includes('[AGE]')
+    });
+    console.log("invalid errors", errors)
+
+    return errors.length > 0;
+  }
+
   useEffect(() => {
     getMainComplaints()
       .then((mainComplaints) => {
@@ -136,11 +145,26 @@ export const MainForm = ({ switchState }) => {
       });
   }
 
+  function hasAgeError(error){
+    if (error){
+      return error.includes('[AGE]');
+    }
+    return false;
+  }
+
+  function hasValidationError(error){
+    if (error && !error.includes('[AGE]')){
+      return true
+    }
+    return false;
+  }
+
   return (
     <Formik initialValues={form} validationSchema={FormSchema}>
       {({ errors, handleBlur, setValues }) => {
         return (
           <Container onSubmit={(e) => handleSubmit(e)}>
+            {console.log(errors)}
             <PatientComplaintContainer>
               <Select
                 onSelect={onSelectQp}
@@ -205,7 +229,8 @@ export const MainForm = ({ switchState }) => {
                       setFormValues(values);
                       setValues(values);
                     }}
-                    hasError={errors.systolicPressure}
+                    hasError={hasValidationError(errors.systolicPressure)}
+                    hasAgeError={hasAgeError(errors.systolicPressure)}
                     handleBlur={handleBlur}
                     value={formValues.systolicPressure}
                     name="systolicPressure"
@@ -218,7 +243,8 @@ export const MainForm = ({ switchState }) => {
                       setFormValues(values);
                       setValues(values);
                     }}
-                    hasError={errors.diastolicPressure}
+                    hasError={hasValidationError(errors.diastolicPressure)}
+                    hasAgeError={hasAgeError(errors.diastolicPressure)}
                     handleBlur={handleBlur}
                     value={formValues.diastolicPressure}
                     name="diastolicPressure"
@@ -233,7 +259,8 @@ export const MainForm = ({ switchState }) => {
                       setFormValues(values);
                       setValues(values);
                     }}
-                    hasError={errors.heartRate}
+                    hasError={hasValidationError(errors.heartRate)}
+                    hasAgeError={hasAgeError(errors.heartRate)}
                     handleBlur={handleBlur}
                     value={formValues.heartRate}
                     name="heartRate"
@@ -246,7 +273,8 @@ export const MainForm = ({ switchState }) => {
                       setFormValues(values);
                       setValues(values);
                     }}
-                    hasError={errors.respiratoryRate}
+                    hasError={hasValidationError(errors.respiratoryRate)}
+                    hasAgeError={hasAgeError(errors.respiratoryRate)}
                     handleBlur={handleBlur}
                     flexValue={'1 1 126px'}
                     value={formValues.respiratoryRate}
@@ -259,7 +287,8 @@ export const MainForm = ({ switchState }) => {
                       setFormValues(values);
                       setValues(values);
                     }}
-                    hasError={errors.spO2}
+                    hasError={hasValidationError(errors.spO2)}
+                    hasAgeError={hasAgeError(errors.spO2)}
                     handleBlur={handleBlur}
                     flexValue={'1 1 122px'}
                     value={formValues.spO2}
@@ -273,7 +302,8 @@ export const MainForm = ({ switchState }) => {
                       setFormValues(values);
                       setValues(values);
                     }}
-                    hasError={errors.temperature}
+                    hasAgeError={hasAgeError(errors.temperature)}
+                    hasError={hasValidationError(errors.temperature)}
                     handleBlur={handleBlur}
                     value={formValues.temperature}
                     flexValue={'1 1 116px'}
@@ -290,7 +320,8 @@ export const MainForm = ({ switchState }) => {
                       setFormValues(values);
                       setValues(values);
                     }}
-                    hasError={errors.glasgow}
+                    hasAgeError={hasAgeError(errors.glasgow)}
+                    hasError={hasValidationError(errors.glasgow)}
                     handleBlur={handleBlur}
                     value={formValues.glasgow}
                     name="glasgow"
@@ -300,11 +331,12 @@ export const MainForm = ({ switchState }) => {
                   <TextField
                     type="number"
                     flexValue={'1 1 154px'}
+                    hasAgeError={hasAgeError(errors.hgt)}
                     setValues={(values) => {
                       setFormValues(values);
                       setValues(values);
                     }}
-                    hasError={errors.hgt}
+                    hasError={hasValidationError(errors.hgt)}
                     handleBlur={handleBlur}
                     value={formValues.hgt}
                     name="hgt"
@@ -319,7 +351,8 @@ export const MainForm = ({ switchState }) => {
                       setFormValues(values);
                       setValues(values);
                     }}
-                    hasError={errors.pain}
+                    hasAgeError={hasAgeError(errors.pain)}
+                    hasError={hasValidationError(errors.pain)}
                     handleBlur={handleBlur}
                     value={formValues.pain}
                     name="pain"
@@ -336,8 +369,8 @@ export const MainForm = ({ switchState }) => {
               </FormErrorContainer>
             </PatientSignsContainer>
             <SubmitButton
-              disabled={!areInputsFilled(formValues)}
-              active={areInputsFilled(formValues)}
+              disabled={!areInputsFilled(formValues) || areInvalidErrors(errors)}
+              active={areInputsFilled(formValues) && !areInvalidErrors(errors)}
               type="submit"
             >
               RESULTADO

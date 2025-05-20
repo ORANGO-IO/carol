@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Container = styled.div.withConfig({
-  shouldForwardProp: (prop) => !['flexValue', 'hasError'].includes(prop), // Prevent flexValue from being forwarded to the DOM
+  shouldForwardProp: (prop) => !['flexValue', 'hasError', 'hasAgeError'].includes(prop), // Prevent flexValue from being forwarded to the DOM
 })`
   display: flex;
   flex-direction: row;
@@ -14,9 +14,8 @@ export const Container = styled.div.withConfig({
   justify-content: space-between;
   flex: ${(props) => props.flexValue || '1 1 150px'};
   max-height: 31px;
-  background-color: ${(props) => (props.hasError ? '#FFB100' : 'white')};
+  background-color: ${(props) => (props.hasAgeError ? '#FFB100' : 'white')};
   
-
   &:focus-within {
     border: ${(props) =>
       props.hasError ? '1px solid #D40000' : '1px solid #0074d9'};

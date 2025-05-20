@@ -1,5 +1,3 @@
-import { DATE_REGEX } from '@/regex';
-import { calculateAge } from '@/utils/calculate-age-from-date';
 import { getPatientAge } from '@/utils/get-patient-age';
 import { getVitalRange } from '@/utils/get-vital-range';
 import * as Yup from 'yup';
@@ -26,7 +24,18 @@ function valideteIfDiastolicPressureIsRequired(value) {
   return true;
 }
 
+function validateDiastolicPressureInvalidValues(value){
+  if (value == undefined || value == '') return true;
+
+  return value >= 10 && value <= 200;
+}
+
 export const DiastolicPressureValidation = Yup.string()
+  .test(
+    'validate-disatolic-invalid-values',
+    'Pressão sistólica inválida, deve ser entre 10 e 200',
+    validateDiastolicPressureInvalidValues
+  )
   .test(
     'validate-required-diastolic',
     'Pressão diastólica é obrigatória se a sistólica for preenchida',
@@ -34,6 +43,6 @@ export const DiastolicPressureValidation = Yup.string()
   )
   .test(
     'validate-diastolic',
-    'Pressão diastólica imcompatível com a idade',
+    '[AGE]Pressão diastólica imcompatível com a idade',
     validateDiastolicPressure
   );
