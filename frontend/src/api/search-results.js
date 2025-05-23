@@ -12,7 +12,7 @@ export async function searchResult(values) {
     glasgow: values?.glasgow ?? '',
     glicemia: values?.hgt ?? '',
     sintomas: values?.symptoms ?? '',
-    categoria: values?.vulnarability ?? ''
+    categoria: values?.vulnarability ?? null
   };
 
   try {

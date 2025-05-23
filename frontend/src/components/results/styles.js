@@ -21,7 +21,7 @@ export const Title = styled.p`
 `;
 
 export const ResultContainer = styled.div.withConfig({
-  shouldForwardProp: (prop) => !['swtichState'].includes(prop),
+  shouldForwardProp: (prop) => !['color'].includes(prop),
 })`
   margin-top: 30px;
   flex-direction: column;
@@ -30,28 +30,21 @@ export const ResultContainer = styled.div.withConfig({
   display: flex;
   gap: 11px;
   padding: 23px;
-  background-color: ${(props) =>
-    props.swtichState === 'VULNERABILIDADE' ? '#FFB100' : '#D40000'};
+  background-color: ${(props) => props.color};
   border: 1px solid #956d10;
   border-radius: 24px;
   margin-bottom: 16px;
 `;
 
-export const ResultTitle = styled.p.withConfig({
-  shouldForwardProp: (prop) => !['switchState'].includes(prop),
-})`
+export const ResultTitle = styled.p`
   font-size: 12px;
   line-height: 12px;
   font-weight: 700;
-  color: ${(props) =>
-    props.switchState === 'VULNERABILIDADE' ? '#000000' : '#FFFFFF'};
+  color: #000000;
 `;
 
-export const ResultMessage = styled.p.withConfig({
-  shouldForwardProp: (prop) => !['switchState'].includes(prop),
-})`
-  color: ${(props) =>
-    props.switchState === 'VULNERABILIDADE' ? '#000000' : '#FFFFFF'};
+export const ResultMessage = styled.p`
+  color: #000000;
   line-height: 12px;
   font-size: 10px;
 `;

@@ -128,7 +128,7 @@ function getCopyMessage(
   return `Paciente${getAgeMessage()}${getComplaintMessage()}${getSymptomsMessage()}. Exame físico: ${getPhysicalExamMessage()}${getHeartRateMessage()}${getRespiratoryRateMessage()}${getSpO2Message()}${getTemperatureMessage()}${getGlasgowMessage()}${getHgtMessage()}${getPainMessage()}.`;
 }
 
-export const Results = ({switchState}) => {
+export const Results = () => {
   const form = useAtomValue(formAtom);
   const result = useAtomValue(searchResultsAtom);
   const [copyMessage, setCopyMessage] = useState(false);
@@ -164,11 +164,11 @@ export const Results = ({switchState}) => {
       <CopyResult onClick={onCopyResult}>Copiar</CopyResult>
       <CopyMessage active={copyMessage}>Resultado copiado!</CopyMessage>
       <Title>RESULTADO MAIS SENSÍVEL CARREGADO</Title>
-      <ResultContainer swtichState={switchState}>
+      <ResultContainer color={`#${result.resultados[0].classificacao.cor_hex}`}>
         <TitleContainer>
-          <ResultTitle switchState={switchState}>{`TÍTULO DA SUGESTÃO DE ${result.resultados[0].sintoma}`}</ResultTitle>
+          <ResultTitle>{`TÍTULO DA SUGESTÃO DE ${result.resultados[0].sintoma}`}</ResultTitle>
         </TitleContainer>
-        <ResultMessage switchState={switchState}>{result.resultados[0].observacao}</ResultMessage>
+        <ResultMessage>{result.resultados[0].observacao}</ResultMessage>
       </ResultContainer>
       <MoreResults onClick={() => setShowOtherResults((prev) => !prev)}>
         OUTROS RESULTADOS ⬇️
@@ -176,11 +176,11 @@ export const Results = ({switchState}) => {
       {showOtherResults && (
         <>
           {result.sugestoes.map((sugestao, index) => (
-            <ResultContainer key={index} swtichState={switchState}>
+            <ResultContainer key={index} color={`#${sugestao.cor_hex}`}>
               <TitleContainer>
-                <ResultTitle switchState={switchState}>{`${sugestao.sintoma}`}</ResultTitle>
+                <ResultTitle>{`${sugestao.sintoma}`}</ResultTitle>
               </TitleContainer>
-              <ResultMessage switchState={switchState}>{sugestao.observacao}</ResultMessage>
+              <ResultMessage>{sugestao.observacao}</ResultMessage>
             </ResultContainer>
           ))}
         </>
