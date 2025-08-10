@@ -13,6 +13,7 @@ export const TextField = ({
   name,
   value,
   hasError,
+  hasAgeError,
   handleBlur,
   setValues,
   type = 'text',
@@ -22,9 +23,10 @@ export const TextField = ({
   }
 
   return (
-    <Container hasError={hasError} flexValue={flexValue}>
+    <Container hasError={hasError} hasAgeError={hasAgeError} flexValue={flexValue}>
       <TextFieldContainer>
         <BaseTextField
+          hasError={hasAgeError}
           type={type}
           onChange={onChange}
           onBlur={handleBlur}

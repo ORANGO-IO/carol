@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Container = styled.div.withConfig({
-  shouldForwardProp: (prop) => !['flexValue', 'hasError'].includes(prop), // Prevent flexValue from being forwarded to the DOM
+  shouldForwardProp: (prop) => !['flexValue', 'hasError', 'hasAgeError'].includes(prop), // Prevent flexValue from being forwarded to the DOM
 })`
   display: flex;
   flex-direction: row;
@@ -14,7 +14,8 @@ export const Container = styled.div.withConfig({
   justify-content: space-between;
   flex: ${(props) => props.flexValue || '1 1 150px'};
   max-height: 31px;
-
+  background-color: ${(props) => (props.hasAgeError ? '#FFB100' : 'white')};
+  
   &:focus-within {
     border: ${(props) =>
       props.hasError ? '1px solid #D40000' : '1px solid #0074d9'};
@@ -22,12 +23,14 @@ export const Container = styled.div.withConfig({
 `;
 
 export const TextFieldContainer = styled.div`
-  padding: 10px;
   width: 100%;
+  margin-left: 10px;
 `;
 
-export const BaseTextField = styled.input`
-  background-color: white;
+export const BaseTextField = styled.input.withConfig({
+  shouldForwardProp: (prop) => !['hasError'].includes(prop), // Prevent hasError from being forwarded to the DOM
+})`
+  background-color: ${(props) => (props.hasError ? '#FFB100' : 'white')};
   color: #3a3a3a;
   outline: none;
   border: none;
@@ -35,6 +38,7 @@ export const BaseTextField = styled.input`
   font-weight: 400;
   font-size: 12px;
   max-height: 31px;
+
 `;
 
 export const LabelContainer = styled.div`

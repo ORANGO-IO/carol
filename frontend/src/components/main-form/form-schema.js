@@ -15,7 +15,7 @@ export const FormSchema = Yup.object().shape({
   complaint: Yup.string(),
   birthday: BirthdayValidation,
   age: AgeValidation,
-  vulnarability: Yup.string(),
+  vulnarability: Yup.string(), 
   symptoms: Yup.array().of(Yup.string()),
   systolicPressure: SystolicPressureValidation,
   diastolicPressure: DiastolicPressureValidation,

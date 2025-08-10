@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   max-width: 513px;
+  min-width: 513px;
   margin-top: 35px;
 `;
 
@@ -19,7 +20,9 @@ export const Title = styled.p`
   color: black;
 `;
 
-export const ResultContainer = styled.div`
+export const ResultContainer = styled.div.withConfig({
+  shouldForwardProp: (prop) => !['color'].includes(prop),
+})`
   margin-top: 30px;
   flex-direction: column;
   justify-content: flex-start;
@@ -27,26 +30,26 @@ export const ResultContainer = styled.div`
   display: flex;
   gap: 11px;
   padding: 23px;
-  background-color: #ffb100;
+  background-color: ${(props) => props.color};
   border: 1px solid #956d10;
   border-radius: 24px;
+  margin-bottom: 16px;
 `;
 
 export const ResultTitle = styled.p`
   font-size: 12px;
   line-height: 12px;
   font-weight: 700;
-  color: #3a3a3a;
+  color: #000000;
 `;
 
 export const ResultMessage = styled.p`
-  color: #3a3a3a;
+  color: #000000;
   line-height: 12px;
   font-size: 10px;
 `;
 
 export const CopyResult = styled.button`
-  margin-top: 16px;
   background-color: #2578fa;
   color: white;
   border: none;
@@ -72,4 +75,12 @@ export const CopyMessage = styled.p.withConfig({
   margin-top: 6px;
   font-size: 12px;
   text-align: center;
+`;
+
+export const MoreResults = styled.div`
+  margin-top: 16px;
+  font-weight: bold;
+  color: #000000;
+  font-size: 12px;
+  cursor: pointer;
 `;

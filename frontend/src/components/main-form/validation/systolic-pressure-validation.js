@@ -15,8 +15,20 @@ function validateSystolicPressure(value) {
   return value >= range.min && value <= range.max;
 }
 
-export const SystolicPressureValidation = Yup.string().test(
+function validateSystolicPressureInvalidValues(value) {
+  if (value == undefined || value == '') return true;
+
+  return value >= 20 && value <= 300;
+}
+
+export const SystolicPressureValidation = Yup.string()
+.test(
+  'validate-systolic-invalid-values',
+  'Pressão sistólica inválida, deve ser entre 20 e 300',
+  validateSystolicPressureInvalidValues
+)
+.test(
   'validate-systolic',
-  'Pressão sistólica incompatível com a idade',
+  '[AGE]Pressão sistólica incompatível com a idade',
   validateSystolicPressure
-);
+)

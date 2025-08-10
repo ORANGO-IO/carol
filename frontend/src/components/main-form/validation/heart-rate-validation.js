@@ -1,8 +1,6 @@
-import * as Yup from 'yup';
-import { calculateAge } from '@/utils/calculate-age-from-date';
-import { DATE_REGEX } from '@/regex';
-import { getVitalRange } from '@/utils/get-vital-range';
 import { getPatientAge } from '@/utils/get-patient-age';
+import { getVitalRange } from '@/utils/get-vital-range';
+import * as Yup from 'yup';
 
 function validateHeartRateByAge(value) {
   if (value == undefined || value == '') return true;
@@ -17,18 +15,20 @@ function validateHeartRateByAge(value) {
   return value >= range.min && value <= range.max;
 }
 
+function validateHeartRateInvalidValues(value){
+  if (value == undefined || value == '') return true;
+
+  return value >= 20 && value <= 200;
+}
+
 export const HeartRateValidation = Yup.string()
   .test(
     'validate-heart-rate',
-    'Frequência cardíaca incompatível',
-    function (value) {
-      if (value == undefined || value == '') return true;
-
-      return value >= 0 && value <= 160; // Default
-    }
+    'Frequência cardíaca incompatível deve ser entre 20 a 200',
+    validateHeartRateInvalidValues
   )
   .test(
     'validate-heart-rate-by-age',
-    'Frequência cardíaca incompatível com a idade',
+    '[AGE]Frequência cardíaca incompatível com a idade',
     validateHeartRateByAge
   );

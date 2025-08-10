@@ -2,19 +2,21 @@ from flask import Flask, jsonify, request, Blueprint, Response
 from flask_cors import CORS
 from flask_swagger import swagger
 from pprint import pprint
-from calc import calc
-from functions import getClassificacao, getCategoriaNome
-from utils.db import provide_session
-from models.classificacao import Classificacao
-from models.sinais import Sinais
-from models.queixas_principais import QueixasPrincipais
-from models.registros_sinais import RegistrosSinais
-from models.sintomas import Sintomas
-from models.categorias import Categorias
-from models.registros_sintomas import RegistrosSintomas
+from .calc import calc
+from .functions import getClassificacao, getCategoriaNome
+from .utils.db import provide_session
+from .models.classificacao import Classificacao
+from .models.sinais import Sinais
+from .models.queixas_principais import QueixasPrincipais
+from .models.registros_sinais import RegistrosSinais
+from .models.sintomas import Sintomas
+from .models.categorias import Categorias
+from .models.registros_sintomas import RegistrosSintomas
 from sqlalchemy import func
 from werkzeug.middleware.proxy_fix import ProxyFix
 import sys
+
+v1_blueprint = Blueprint("v1", __name__, url_prefix="/api/v1")
 
 def verificaDescritor(descritor: str) -> bool:
     pass
@@ -87,19 +89,13 @@ def getQP(id: int, session=None) -> list:
     if result:
         return result._asdict()
 
-
-app = Flask(__name__)
-app_blueprint = Blueprint("example_bp", __name__)
-CORS(app)
-
-
-@app_blueprint.route("/")
+@v1_blueprint.route("/")
 def hello():
     """Return a friendly HTTP greeting."""
-    return "Hello World from CAROL!"
+    return "Hello World from CAROL V1!"
 
 
-@app_blueprint.route("/metrics")
+@v1_blueprint.route("/metrics")
 @provide_session
 def metrics(session=None):
     metrics = {}
@@ -110,7 +106,7 @@ def metrics(session=None):
     return jsonify(metrics)
 
 
-@app_blueprint.route("/filter")
+@v1_blueprint.route("/filter")
 @provide_session
 def filter(session=None):
     """Filtra resultados de acordo com sintomas enviados"""
@@ -180,7 +176,7 @@ def filter(session=None):
     return calc(data)
 
 
-@app_blueprint.route("/classificacao")
+@v1_blueprint.route("/classificacao")
 @provide_session
 def classificacao(session=None):
     """Retorna a lista das classificações de risco"""
@@ -198,7 +194,7 @@ def classificacao(session=None):
         return jsonify([])
 
 
-@app_blueprint.route("/sinais")
+@v1_blueprint.route("/sinais")
 @provide_session
 def sinais(session=None):
     """Retorna a lista dos sinais cadastrados"""
@@ -219,7 +215,7 @@ def sinais(session=None):
         return jsonify([])
 
 
-@app_blueprint.route("/sintomas")
+@v1_blueprint.route("/sintomas")
 @provide_session
 def sintomas(session=None):
     """Retorna a lista dos sintomas cadastrados"""
@@ -238,7 +234,7 @@ def sintomas(session=None):
         return jsonify([])
 
 
-@app_blueprint.route("/categorias")
+@v1_blueprint.route("/categorias")
 @provide_session
 def categorias(session=None):
     """Retorna a lista das categorias de qp cadastradas"""
@@ -251,7 +247,7 @@ def categorias(session=None):
         return jsonify([])
 
 
-@app_blueprint.route("/qp/<id>")
+@v1_blueprint.route("/qp/<id>")
 @provide_session
 def qpDetails(id: int, session=None):
     print(id, file=sys.stderr)
@@ -353,7 +349,7 @@ def qpDetails(id: int, session=None):
     return jsonify(data)
 
 
-@app_blueprint.route("/qp", methods=["GET", "PUT"])
+@v1_blueprint.route("/qp", methods=["GET", "PUT"])
 @provide_session
 def qp(session=None):
     print("TESTE", file=sys.stderr)
@@ -381,7 +377,7 @@ def qp(session=None):
         return jsonify(req)
 
 
-@app_blueprint.route("/registro", methods=["PUT"])
+@v1_blueprint.route("/registro", methods=["PUT"])
 @provide_session
 def registro(session=None):
     """Registra um bloco de dados relacionados a uma queixa principal"""
@@ -578,7 +574,7 @@ def registro(session=None):
     return jsonify(request.json)
 
 
-@app_blueprint.route("/edit", methods=["PUT"])
+@v1_blueprint.route("/edit", methods=["PUT"])
 @provide_session
 def edit(session=None):
     # Verifica qp
@@ -693,18 +689,9 @@ def edit(session=None):
     return jsonify(request.json)
 
 
-@app_blueprint.route("/specs")
+@v1_blueprint.route("/specs")
 def specs():
     swag = swagger(app)
     swag["info"]["version"] = "1.0"
     swag["info"]["title"] = "My API"
     return jsonify(swag)
-
-
-app.register_blueprint(app_blueprint, url_prefix="/api/v1")
-# app.register_blueprint(app_blueprint)
-
-# app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
-
-if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5000)

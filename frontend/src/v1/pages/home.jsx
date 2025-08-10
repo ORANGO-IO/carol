@@ -32,7 +32,7 @@ export default class newHome extends Component {
     console.log(selectedQP);
     this.setState({ isLoading: true });
     selectedQP.map((qp) => {
-      axios(`${import.meta.env.VITE_API_URL}/qp/${qp.ID}`)
+      axios(`${import.meta.env.VITE_API_URL_V1}/qp/${qp.ID}`)
         .then((response) => {
           console.log(response.data);
           this.context.showQp([response.data]);
@@ -67,7 +67,7 @@ export default class newHome extends Component {
       .join('')}`;
     url += `categoria=${this.state.categoria}`;
     console.log(url);
-    axios(`${import.meta.env.VITE_API_URL}/${url}`)
+    axios(`${import.meta.env.VITE_API_URL_V1}/${url}`)
       .then((response) =>
         this.setState({ results: response.data, isLoading: false }, () =>
           console.log(this.state.results)
@@ -79,7 +79,7 @@ export default class newHome extends Component {
   componentDidMount() {
     if (!this.state.dbQP.length) {
       this.setState({ isLoading: true });
-      axios(`${import.meta.env.VITE_API_URL}/qp`)
+      axios(`${import.meta.env.VITE_API_URL_V1}/qp`)
         .then((response) => {
           let data = [];
           response.data.forEach((qp) => {
@@ -115,7 +115,7 @@ export default class newHome extends Component {
       </Modal>,
 
       <Container id="home-search-box" text>
-        <img src="/sm_carol.svg" />
+        <img src="/sm_carol_v1.svg" />
         <Segment>
           <Grid className="queixa">
             <Grid.Column mobile={16} tablet={16} computer={16}>

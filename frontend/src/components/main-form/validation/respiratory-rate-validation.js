@@ -1,7 +1,5 @@
-import { DATE_REGEX } from '@/regex';
-import { calculateAge } from '@/utils/calculate-age-from-date';
-import { getVitalRange } from '@/utils/get-vital-range';
 import { getPatientAge } from '@/utils/get-patient-age';
+import { getVitalRange } from '@/utils/get-vital-range';
 import * as Yup from 'yup';
 
 function validateRespiratoryRate(value) {
@@ -17,8 +15,20 @@ function validateRespiratoryRate(value) {
   return value >= range.min && value <= range.max;
 }
 
-export const RespiratoryRateValidation = Yup.string().test(
+function validateRespiratoryRateInvalidValues(value){
+  if (value == undefined || value == '') return true;
+
+  return value >= 1 && value <= 70;
+}
+
+export const RespiratoryRateValidation = Yup.string()
+.test(
+  'validate-respiratory-rate-invalid-values',
+  'Frequência respiratória inválida, deve estar entre 1 a 70',
+  validateRespiratoryRateInvalidValues
+)
+.test(
   'validate-respiratory-rate',
-  'Frequência respiratória incompatível com a idade',
+  '[AGE]Frequência respiratória incompatível com a idade',
   validateRespiratoryRate
 );

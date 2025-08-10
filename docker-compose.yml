@@ -24,7 +24,8 @@ services:
     build: ./backend
     restart: always
     environment:
-      SQL_ALCHEMY_CONN: mysql+pymysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db-carol/carol_v1_db
+      SQL_ALCHEMY_CONN_V1: ${SQL_ALCHEMY_CONN_V1}
+      SQL_ALCHEMY_CONN_V2: ${SQL_ALCHEMY_CONN_V2}
     volumes:
       - ./backend:/app
     ports:
