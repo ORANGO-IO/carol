@@ -11,8 +11,41 @@ import {
   ResultTitle,
   Title,
   TitleContainer,
+  ClassificationBadge,
+  ClassificationInfo,
+  PriorityLabel,
 } from './styles';
 import { calculateAge } from '@/utils/calculate-age-from-date';
+
+// Helper function to get priority name based on priority number
+function getPriorityName(priority) {
+  const priorityMap = {
+    1: 'VERMELHO',
+    2: 'LARANJA', 
+    3: 'AMARELO',
+    4: 'VERDE',
+    5: 'AZUL'
+  };
+  return priorityMap[priority] || 'NÃO CLASSIFICADO';
+}
+
+// Helper function to get color based on priority  
+function getPriorityColor(priority, colorHex) {
+  // Use color from database if available
+  if (colorHex) {
+    return `#${colorHex}`;
+  }
+  
+  // Fallback to Manchester Protocol standard colors
+  const colorMap = {
+    1: '#D40000', // Vermelho - Emergência
+    2: '#FF7700', // Laranja - Muito urgente  
+    3: '#FFD700', // Amarelo - Urgente
+    4: '#00C851', // Verde - Pouco urgente
+    5: '#0099CC'  // Azul - Não urgente
+  };
+  return colorMap[priority] || '#808080';
+}
 
 function getCopyMessage(
   age,
@@ -164,11 +197,31 @@ export const Results = ({switchState}) => {
       <CopyResult onClick={onCopyResult}>Copiar</CopyResult>
       <CopyMessage active={copyMessage}>Resultado copiado!</CopyMessage>
       <Title>RESULTADO MAIS SENSÍVEL CARREGADO</Title>
-      <ResultContainer swtichState={switchState}>
+      <ResultContainer 
+        priority={result.triagem?.prioridade || result.resultados[0]?.prioridade}
+        colorHex={result.triagem?.cor_hex || result.resultados[0]?.cor_hex}
+        switchState={switchState}
+      >
         <TitleContainer>
-          <ResultTitle switchState={switchState}>{`TÍTULO DA SUGESTÃO DE ${result.resultados[0].sintoma}`}</ResultTitle>
+          <ResultTitle>
+            {`TÍTULO DA SUGESTÃO DE ${result.triagem?.sintoma || result.resultados[0]?.sintoma}`}
+          </ResultTitle>
+          <ClassificationBadge 
+            priority={result.triagem?.prioridade || result.resultados[0]?.prioridade}
+            colorHex={result.triagem?.cor_hex || result.resultados[0]?.cor_hex}
+          >
+            <PriorityLabel>
+              {result.triagem?.classificacao?.classificacao || result.resultados[0]?.classificacao?.classificacao}
+            </PriorityLabel>
+          </ClassificationBadge>
         </TitleContainer>
-        <ResultMessage switchState={switchState}>{result.resultados[0].observacao}</ResultMessage>
+        <ResultMessage>
+          {result.triagem?.observacao || result.resultados[0]?.observacao}
+        </ResultMessage>
+        <ClassificationInfo>
+          <span>Tempo de atendimento: <strong>{result.triagem?.classificacao?.tempo_atendimento || result.resultados[0]?.classificacao?.tempo_atendimento}</strong></span>
+          <span>{result.triagem?.classificacao?.descritor || result.resultados[0]?.classificacao?.descritor}</span>
+        </ClassificationInfo>
       </ResultContainer>
       <MoreResults onClick={() => setShowOtherResults((prev) => !prev)}>
         OUTROS RESULTADOS ⬇️
@@ -176,11 +229,26 @@ export const Results = ({switchState}) => {
       {showOtherResults && (
         <>
           {result.sugestoes.map((sugestao, index) => (
-            <ResultContainer key={index} swtichState={switchState}>
+            <ResultContainer 
+              key={index} 
+              priority={sugestao.prioridade}
+              colorHex={sugestao.cor_hex}
+              switchState={switchState}
+            >
               <TitleContainer>
-                <ResultTitle switchState={switchState}>{`${sugestao.sintoma}`}</ResultTitle>
+                <ResultTitle>
+                  {`${sugestao.sintoma}`}
+                </ResultTitle>
+                <ClassificationBadge 
+                  priority={sugestao.prioridade}
+                  colorHex={sugestao.cor_hex}
+                >
+                  <PriorityLabel>
+                    {getPriorityName(sugestao.prioridade)}
+                  </PriorityLabel>
+                </ClassificationBadge>
               </TitleContainer>
-              <ResultMessage switchState={switchState}>{sugestao.observacao}</ResultMessage>
+              <ResultMessage>{sugestao.observacao}</ResultMessage>
             </ResultContainer>
           ))}
         </>

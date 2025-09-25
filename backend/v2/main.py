@@ -75,12 +75,23 @@ def processa_resultado(result, value):
 @base_blueprint.route("/filter")
 @provide_session
 def filter(session=None):
-    """Filtra resultados baseados nos sintomas enviados pela query."""
+    """Filtra resultados baseados nos sintomas enviados pela query.
+    
+    Parâmetros expandidos:
+    - categoria: ID da categoria para filtrar
+    - sintomas: Lista de sintomas separados por vírgula
+    - vulnerabilidade: true/false se paciente é vulnerável (gestante, idoso, criança)
+    - queixa_principal: ID da queixa principal específica (opcional)
+    """
     logger.debug(f"Filter params: {request.args}")
     data = []
     categoria = request.args.get("categoria")
     sintomas_param = request.args.get("sintomas", "")
     sintomas_list = sintomas_param.split(",") if sintomas_param else []
+    
+    # Novos parâmetros para o cálculo expandido
+    vulnerabilidade = request.args.get("vulnerabilidade", "false").lower() == "true"
+    queixa_principal_id = request.args.get("queixa_principal", type=int, default=0)
 
     # Itera apenas sobre os itens que representam sinais (excluindo 'categoria' e 'sintomas')
     for key, value in request.args.items():
@@ -131,7 +142,14 @@ def filter(session=None):
             sinal_info = get_sinal(sinal_id)
             sinal_info["matches"] = filtrados
             data.append(sinal_info)
-    return calc(data)
+    
+    # Chamar calc com os novos parâmetros
+    return calc(
+        data, 
+        vulnerabilidade=vulnerabilidade,
+        queixa_principal_id=queixa_principal_id,
+        sintomas_paciente=sintomas_list
+    )
 
 def query_to_json(query_result):
     """Converte o resultado da consulta para lista de dicionários."""

@@ -11,7 +11,9 @@ export async function searchResult(values) {
     glasgow: values?.glasgow ?? '',
     glicemia: values?.hgt ?? '',
     sintomas: values?.symptoms ?? '',
-    categoria: 1
+    categoria: 1,
+    vulnerabilidade: values?.vulnerability ?? false,
+    queixa_principal: values?.mainComplaint ?? ''
   };
 
   try {

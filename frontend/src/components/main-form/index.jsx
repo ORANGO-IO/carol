@@ -133,7 +133,15 @@ export const MainForm = ({ switchState }) => {
     e.preventDefault();
     setIsLoading(true);
     setForm(formValues);
-    searchResult(formValues)
+    
+    // Prepare the form values with vulnerability flag
+    const searchValues = {
+      ...formValues,
+      vulnerability: formValues.vulnarability ? true : false,
+      mainComplaint: formValues.complaint?.id || null
+    };
+    
+    searchResult(searchValues)
       .then((result) => {
         setSearchResults(result);
       })
