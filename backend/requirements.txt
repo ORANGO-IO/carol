@@ -8,3 +8,9 @@ alembic
 PyMySQL==0.10.0
 Werkzeug==2.2.2
 
+# Development and Testing
+pytest==7.4.0
+pytest-cov==4.1.0
+pytest-mock==3.11.1
+ruff==0.5.0
+

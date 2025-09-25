@@ -1,8 +1,9 @@
 from flask import jsonify, request, Blueprint
-from flask_swagger import swagger
-from pprint import pprint
 from sqlalchemy import func
-import sys
+import logging
+
+# Configurar logging
+logger = logging.getLogger(__name__)
 
 from .calc import calc
 from .functions import (
@@ -30,11 +31,20 @@ def hello():
     """Retorna uma mensagem de saudação."""
     return "Hello World from CAROL V2!"
 
-@base_blueprint.route("/sintomas_descritivos")
+@base_blueprint.route("/sintomas_descritivos", methods=["POST"])
 @provide_session
 def inserir_sintomas_descritivos(session=None):
-    """Insere sintomas descritivos a partir do payload JSON."""
+    """Insere sintomas descritivos a partir do payload JSON.
+    
+    Regra de negócio: Cada sintoma deve ter ID de queixa, classificação e descritor.
+    """
+    if not request.json:
+        return jsonify({"error": "Payload JSON é obrigatório"}), 400
+    
     sintomas = request.json.get("sintomas_descritivos", [])
+    if not sintomas or not isinstance(sintomas, list):
+        return jsonify({"error": "Lista de sintomas_descritivos é obrigatória"}), 400
+    
     for sintoma in sintomas:
         novo_sintoma = QueixasSintomasClassificacao(
             fk_queixa=sintoma["id_queixa"],
@@ -66,7 +76,7 @@ def processa_resultado(result, value):
 @provide_session
 def filter(session=None):
     """Filtra resultados baseados nos sintomas enviados pela query."""
-    pprint(request.args)
+    logger.debug(f"Filter params: {request.args}")
     data = []
     categoria = request.args.get("categoria")
     sintomas_param = request.args.get("sintomas", "")
@@ -249,8 +259,17 @@ def qp(session=None):
 
 @base_blueprint.route("/specs/v2")
 def specs():
-    """Retorna a especificação Swagger da API."""
-    swag = swagger(base_blueprint)
-    swag["info"]["version"] = "1.0"
-    swag["info"]["title"] = "My API v2"
-    return jsonify(swag)
+    """Retorna a especificação da API v2."""
+    return jsonify({
+        "info": {
+            "version": "2.0.0",
+            "title": "CAROL API v2",
+            "description": "API de classificação de risco médico baseada no protocolo de Manchester"
+        },
+        "endpoints": [
+            "/api/filter",
+            "/api/qp",
+            "/api/sintomas",
+            "/api/vulnerabilidades"
+        ]
+    })

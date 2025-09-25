@@ -6,8 +6,12 @@ from .models.classificacao import Classificacao
 from sqlalchemy.sql.expression import literal
 
 
-def checkItem(item: tuple, *lists: list) -> bool:
-    """Função checa se tem match de sinais em uma queixa principal e atribui pontuações"""
+def checkItem(item: tuple, *lists: list) -> dict:
+    """Função checa se tem match de sinais em uma queixa principal e atribui pontuações.
+    
+    Regra de negócio: Pontuação baseada em quantidade de matches + peso inversamente
+    proporcional ao ID da classificação (prioridades menores = mais graves).
+    """
     pontos = 0
     for lista in lists:
         if item in lista:
@@ -16,8 +20,12 @@ def checkItem(item: tuple, *lists: list) -> bool:
     retorno = {"item": item, "pontos": pontos}
     return retorno
 
-def intersection(*lists: list) -> list:
-    """Captura a intercessão de tuplas dentro de um array"""
+def intersection(*lists: list) -> dict:
+    """Captura a intercessão de tuplas dentro de um array.
+    
+    Regra de negócio: Retorna todas as interseções ordenadas por pontuação
+    e sugere as de maior prioridade (maior pontuação).
+    """
     intersections = []
     for lista in lists:
         for tupla in lista:
@@ -32,16 +40,28 @@ def intersection(*lists: list) -> list:
 
     return {"intersections": intersections, "sugestions": sugestions}
 
+# Constantes de classificação de risco (Protocolo de Manchester)
+PRIORIDADE_EMERGENCIA = 1      # Vermelho - Atendimento imediato
+PRIORIDADE_MUITO_URGENTE = 2   # Laranja - 10 minutos
+PRIORIDADE_URGENTE = 3         # Amarelo - 60 minutos
+PRIORIDADE_POUCO_URGENTE = 4   # Verde - 120 minutos
+PRIORIDADE_NAO_URGENTE = 5     # Azul - 240 minutos
+PRIORIDADE_MINIMA = 9          # Sem classificação
+
 @provide_session
 def calc(filterData: dict, session=None) -> Response:
-    """Função que calcula as prioridades e dá o resultado final"""
+    """Função que calcula as prioridades e dá o resultado final.
+    
+    Regra de negócio: Calcula classificação de risco baseada nos sinais vitais
+    e sintomas do paciente. Menor número = maior prioridade de atendimento.
+    """
     data = {}
     data["resultados"] = []
     qp_ids = []
     qp_classif_ids = []
     for sinal in filterData:
         # Verificar qual a maior classificacao, prioridade 1 é a maior
-        prioridade_max = 9
+        prioridade_max = PRIORIDADE_MINIMA
         qp_ids_sinal = []
         qp_classif_ids_sinal = []
         for match in sinal["matches"]:
