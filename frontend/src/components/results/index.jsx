@@ -204,7 +204,7 @@ export const Results = ({switchState}) => {
       >
         <TitleContainer>
           <ResultTitle>
-            {`TÍTULO DA SUGESTÃO DE ${result.triagem?.sintoma || result.resultados[0]?.sintoma}`}
+            {`${result.triagem?.sintoma || result.resultados[0]?.sintoma}`}
           </ResultTitle>
           <ClassificationBadge 
             priority={result.triagem?.prioridade || result.resultados[0]?.prioridade}

@@ -1,5 +1,20 @@
+import { getVitalRangeByAge } from './vital-signs-config';
+
+/**
+ * Função legada mantida para compatibilidade
+ * ATENÇÃO: Contém erro na pressão diastólica para adultos
+ * Use vital-signs-config.js para valores corretos
+ * 
+ * @deprecated Use getVitalRangeByAge de vital-signs-config.js
+ */
 export function getVitalRange(vital, age) {
   if (!age || age < 1) return null;
+  
+  // Mapeia para a nova função centralizada
+  const range = getVitalRangeByAge(vital, age);
+  return range ? { min: range.min, max: range.max } : null;
+  
+  /* Código antigo com erro - mantido como referência
   switch (vital) {
     case 'diastolic':
       if (age <= 2) return { min: 42, max: 63 };
@@ -7,7 +22,7 @@ export function getVitalRange(vital, age) {
       if (age <= 9) return { min: 57, max: 76 };
       if (age <= 12) return { min: 61, max: 80 };
       if (age <= 15) return { min: 64, max: 83 };
-      return { min: 90, max: 140 };
+      return { min: 90, max: 140 }; // ERRO: deveria ser 60-80
     case 'systolic':
       if (age <= 2) return { min: 86, max: 106 };
       if (age <= 5) return { min: 89, max: 112 };
@@ -32,4 +47,5 @@ export function getVitalRange(vital, age) {
     default:
       return null;
   }
+  */
 }
