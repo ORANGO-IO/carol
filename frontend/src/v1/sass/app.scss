@@ -1,20 +1,17 @@
-// Importar fontes
-@import url('https://fonts.googleapis.com/css?family=Hind+Guntur');
-
 // Importar variáveis
-@import 'variables';
+@use 'variables' as *;
 
 // Importar mixins
-@import 'mixins';
+@use 'mixins' as *;
 
 // Importar páginas
-@import './pages/home';
-
-// Importar layouts
-// @import 'layouts/login';
+@use './pages/home' as *;
 
 // Importar componentes
-@import 'components/form/form';
+@use 'components/form/form' as *;
+
+// Importar fontes
+@import url('https://fonts.googleapis.com/css?family=Hind+Guntur');
 
 * {
   @include mp0;
