@@ -30,6 +30,8 @@ export const ResultContainer = styled.div.withConfig({
   display: flex;
   gap: 11px;
   padding: 23px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
   background-color: ${(props) => {
     // Use color from database if available
     if (props.colorHex) {
@@ -72,6 +74,16 @@ export const ResultContainer = styled.div.withConfig({
   }};
   border-radius: 24px;
   margin-bottom: 16px;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+  }
+
+  &:focus-visible {
+    outline: 3px solid #2578fa;
+    outline-offset: 2px;
+  }
 `;
 
 export const ResultTitle = styled.p`
@@ -181,4 +193,10 @@ export const ClassificationInfo = styled.div`
       color: #000000;
     }
   }
+`;
+
+export const ErrorMessage = styled.p`
+  margin-top: 12px;
+  font-size: 11px;
+  color: #d40000;
 `;
