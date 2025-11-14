@@ -10,7 +10,7 @@ export async function searchResult(values) {
     temp: values?.temperature ?? '',
     glasgow: values?.glasgow ?? '',
     glicemia: values?.hgt ?? '',
-    sintomas: values?.symptoms ?? '',
+    sintomas: values?.symptoms?.join(',') ?? '',
     categoria: 1,
     vulnerabilidade: values?.vulnerability ?? false,
     queixa_principal: values?.mainComplaint ?? ''

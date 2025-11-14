@@ -45,6 +45,7 @@ export const MainForm = ({ switchState }) => {
     useState(true);
   const [isLoadingSymptoms, setIsLoadingSymptoms] = useState(true);
   const [selectedSymptoms, setSelectedSymptoms] = useState([]);
+  const [selectedComplaintId, setSelectedComplaintId] = useState(null);
   const [formValues, setFormValues] = useState({});
 
   const [symptoms, setSymptoms] = useState([]);
@@ -112,6 +113,7 @@ export const MainForm = ({ switchState }) => {
   }, []);
 
   function onSelectQp(value) {
+    setSelectedComplaintId(value?.id || null);
     if (!value || !value.sintomas) return;
     setSelectedSymptoms((prev) => {
       const sintomas = value.sintomas
@@ -138,7 +140,7 @@ export const MainForm = ({ switchState }) => {
     const searchValues = {
       ...formValues,
       vulnerability: formValues.vulnarability ? true : false,
-      mainComplaint: formValues.complaint?.id || null
+      mainComplaint: selectedComplaintId || null
     };
     
     searchResult(searchValues)
