@@ -15,6 +15,7 @@ import {
   ClassificationInfo,
   PriorityLabel,
   ErrorMessage,
+  EmptyResultsMessage,
 } from './styles';
 import { calculateAge } from '@/utils/calculate-age-from-date';
 import AppContext from '@/context';
@@ -222,11 +223,26 @@ export const Results = ({ switchState }) => {
   const mainResult = result.triagem || result.resultados[0];
   const mainResultId = mainResult?.id || mainResult?.ID;
 
+  // Check if there are no results after a search
+  if (result.resultados.length === 0) {
+    return (
+      <Container>
+        <EmptyResultsMessage>
+          A combinação de parâmetros não retornou resultados, geralmente remover a queixa principal e clicar em Resultados novamente resolve com uma busca mais abrangente.
+        </EmptyResultsMessage>
+      </Container>
+    );
+  }
+
   return (
     <Container>
-      <CopyResult onClick={onCopyResult}>Copiar</CopyResult>
-      <CopyMessage active={copyMessage}>Resultado copiado!</CopyMessage>
-      <Title>RESULTADO MAIS SENSÍVEL CARREGADO</Title>
+      {result.resultados.length > 0 && (
+        <>
+          <CopyResult onClick={onCopyResult}>Copiar</CopyResult>
+          <CopyMessage active={copyMessage}>Resultado copiado!</CopyMessage>
+          <Title>RESULTADO MAIS SENSÍVEL CARREGADO</Title>
+        </>
+      )}
       <ResultContainer
         priority={result.triagem?.prioridade || result.resultados[0]?.prioridade}
         colorHex={result.triagem?.cor_hex || result.resultados[0]?.cor_hex}

@@ -49,6 +49,7 @@ export const MainForm = ({ switchState }) => {
   const [formValues, setFormValues] = useState({});
 
   const [symptoms, setSymptoms] = useState([]);
+  const [filteredSymptoms, setFilteredSymptoms] = useState([]);
 
   function areInputsFilled(values) {
     return Object.values(values).filter(
@@ -81,15 +82,15 @@ export const MainForm = ({ switchState }) => {
 
     getSymptoms()
       .then((s) => {
-        setSymptoms(
-          s.map((item) => {
-            return {
-              label: item.sintoma,
-              value: item.sintoma,
-              id: item.id,
-            };
-          })
-        );
+        const mappedSymptoms = s.map((item) => {
+          return {
+            label: item.sintoma,
+            value: item.sintoma,
+            id: item.id,
+          };
+        });
+        setSymptoms(mappedSymptoms);
+        setFilteredSymptoms(mappedSymptoms);
       })
       .finally(() => {
         setIsLoadingSymptoms(false);
@@ -114,7 +115,14 @@ export const MainForm = ({ switchState }) => {
 
   function onSelectQp(value) {
     setSelectedComplaintId(value?.id || null);
-    if (!value || !value.sintomas) return;
+    if (!value || !value.sintomas) {
+      setFilteredSymptoms(symptoms);
+      return;
+    }
+    const relatedSymptoms = symptoms.filter(symptom =>
+      value.sintomas.includes(symptom.label)
+    );
+    setFilteredSymptoms(relatedSymptoms);
     setSelectedSymptoms((prev) => {
       const sintomas = value.sintomas
         .map((sintoma) => {
@@ -145,7 +153,7 @@ export const MainForm = ({ switchState }) => {
     
     searchResult(searchValues)
       .then((result) => {
-        setSearchResults(result);
+        setSearchResults({ ...result, hasSearched: true });
       })
       .finally(() => {
         setIsLoading(false);
@@ -209,7 +217,7 @@ export const MainForm = ({ switchState }) => {
                   setValues(values);
                 }}
                 handleBlur={handleBlur}
-                options={symptoms}
+                options={filteredSymptoms}
                 name="symptoms"
                 placeholder="SINTOMAS"
               />

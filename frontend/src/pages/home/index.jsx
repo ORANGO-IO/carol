@@ -29,7 +29,7 @@ export const HomePage = () => {
           onToggle={handleSwitch}
         />
         <MainForm switchState={swtichState} />
-        {results.resultados.length > 0 && <Results switchState={swtichState} />}
+        {(results.hasSearched || results.resultados.length > 0) && <Results switchState={swtichState} />}
         <MedicalDisclaimer />
       </Container>
       <Footer />

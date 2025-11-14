@@ -200,3 +200,14 @@ export const ErrorMessage = styled.p`
   font-size: 11px;
   color: #d40000;
 `;
+
+export const EmptyResultsMessage = styled.p`
+  margin-top: 30px;
+  font-size: 12px;
+  color: #333333;
+  text-align: center;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+`;
