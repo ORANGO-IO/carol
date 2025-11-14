@@ -87,27 +87,6 @@ export const Footer = () => (
         </Caption>
       </Section>
       <Section>
-        <Title>Referência</Title>
-        <Caption>
-          Manual de acolhimento e classificação de risco (
-          <FooterLink
-            href="/manual-acolhimento-classificacao-de-risco.pdf"
-            target="_blank"
-            rel="noreferrer"
-          >
-            PDF
-          </FooterLink>
-          ) · Projeto de{' '}
-          <FooterLink
-            href="https://pt.wikipedia.org/wiki/C%C3%B3digo_aberto"
-            target="_blank"
-            rel="noreferrer"
-          >
-            código aberto
-          </FooterLink>
-        </Caption>
-      </Section>
-      <Section>
         <Title>Sobre</Title>
         <Caption>
            O acrônimo que leva o nome do projeto (Classificacao de Agravos Reais de forma Objetiva e Ligeira) é em referencia a uma colega que trabalhava na recepção de uma unidade de saúde em que estávamos e sempre tinha dificuldades de fazer a triagem técnica adequada para verificar necessidade de atendimento, pois não tinha conhecimento técnico para isso e os profissionais técnicos se encontravam frequentemente alocado em outras atividades. Sabemos que isso é um problema geral pois vivenciamos em nossa prática clínica. Por isso desenvolvemos o CAROL para comunidade, fique à vontade para usar, perguntar, colaborar. Entre em <FooterLink
@@ -119,12 +98,31 @@ export const Footer = () => (
           .
         </Caption>
       </Section>
+            <Section>
+        <Title>Referência</Title>
+        <Caption>
+          O Carol é um projeto de <FooterLink
+            href="https://pt.wikipedia.org/wiki/C%C3%B3digo_aberto"
+            target="_blank"
+            rel="noreferrer"
+          >código aberto</FooterLink> com base no <FooterLink
+            href="/manual-acolhimento-classificacao-de-risco.pdf"
+            target="_blank"
+            rel="noreferrer"
+          >Manual de acolhimento e classificação de risco
+          </FooterLink>. Siga o projeto no <FooterLink
+            href="https://github.com/ORANGO-IO/carol"
+            target="_blank"
+            rel="noreferrer"
+          >Github</FooterLink>.
+        </Caption>
+      </Section>
     </Grid>
     <FooterNote>
-      Um oferecimento{' '}
-      <FooterLink href="https://orango.io" target="_blank" rel="noreferrer">
-        Orango (logo orango)
-      </FooterLink>
+       Um oferecimento{' '}
+       <FooterLink href="https://orango.io" target="_blank" rel="noreferrer">
+         <img src="/orango.png" alt="Orango logo" style={{width: '60px', height: 'auto', verticalAlign: 'middle'}} />
+       </FooterLink>
     </FooterNote>
   </FooterContainer>
 );

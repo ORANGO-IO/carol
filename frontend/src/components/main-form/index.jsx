@@ -161,6 +161,7 @@ export const MainForm = ({ switchState }) => {
               <Select
                 onSelect={onSelectQp}
                 isLoading={isLoadingMainComplaints}
+                isClearable={true}
                 handleBlur={handleBlur}
                 setValues={(values) => {
                   setFormValues(values);
@@ -186,6 +187,7 @@ export const MainForm = ({ switchState }) => {
                 <SelectContainer>
                   <Select
                     isLoading={isLoadingVulnerabilities}
+                    isClearable={true}
                     handleBlur={handleBlur}
                     setValues={(values) => {
                       setFormValues(values);
