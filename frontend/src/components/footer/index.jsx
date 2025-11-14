@@ -75,37 +75,15 @@ export const Footer = () => (
           >
             Dr Filipe Lopes
           </FooterLink>{' '}
-          com apoio direto de toda a equipe médica. O projeto nasceu para apoiar
-          os profissionais de acolhimento na triagem técnica.
-        </Caption>
-      </Section>
-      <Section>
-        <Title>Médicos</Title>
-        <Caption>
-          Dr. João Pedro Lopes Boulhosa · Dr. Gabriel Lima · Dra. Chuva
-          Starteri · Dra. Juliana Pereira (Curadoria de dados e atualização)
-        </Caption>
-      </Section>
-      <Section>
-        <Title>Desenvolvedores</Title>
-        <Caption>
-          Brenno Almeida (
-          <FooterLink
+          com apoio direto de colegas médicos (Dr. João Pedro Lopes Boulhosa · Dr. Gabriel Lima · Dra. Chuva Starteri · Dra. Juliana Pereira - curadoria de dados e atualização) e mais desenvolvedores <FooterLink
             href="https://github.com/brennoflavio"
             target="_blank"
             rel="noreferrer"
-          >
-            Github
-          </FooterLink>
-          ) · Henrique Gomes (
-          <FooterLink
+          >Brenno Almeida</FooterLink> · <FooterLink
             href="https://github.com/Henrique-Gomesz"
             target="_blank"
             rel="noreferrer"
-          >
-            Github
-          </FooterLink>
-          )
+          >Henrique Gomes</FooterLink>
         </Caption>
       </Section>
       <Section>
@@ -132,15 +110,11 @@ export const Footer = () => (
       <Section>
         <Title>Sobre</Title>
         <Caption>
-          CAROL (Classificação de Agravos Reais de forma Objetiva e Ligeira)
-          homenageia uma colega da recepção que lutava para triagens técnicas.
-          Use, pergunte, colabore e entre em contato pelo mesmo{' '}
-          <FooterLink
+           O acrônimo que leva o nome do projeto (Classificacao de Agravos Reais de forma Objetiva e Ligeira) é em referencia a uma colega que trabalhava na recepção de uma unidade de saúde em que estávamos e sempre tinha dificuldades de fazer a triagem técnica adequada para verificar necessidade de atendimento, pois não tinha conhecimento técnico para isso e os profissionais técnicos se encontravam frequentemente alocado em outras atividades. Sabemos que isso é um problema geral pois vivenciamos em nossa prática clínica. Por isso desenvolvemos o CAROL para comunidade, fique à vontade para usar, perguntar, colaborar. Entre em <FooterLink
             href="https://link.orango.io/WYMyP"
             target="_blank"
             rel="noreferrer"
-          >
-            WhatsApp
+          >contato
           </FooterLink>
           .
         </Caption>
