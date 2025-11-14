@@ -3,7 +3,8 @@ import { MainForm } from '@/components/main-form';
 import { Results } from '@/components/results';
 import { MedicalDisclaimer } from '@/components/medical-disclaimer';
 import { Logo } from '@/components/logo';
-import { Container, Title } from './styles';
+import { Footer } from '@/components/footer';
+import { Container, Title, PageShell } from './styles';
 import { useState } from 'react';
 import { useAtomValue } from 'jotai';
 import { isLoadingAtom, searchResultsAtom } from '@/store/main-store';
@@ -18,18 +19,21 @@ export const HomePage = () => {
   }
 
   return (
-    <Container>
-      <Logo />
-      <Title>CLASSIFICAÇÃO OBJETIVA EM SAÚDE</Title>
-      <FormSwitch
-        leftLabel="ATENÇÃO BÁSICA"
-        rightLabel="HOSPITALAR"
-        onToggle={handleSwitch}
-      />
-      <MainForm switchState={swtichState} />
-      {results.resultados.length > 0 && <Results switchState={swtichState} />}
-      <MedicalDisclaimer />
+    <PageShell>
+      <Container>
+        <Logo />
+        <Title>CLASSIFICAÇÃO OBJETIVA EM SAÚDE</Title>
+        <FormSwitch
+          leftLabel="ATENÇÃO BÁSICA"
+          rightLabel="HOSPITALAR"
+          onToggle={handleSwitch}
+        />
+        <MainForm switchState={swtichState} />
+        {results.resultados.length > 0 && <Results switchState={swtichState} />}
+        <MedicalDisclaimer />
+      </Container>
+      <Footer />
       {loading && <Loading />}
-    </Container>
+    </PageShell>
   );
 };

@@ -11,8 +11,8 @@ export const GlobalStyle = createGlobalStyle`
         text-rendering: optimizeLegibility;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        margin: 0 auto;
-        padding: 2rem;
+        margin: 0;
+        padding: 0;
         text-align: center;
     }
 
@@ -20,6 +20,7 @@ export const GlobalStyle = createGlobalStyle`
         font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
         font-weight: 400;
         margin: 0;
+        padding: 0;
         min-width: 320px;
         min-height: 100vh;
     }
