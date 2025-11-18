@@ -8,20 +8,39 @@ import AppContext from './context';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { HomePage } from './pages/home';
-import { Modal } from 'semantic-ui-react';
-import Qp_description from './v1/components/qp_description';
 import { GlobalStyle } from './global-style';
+import { ComplaintDetailsModal } from './components/complaint-details-modal';
 
 const Main = () => {
-  const [state, setState] = React.useState({
+  const [modalState, setModalState] = React.useState({
     isShowingQp: false,
     showedQP: null,
-    showQp: (showedQP) =>
-      setState({
-        isShowingQp: true,
-        showedQP,
-      }),
+    isLoadingQp: false,
   });
+
+  const showQp = React.useCallback((showedQP) => {
+    setModalState({
+      isShowingQp: true,
+      showedQP,
+      isLoadingQp: false,
+    });
+  }, []);
+
+  const startQpLoading = React.useCallback(() => {
+    setModalState({
+      isShowingQp: true,
+      showedQP: null,
+      isLoadingQp: true,
+    });
+  }, []);
+
+  const closeQp = React.useCallback(() => {
+    setModalState({
+      isShowingQp: false,
+      showedQP: null,
+      isLoadingQp: false,
+    });
+  }, []);
 
   const router = createBrowserRouter([
     {
@@ -34,26 +53,25 @@ const Main = () => {
     },
   ]);
 
+  const contextValue = React.useMemo(
+    () => ({
+      ...modalState,
+      showQp,
+      closeQp,
+      startQpLoading,
+    }),
+    [modalState, showQp, closeQp, startQpLoading]
+  );
+
   return [
-    <Modal
+    <ComplaintDetailsModal
       key={'modal-qp'}
-      size="small"
-      open={state.isShowingQp}
-      onClose={() =>
-        setState({
-          isShowingQp: false,
-          showedQP: null,
-          showQp: (showedQP) =>
-            setState({
-              isShowingQp: true,
-              showedQP,
-            }),
-        })
-      }
-    >
-      {state.showedQP ? <Qp_description showedQP={state.showedQP} /> : null}
-    </Modal>,
-    <AppContext.Provider key={'contet'} value={state}>
+      isOpen={modalState.isShowingQp}
+      complaint={modalState.showedQP}
+      isLoading={modalState.isLoadingQp}
+      onClose={closeQp}
+    />,
+    <AppContext.Provider key={'contet'} value={contextValue}>
       <RouterProvider router={router} />
     </AppContext.Provider>,
   ];

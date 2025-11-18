@@ -117,6 +117,8 @@ def filter(session=None):
                 )
                 .filter(QueixasSinaisClassificacao.fk_sinal == sinal_id)
             )
+            if queixa_principal_id > 0:
+                query = query.filter(QueixasSinaisClassificacao.fk_queixa == queixa_principal_id)
             resultados = query.all()
             if not resultados:
                 continue

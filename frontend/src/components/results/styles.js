@@ -30,6 +30,8 @@ export const ResultContainer = styled.div.withConfig({
   display: flex;
   gap: 11px;
   padding: 23px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
   background-color: ${(props) => {
     // Use color from database if available
     if (props.colorHex) {
@@ -72,6 +74,16 @@ export const ResultContainer = styled.div.withConfig({
   }};
   border-radius: 24px;
   margin-bottom: 16px;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+  }
+
+  &:focus-visible {
+    outline: 3px solid #2578fa;
+    outline-offset: 2px;
+  }
 `;
 
 export const ResultTitle = styled.p`
@@ -181,4 +193,21 @@ export const ClassificationInfo = styled.div`
       color: #000000;
     }
   }
+`;
+
+export const ErrorMessage = styled.p`
+  margin-top: 12px;
+  font-size: 11px;
+  color: #d40000;
+`;
+
+export const EmptyResultsMessage = styled.p`
+  margin-top: 30px;
+  font-size: 12px;
+  color: #333333;
+  text-align: center;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
 `;

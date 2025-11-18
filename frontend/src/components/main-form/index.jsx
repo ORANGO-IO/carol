@@ -45,9 +45,11 @@ export const MainForm = ({ switchState }) => {
     useState(true);
   const [isLoadingSymptoms, setIsLoadingSymptoms] = useState(true);
   const [selectedSymptoms, setSelectedSymptoms] = useState([]);
+  const [selectedComplaintId, setSelectedComplaintId] = useState(null);
   const [formValues, setFormValues] = useState({});
 
   const [symptoms, setSymptoms] = useState([]);
+  const [filteredSymptoms, setFilteredSymptoms] = useState([]);
 
   function areInputsFilled(values) {
     return Object.values(values).filter(
@@ -80,15 +82,15 @@ export const MainForm = ({ switchState }) => {
 
     getSymptoms()
       .then((s) => {
-        setSymptoms(
-          s.map((item) => {
-            return {
-              label: item.sintoma,
-              value: item.sintoma,
-              id: item.id,
-            };
-          })
-        );
+        const mappedSymptoms = s.map((item) => {
+          return {
+            label: item.sintoma,
+            value: item.sintoma,
+            id: item.id,
+          };
+        });
+        setSymptoms(mappedSymptoms);
+        setFilteredSymptoms(mappedSymptoms);
       })
       .finally(() => {
         setIsLoadingSymptoms(false);
@@ -112,7 +114,15 @@ export const MainForm = ({ switchState }) => {
   }, []);
 
   function onSelectQp(value) {
-    if (!value || !value.sintomas) return;
+    setSelectedComplaintId(value?.id || null);
+    if (!value || !value.sintomas) {
+      setFilteredSymptoms(symptoms);
+      return;
+    }
+    const relatedSymptoms = symptoms.filter(symptom =>
+      value.sintomas.includes(symptom.label)
+    );
+    setFilteredSymptoms(relatedSymptoms);
     setSelectedSymptoms((prev) => {
       const sintomas = value.sintomas
         .map((sintoma) => {
@@ -138,12 +148,12 @@ export const MainForm = ({ switchState }) => {
     const searchValues = {
       ...formValues,
       vulnerability: formValues.vulnarability ? true : false,
-      mainComplaint: formValues.complaint?.id || null
+      mainComplaint: selectedComplaintId || null
     };
     
     searchResult(searchValues)
       .then((result) => {
-        setSearchResults(result);
+        setSearchResults({ ...result, hasSearched: true });
       })
       .finally(() => {
         setIsLoading(false);
@@ -159,6 +169,7 @@ export const MainForm = ({ switchState }) => {
               <Select
                 onSelect={onSelectQp}
                 isLoading={isLoadingMainComplaints}
+                isClearable={true}
                 handleBlur={handleBlur}
                 setValues={(values) => {
                   setFormValues(values);
@@ -184,6 +195,7 @@ export const MainForm = ({ switchState }) => {
                 <SelectContainer>
                   <Select
                     isLoading={isLoadingVulnerabilities}
+                    isClearable={true}
                     handleBlur={handleBlur}
                     setValues={(values) => {
                       setFormValues(values);
@@ -205,7 +217,7 @@ export const MainForm = ({ switchState }) => {
                   setValues(values);
                 }}
                 handleBlur={handleBlur}
-                options={symptoms}
+                options={filteredSymptoms}
                 name="symptoms"
                 placeholder="SINTOMAS"
               />

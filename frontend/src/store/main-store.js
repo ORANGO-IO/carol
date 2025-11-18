@@ -23,6 +23,7 @@ export const searchResultsAtom = atom({
   resultados: [],
   sinais: [],
   sugestoes: [],
+  hasSearched: false,
 });
 
 export const isLoadingAtom = atom(false);

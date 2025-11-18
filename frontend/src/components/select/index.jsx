@@ -8,11 +8,13 @@ export const Select = ({
   setValues,
   handleBlur,
   isLoading = false,
+  isClearable = false,
   onSelect = () => {},
 }) => {
   return (
     <SelectComponent
       isLoading={isLoading}
+      isClearable={isClearable}
       onBlur={handleBlur}
       options={options}
       onChange={(value) => {
@@ -20,7 +22,7 @@ export const Select = ({
         setValues((values) => {
           return {
             ...values,
-            [name]: value.value,
+            [name]: value ? value.value : null,
           };
         });
       }}
